@@ -18,6 +18,8 @@ class ClassDefinition implements Serializable {
 
     private final byte[] classBytes;
 
+    private Equals equals;
+
     public ClassDefinition(Class aClass) throws IOException {
         this(new StandardClassUtil(), aClass);
     }
@@ -25,6 +27,15 @@ class ClassDefinition implements Serializable {
     ClassDefinition(ClassUtil classUtil, Class aClass) throws IOException {
         this.className = aClass.getName();
         this.classBytes = classUtil.getResourceBytes(aClass);
+        this.equals = new Equals(this) {
+            private static final long serialVersionUID = 1L;
+            protected boolean equalsInner(Object obj) {
+                ClassDefinition other = (ClassDefinition) obj;
+                if (!className().equals(other.className()))
+                    return false;
+                return Arrays.equals(classBytes(), other.classBytes());
+            }
+        };
     }
 
     public String className() {
@@ -40,14 +51,7 @@ class ClassDefinition implements Serializable {
     }
 
     public boolean equals(Object obj) {
-        return new Equals(this) {
-            protected boolean equalsInner(Object obj) {
-                ClassDefinition other = (ClassDefinition) obj;
-                if (!className().equals(other.className()))
-                    return false;
-                return Arrays.equals(classBytes(), other.classBytes());
-            }
-        }.check(obj);
+        return equals.check(obj);
     }
 
     public int hashCode() {
