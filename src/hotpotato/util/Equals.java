@@ -23,11 +23,12 @@ public class Equals implements Serializable {
         if (owner == null || other == null) {
             return false;
         }
-
         if (!classConstraintMatch(other)) {
             return false;
         }
-
+        if (owner.hashCode() != other.hashCode()) {
+            return false;
+        }
         return owner.equalsInner(other);
     }
 
