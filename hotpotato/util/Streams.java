@@ -39,9 +39,18 @@ public final class Streams {
         }
     }
 
+    public String readString(InputStream from) throws IOException {
+        return readAll(from).toString();
+    }
+
     public byte[] readBytes(InputStream from) throws IOException {
+        return readAll(from).toByteArray();
+    }
+
+    private ByteArrayOutputStream readAll(InputStream from)
+        throws IOException {
         ByteArrayOutputStream buf = new ByteArrayOutputStream();
         copy(from, buf);
-        return buf.toByteArray();
+        return buf;
     }
 }

@@ -11,13 +11,15 @@ import java.io.*;
 public class Shell extends Thread {
     private String[] args;
     private String[] envp;
-    PrintStream out;
+    private PrintStream out;
+    private Streams streams;
 
     public Shell(String[] args, String[] envp, String name, PrintStream out) {
         super(name);
         this.args = args;
         this.envp = envp;
         this.out = out;
+        this.streams = new Streams();
     }
 
     public Shell(String[] args, String[] envp, String name) {
@@ -28,6 +30,9 @@ public class Shell extends Thread {
         try {
             runtimeExec();
         } catch (Exception e) {
+            if (e instanceof RuntimeException) {
+                throw (RuntimeException) e;
+            }
             throw new RuntimeException(e);
         }
     }
@@ -46,13 +51,7 @@ public class Shell extends Thread {
         }
     }
 
-    private void print(InputStream in) throws IOException {
-        while (true) {
-            int i = in.read();
-            if (i == -1) {
-                break;
-            }
-            out.print((char) ((byte) i));
-        }
+    public void print(InputStream in) throws IOException {
+        out.print(streams.readString(in));
     }
 }
