@@ -27,8 +27,10 @@ class ClassDefinition implements Serializable {
     ClassDefinition(ClassUtil classUtil, Class aClass) throws IOException {
         this.className = aClass.getName();
         this.classBytes = classUtil.getResourceBytes(aClass);
+        
         this.equals = new Equals(this) {
             private static final long serialVersionUID = 1L;
+            
             protected boolean equalsInner(Object obj) {
                 ClassDefinition other = (ClassDefinition) obj;
                 if (!className().equals(other.className()))
