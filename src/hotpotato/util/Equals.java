@@ -8,11 +8,11 @@ package hotpotato.util;
 
 import java.io.*;
 
-public abstract class Equals implements Serializable {
+public class Equals implements Serializable {
     private static final long serialVersionUID = 1L;
-    private Object owner;
+    private Equals.Inner owner;
     
-    public Equals(Object owner){
+    public Equals(Equals.Inner owner){
         this.owner = owner;
     }
 
@@ -28,11 +28,7 @@ public abstract class Equals implements Serializable {
             return false;
         }
 
-        return classCheck(other);
-    }
-    
-    protected final Object owner() {
-        return owner;
+        return owner.equalsInner(other);
     }
 
     /**
@@ -44,5 +40,7 @@ public abstract class Equals implements Serializable {
         return owner.getClass().equals(other.getClass());
     }
 
-    protected abstract boolean classCheck(Object other);
+    public static interface Inner {
+        boolean equalsInner(Object other);
+    }
 }

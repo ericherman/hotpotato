@@ -11,7 +11,7 @@ import hotpotato.util.*;
 import java.io.*;
 import java.util.*;
 
-class ClassDefinition implements Serializable {
+class ClassDefinition implements Serializable, Equals.Inner {
 	private static final long serialVersionUID = 1L;
 
 	private final String className;
@@ -19,8 +19,6 @@ class ClassDefinition implements Serializable {
     private final byte[] classBytes;
 
     private final ClassUtil classUtil;
-    
-    private final Equals equals;
 
     public ClassDefinition(Class aClass) throws IOException {
         this.classUtil = new ClassUtil();
@@ -30,17 +28,6 @@ class ClassDefinition implements Serializable {
         ClassLoader classLoader = classUtil.classLoaderFor(aClass);
         this.classBytes = classUtil
                 .loadResourceBytes(resourceName, classLoader);
-        
-        this.equals = new Equals(this) {
-            private static final long serialVersionUID = 1L;
-            public boolean classCheck(Object obj) {
-                ClassDefinition other = (ClassDefinition) obj;
-
-                if (!className().equals(other.className()))
-                    return false;
-                return Arrays.equals(classBytes(), other.classBytes());
-            }
-        };
     }
 
     public String className() {
@@ -54,9 +41,16 @@ class ClassDefinition implements Serializable {
     public String toString() {
         return className() + ": " + classBytes().length;
     }
+    
+    public boolean equalsInner(Object obj){
+        ClassDefinition other = (ClassDefinition) obj;
+        if (!className().equals(other.className()))
+            return false;
+        return Arrays.equals(classBytes(), other.classBytes());
+    }
 
     public boolean equals(Object obj) {
-        return equals.check(obj);
+        return new Equals(this).check(obj);
     }
 
     public int hashCode() {
