@@ -11,8 +11,11 @@ import java.io.*;
 public abstract class Equals implements Serializable {
     private static final long serialVersionUID = 1L;
     private Object owner;
-    
-    public Equals(Object owner){
+
+    public Equals(Object owner) {
+        if (owner == null) {
+            throw new IllegalArgumentException("Owner should not be null");
+        }
         this.owner = owner;
     }
 
@@ -20,7 +23,7 @@ public abstract class Equals implements Serializable {
         if (owner == other) {
             return true;
         }
-        if (owner == null || other == null) {
+        if (other == null) {
             return false;
         }
         if (!classConstraintMatch(other)) {
@@ -34,7 +37,7 @@ public abstract class Equals implements Serializable {
 
     /**
      * @deprecated over-ride with extreme caution: using "instanceof" or
-     *             class.getName() matching allows for breaking of the 
+     *             class.getName() matching allows for breaking of the
      *             ".equals(obj)" contract.
      */
     protected boolean classConstraintMatch(Object other) {

@@ -12,6 +12,7 @@ public class AllTestSuite {
 
     public static Test suite() {
         TestSuite suite = new TestSuite("Hotpotato Utility Tests");
+        suite.addTestSuite(EqualsTest.class);
         suite.addTestSuite(StandardClassUtilTest.class);
         suite.addTestSuite(StreamsTest.class);
         return suite;
