@@ -12,6 +12,19 @@ import junit.framework.*;
 
 public class StreamsTest extends TestCase {
 
+    public void testConnect() throws Exception {
+        String expected = "sendMe";
+        ByteArrayInputStream send = new ByteArrayInputStream(expected.getBytes());
+
+        ByteArrayOutputStream receive = new ByteArrayOutputStream();
+
+        new Streams().connect(send, receive);
+        Thread.sleep(20);
+
+
+        assertEquals(expected, new String(receive.toByteArray()));
+    }
+
     /*
      * Our test tries to provide input to the InputStream and recieve output
      * from the OutputStream.
@@ -23,7 +36,7 @@ public class StreamsTest extends TestCase {
      * Less than obvious code, I know. It's easy to get lost in who's coming
      * and who's going.
      */
-    public void testStreamConnector() throws Exception {
+    public void testConnectMoreRealistically() throws Exception {
         PipedInputStream senderInputStream = new PipedInputStream();
         PrintWriter send = new PrintWriter(new PipedOutputStream(
                 senderInputStream));
