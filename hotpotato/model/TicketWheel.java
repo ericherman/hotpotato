@@ -1,22 +1,32 @@
-/*
- * Copyright (C) 2003 by Eric Herman.
- * For licensing information see GnuGeneralPublicLicenseVersion2.txt
- *  or http://www.fsf.org/licenses/gpl.txt 
- *  or for alternative licensing, email Eric Herman: eric AT rnd DOT cx 
+/**
+ * Copyright (C) 2003 by Eric Herman. 
+ * For licensing information see GnuGeneralPublicLicenseVersion2.txt 
+ *  or http://www.fsf.org/licenses/gpl.txt
+ *  or for alternative licensing, email Eric Herman: eric AT rnd DOT cx
  */
 package hotpotato.model;
 
 import java.util.*;
 
 /**
- * TicketWheel is marked final as a hint to the compiler. 
- * It can safely be un-finalized.
+ * TicketWheel is marked final as a hint to the compiler. It can safely be
+ * un-finalized.
  * 
- * When making multiple calls to a single TicketWheel, please consider whether 
- * we need to perform all operations within a single block synchronized on the
- * TicketWheel.  For example, if our code calls <code>hasItems</code> and then 
- * calls <code>get</code> if the <code>hasItems</code> call returns true, we 
- * should enclose all of that code in a block synchronized on the TicketWheel.
+ * When making multiple calls to a TicketWheel, please consider whether we need
+ * to perform all operations within a single block synchronized on the
+ * TicketWheel.
+ * 
+ * <code>
+ * if (ticketWheel.hasItems())  // possible threading problem
+ *     a = ticketWhell.get();   // what if ticketWheel is now empty?
+ * </code>
+ * 
+ * <code>
+ * synchronized (ticketWheel) {
+ *     if (ticketWheel.hasItems())
+ *         a = ticketWhell.get();
+ * }
+ * </code>
  */
 public final class TicketWheel {
 

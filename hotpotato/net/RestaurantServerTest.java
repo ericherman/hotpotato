@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2003 by Eric Herman.
  * For licensing information see GnuGeneralPublicLicenseVersion2.txt
  *  or http://www.fsf.org/licenses/gpl.txt 
@@ -33,7 +33,7 @@ public class RestaurantServerTest extends TestCase {
     public void testAcceptConnection() throws Exception {
         server = new RestaurantServer(0);
         server.start();
-        
+
         Socket s = new Socket(InetAddress.getLocalHost(), server.getPort());
         ObjectSender sender = new ObjectSender(s);
 

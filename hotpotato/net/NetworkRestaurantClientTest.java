@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2003 by Eric Herman.
  * For licensing information see GnuGeneralPublicLicenseVersion2.txt
  *  or http://www.fsf.org/licenses/gpl.txt 
@@ -33,8 +33,9 @@ public class NetworkRestaurantClientTest extends TestCase {
         server = new LoopbackServer(0);
         server.start();
 
-        NetworkRestaurantClient client =
-            new NetworkRestaurantClient(server.getInetAddress(), server.getPort());
+        NetworkRestaurantClient client = new NetworkRestaurantClient(server
+                .getInetAddress(),
+                server.getPort());
 
         Serializable s = client.send(new FooRequest());
 

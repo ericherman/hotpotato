@@ -1,4 +1,4 @@
-/*
+/**
  * Copyright (C) 2003 by Eric Herman.
  * For licensing information see GnuGeneralPublicLicenseVersion2.txt
  *  or http://www.fsf.org/licenses/gpl.txt 
