@@ -12,23 +12,28 @@ public class Shell extends Thread {
     private String[] args;
     private String[] envp;
     private PrintStream out;
+    private PrintStream err;
     private Streams streams;
+    private int returnCode;
 
-    public Shell(String[] args, String[] envp, String name, PrintStream out) {
+    public Shell(String[] args, String[] envp, String name, PrintStream out,
+            PrintStream err) {
         super(name);
         this.args = args;
         this.envp = envp;
         this.out = out;
+        this.err = err;
         this.streams = new Streams();
+        this.returnCode = Integer.MIN_VALUE;
     }
 
     public Shell(String[] args, String[] envp, String name) {
-        this(args, envp, name, null);
+        this(args, envp, name, null, null);
     }
 
     public void run() {
         try {
-            runtimeExec();
+            returnCode = runtimeExec();
         } catch (Exception e) {
             if (e instanceof RuntimeException) {
                 throw (RuntimeException) e;
@@ -37,21 +42,26 @@ public class Shell extends Thread {
         }
     }
 
-    private void runtimeExec() throws IOException, InterruptedException {
+    private int runtimeExec() throws IOException, InterruptedException {
         Process p = Runtime.getRuntime().exec(args, envp);
-        InputStream shellStdErr = p.getErrorStream();
-        InputStream shellStdOut = p.getInputStream();
-        int i = p.waitFor();
+
         if (out != null) {
-            out.println(getName() + " complete: " + i);
-            print(shellStdErr);
-            out.println();
-            print(shellStdOut);
-            out.println("---");
+            InputStream shellStdOut = p.getInputStream();
+            new Streams().connect(shellStdOut, out);
         }
+        if (err != null) {
+            InputStream shellStdErr = p.getErrorStream();
+            new Streams().connect(shellStdErr, err);
+        }
+
+        return p.waitFor();
     }
 
-    public void print(InputStream in) throws IOException {
+    private void print(InputStream in) throws IOException {
         out.print(streams.readString(in));
+    }
+
+    public int getReturnCode() {
+        return returnCode;
     }
 }

@@ -1,8 +1,7 @@
 /**
- * Copyright (C) 2003 by Eric Herman. 
- * For licensing information see GnuGeneralPublicLicenseVersion2.txt
- *  or http://www.fsf.org/licenses/gpl.txt
- *  or for alternative licensing, email Eric Herman: eric AT rnd DOT cx
+ * Copyright (C) 2003 by Eric Herman. For licensing information see
+ * GnuGeneralPublicLicenseVersion2.txt or http://www.fsf.org/licenses/gpl.txt or
+ * for alternative licensing, email Eric Herman: eric AT rnd DOT cx
  */
 package hotpotato.acceptance;
 
@@ -32,18 +31,18 @@ public class AcceptanceMultiVMTest extends TestCase {
 
     public void test1Customer1Cook() throws Exception {
         String path = System.getProperty("java.library.path");
-        String[] envp = new String[]{"PATH=" + path};
+        String[] envp = new String[] { "PATH=" + path };
         String classpath = System.getProperty("java.class.path");
         String maxSeconds = "5";
         String workUnits = "1";
 
-        String[] restaurantArgs = new String[]{"java", "-cp", classpath,
-            "hotpotato.acceptance.RestaurantRunner", maxSeconds, workUnits,
-            "" + port,};
+        String[] restaurantArgs = new String[] { "java", "-cp", classpath,
+                "hotpotato.acceptance.RestaurantRunner", maxSeconds, workUnits,
+                "" + port, };
 
-        String[] cookArgs = new String[]{"java", "-cp", classpath,
-            "hotpotato.acceptance.CookRunner", maxSeconds, workUnits,
-            InetAddress.getLocalHost().getHostName(), "" + port,};
+        String[] cookArgs = new String[] { "java", "-cp", classpath,
+                "hotpotato.acceptance.CookRunner", maxSeconds, workUnits,
+                InetAddress.getLocalHost().getHostName(), "" + port, };
 
         new Shell(restaurantArgs, envp, "Restaraunt").start();
         Thread.sleep(3 * ConnectionServer.SLEEP_DELAY);

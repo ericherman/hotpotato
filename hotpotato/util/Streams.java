@@ -8,9 +8,9 @@ package hotpotato.util;
 
 import java.io.*;
 
-/** 
- * Stream operation utility methods.  This class is final simply as a hint 
- * to the compiler, feel free to un-finalize it.
+/**
+ * Stream operation utility methods. This class is final simply as a hint to the
+ * compiler, feel free to un-finalize it.
  */
 public final class Streams {
     private static final int END_OF_STREAM = -1;
@@ -19,7 +19,7 @@ public final class Streams {
         Thread t = new Thread("StreamConnector") {
             public void run() {
                 try {
-                    copy(from, to);
+                    copy(from, to, false);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }
@@ -30,8 +30,15 @@ public final class Streams {
     }
 
     public void copy(InputStream from, OutputStream to) throws IOException {
-        // from = new BufferedInputStream(from);
-        // to = new BufferedOutputStream(to);
+        copy(from, to, true);
+    }
+
+    public void copy(InputStream from, OutputStream to, boolean buffer)
+            throws IOException {
+        if (buffer) {
+            from = new BufferedInputStream(from);
+            to = new BufferedOutputStream(to);
+        }
         while (true) {
             int i = from.read();
             if (i == END_OF_STREAM) {
@@ -39,7 +46,7 @@ public final class Streams {
             }
             to.write(i);
         }
-        // to.flush();
+        to.flush();
     }
 
     public String readString(InputStream from) throws IOException {
@@ -50,8 +57,7 @@ public final class Streams {
         return readAll(from).toByteArray();
     }
 
-    private ByteArrayOutputStream readAll(InputStream from)
-        throws IOException {
+    private ByteArrayOutputStream readAll(InputStream from) throws IOException {
         ByteArrayOutputStream buf = new ByteArrayOutputStream();
         copy(from, buf);
         return buf;
