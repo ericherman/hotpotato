@@ -20,7 +20,7 @@ class ClassDefinition implements Serializable {
         this.classUtil = new ClassUtil();
         this.className = aClass.getName();
         String resourceName = classUtil.toResourceName(className);
-        ClassLoader classLoader = aClass.getClassLoader();
+        ClassLoader classLoader = classUtil.classLoaderFor(aClass);
         this.classBytes =
             classUtil.loadResourceBytes(resourceName, classLoader);
     }

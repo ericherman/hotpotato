@@ -47,7 +47,8 @@ public class ClassUtilTest extends TestCase {
                 10 };
 
         String fileName = "hotpotato/util/simplefile.txt";
-        byte[] result = new ClassUtil().loadResourceBytes(fileName, null);
+        ClassLoader system = ClassLoader.getSystemClassLoader();
+        byte[] result = new ClassUtil().loadResourceBytes(fileName, system);
         assertTrue(Arrays.equals(result, simpleFileBytes));
     }
 }

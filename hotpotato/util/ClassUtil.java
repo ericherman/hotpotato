@@ -16,8 +16,18 @@ import java.io.*;
 public final class ClassUtil implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    public String toResourceName(String className) {
-        return className.replace('.', '/') + ".class";
+    public ClassLoader classLoaderFor(Class aClass) {
+        ClassLoader cl = aClass.getClassLoader();
+        return (cl != null) ? cl : ClassLoader.getSystemClassLoader();
+    }
+
+    public byte[] loadResourceBytes(
+        String resourceName,
+        ClassLoader classLoader)
+        throws IOException {
+
+        InputStream in = classLoader.getResourceAsStream(resourceName);
+        return new Streams().readBytes(in);
     }
 
     public String toClassName(String classResourceName) {
@@ -32,24 +42,7 @@ public final class ClassUtil implements Serializable {
         return toResourceName(aClass.getName());
     }
 
-    public ClassLoader classLoaderFor(Class aClass) {
-        ClassLoader cl = aClass.getClassLoader();
-        if (cl == null)
-            cl = ClassLoader.getSystemClassLoader();
-        return cl;
-    }
-
-    public byte[] loadResourceBytes(
-        String resourceName,
-        ClassLoader classLoader)
-        throws IOException {
-
-        InputStream in;
-        if (classLoader != null) {
-            in = classLoader.getResourceAsStream(resourceName);
-        } else {
-            in = ClassLoader.getSystemResourceAsStream(resourceName);
-        }
-        return new Streams().readBytes(in);
+    public String toResourceName(String className) {
+        return className.replace('.', '/') + ".class";
     }
 }
