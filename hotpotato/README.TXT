@@ -46,9 +46,9 @@ not all problems lend themselves to parrallel solutions.
 THANKS
 
 The idea was first given to me by Ian Greenhoe, so he could 
-distribute the work of a project of his. He was a huge help 
+distribute the work of a project of his. He is a huge help 
 and inspiration for the project. (It always helps to know that
-someone will find it useful.) He also gave me a hand thinking 
+someone is finding it useful.) He also gave me a hand thinking 
 through the initial designs and writing the initial test code, 
 as well as helping me debug various stuff along the way.
 
@@ -78,7 +78,7 @@ At the time of this writing, Hotpotato depends on:
  * JUnit   http://junit.org/
  * BCEL    http://jakarta.apache.org/bcel/
 
-The hotpotato codebase compiles using Java 1.4.2 
+The hotpotato codebase compiles using Sun's JDK 1.4.2 on linux 
 ... and probably any 1.4.x ... but I haven't done the testing. 
 
 TESTING
@@ -97,14 +97,17 @@ in the tests. In time, I hope to address these race conditions,
 but that has not yet been done. Besides, they never break on MY
 computer, anyway. <grin> In reality, I think I'll be motivated 
 to fix the race conditions as a way to speed up the tests. 
-However, because the tests do things in multiple threads, and I 
-refuse to put Thread.Sleep(x) statements in my tests, I must 
-sheepishly admit to using Thread.yeild() in order to hopefully 
+
+However, because the tests do things in multiple threads, I must 
+sheepishly admit to using Thread.sleep(x) in order to hopefully 
 get the threads to line up sensibly in their orders of execution. 
 
-The reason for the "No Sleeps!" policy is simply that the tests 
-must run fast. The 21 seconds it currently takes, I find 
-painfully slow. The slower they are, the less likely I will be to 
+If you have trouble with tests failing, try increasing the delay 
+in hotpotato.io.ConnectionServer.SLEEP_DELAY.
+
+I would like to implement a "No Sleeps!" policy in the tests so 
+they would run fast. The 17 seconds it currently takes, I find 
+rather slow. The slower they are, the less likely I will be to 
 run them after making a small change, and the more confused I 
 will be when later I run them and I discover that something I did 
 broke something else. For some reason, I find it harder to revert 
@@ -139,14 +142,9 @@ reason, it is poorly organized.
 Other times, I've had to settle for a little bit of "metaphor
 shear" as Brett calls it. For instance, most restaurants don't 
 have some variable number of free-lance cooks willing to work out 
-of their garage. Or another instance, when you place an order in 
-most restaurants, you get a plate of food back. In our case, we
-get our order back, with changed state. I hear that some places
-(Brett cites Portillo's, a fabulous Chicago-area fast-food chain)
-write your order on a bag, and then you get the bag back with
-stuff inside. That fits nicely, I guess. However, the imperfect
-fit keeps nudging me to keep an eye out for a better system of
-names. Please let me know if you can think of one.
+of their garage. The imperfect fit keeps nudging me to keep an 
+eye out for a better system of names. Please let me know if you 
+can think of one.
 
 CODING STYLE 
 
@@ -177,7 +175,7 @@ an insight as to how to make something more simple. It's not a
 science.
 
 I avoid use of "static" unless I have a really compelling reason
-not to. This is becuase, in Java, static is sometimes surprising.
+not to. This is because, in Java, static is sometimes surprising.
 For instance, static members are not truly global within the VM;
 they are scoped by the ClassLoader through which they are loaded.
 Static methods tend to be handy, except that they are hard to
@@ -205,18 +203,18 @@ to be extracted.
 
 Please use curly braces, even when they aren't strictly needed.
 Why? Sigh. Becuase I'm asking nicely. I just like to be able to
-drop an assertEquals() or println() anywhere in without having to
-add and later remove the curly braces.
+drop an assertEquals() or println() in anywhere without having to
+add (and later remove) the curly braces.
 
 Also, since I do development work in Eclipse, I rely upon the 
 code formatter built therein. Here are some of my settings:
   Java - Code Formatter
-  . New Lines tab: deselect all check boxes except the last one
+  * New Lines tab: deselect all check boxes except the last one
     (insert new line inside empty catch block)
-  . Style tab: deselect insert tab for indentation, not spaces.
-  . Style tab: number of spaces representing indent: 4
+  * Style tab: deselect insert tab for indentation, not spaces.
+  * Style tab: number of spaces representing indent: 4
   Java - Editor
-  . Appearance: Displayed tab width 8
+  * Appearance: Displayed tab width 8
   
 
 Cheers!  
