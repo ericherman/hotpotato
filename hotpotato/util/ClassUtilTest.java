@@ -14,8 +14,10 @@ public class ClassUtilTest extends TestCase {
     public void testResourceName() {
         String className = getClass().getName();
         assertEquals("hotpotato.util.ClassUtilTest", className);
-        String resourceName = new ClassUtil().toResourceName(className);
-        assertEquals("hotpotato/util/ClassUtilTest.class", resourceName);
+
+        String expected = "hotpotato/util/ClassUtilTest.class";
+        assertEquals(expected, new ClassUtil().toResourceName(className));
+        assertEquals(expected, new ClassUtil().toResourceName(getClass()));
     }
 
     public void testToClassName() {
