@@ -7,20 +7,29 @@
 package hotpotato.util;
 
 public abstract class Equals {
+    private Object owner;
+    
+    public Equals(Object owner){
+        this.owner = owner;
+    }
 
-    public boolean check(Object left, Object right) {
-        if (left == right) {
+    public boolean check(Object other) {
+        if (owner == other) {
             return true;
         }
-        if (left == null || right == null) {
+        if (owner == null || other == null) {
             return false;
         }
 
-        if (!classConstraintMatch(left, right)) {
+        if (!classConstraintMatch(other)) {
             return false;
         }
 
-        return classCheck(left, right);
+        return classCheck(other);
+    }
+    
+    protected final Object owner() {
+        return owner;
     }
 
     /**
@@ -28,9 +37,9 @@ public abstract class Equals {
      *             class.getName() matching allows for breaking of the Equals
      *             contract.
      */
-    protected boolean classConstraintMatch(Object left, Object right) {
-        return left.getClass().equals(right.getClass());
+    protected boolean classConstraintMatch(Object other) {
+        return owner.getClass().equals(other.getClass());
     }
 
-    protected abstract boolean classCheck(Object left, Object right);
+    protected abstract boolean classCheck(Object other);
 }

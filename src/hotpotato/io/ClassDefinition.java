@@ -42,16 +42,16 @@ class ClassDefinition implements Serializable {
     }
 
     public boolean equals(Object obj) {
-        return new Equals() {
-            public boolean classCheck(Object left, Object right) {
-                ClassDefinition us = (ClassDefinition) left;
+        return new Equals(this) {
+            public boolean classCheck(Object right) {
+                ClassDefinition us = ClassDefinition.this;
                 ClassDefinition other = (ClassDefinition) right;
 
                 if (!us.className().equals(other.className()))
                     return false;
                 return Arrays.equals(us.classBytes(), other.classBytes());
             }
-        }.check(this, obj);
+        }.check(obj);
     }
 
     public int hashCode() {
