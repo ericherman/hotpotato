@@ -21,10 +21,11 @@ public class Shell extends Thread {
         super(name);
         this.args = args;
         this.envp = envp;
-        this.out = out;
-        this.err = err;
-        this.streams = new Streams();
         this.returnCode = Integer.MIN_VALUE;
+        this.streams = new Streams();
+        this.out = (out != null) ? out : new NullPrintStream();
+        this.err = (err != null) ? err : new NullPrintStream();
+
     }
 
     public Shell(String[] args, String[] envp, String name) {
@@ -44,21 +45,9 @@ public class Shell extends Thread {
 
     private int runtimeExec() throws IOException, InterruptedException {
         Process p = Runtime.getRuntime().exec(args, envp);
-
-        if (out != null) {
-            InputStream shellStdOut = p.getInputStream();
-            new Streams().connect(shellStdOut, out);
-        }
-        if (err != null) {
-            InputStream shellStdErr = p.getErrorStream();
-            new Streams().connect(shellStdErr, err);
-        }
-
+        streams.connect(p.getInputStream(), out);
+        streams.connect(p.getErrorStream(), err);
         return p.waitFor();
-    }
-
-    private void print(InputStream in) throws IOException {
-        out.print(streams.readString(in));
     }
 
     public int getReturnCode() {
