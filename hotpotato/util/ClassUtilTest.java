@@ -1,0 +1,51 @@
+/*
+ * Copyright (C) 2003 by Eric Herman.
+ * For licensing information see GnuGeneralPublicLicenseVersion2.txt
+ *  or http://www.fsf.org/licenses/gpl.txt 
+ *  or for alternative licensing, email Eric Herman: eric AT rnd DOT cx 
+ */
+package hotpotato.util;
+
+import java.util.*;
+
+import junit.framework.*;
+
+public class ClassUtilTest extends TestCase {
+    public void testResourceName() {
+        String className = getClass().getName();
+        assertEquals("hotpotato.util.ClassUtilTest", className);
+        String resourceName = new ClassUtil().toResourceName(className);
+        assertEquals("hotpotato/util/ClassUtilTest.class", resourceName);
+    }
+
+    public void testToClassName() {
+        String className = new ClassUtil().toClassName("aliens/Alien.class");
+        assertEquals("aliens.Alien", className);
+    }
+
+    public void testLoadResourceBytes() throws Exception {
+        byte[] simpleFileBytes =
+            new byte[] {
+                68,
+                111,
+                110,
+                39,
+                116,
+                32,
+                99,
+                104,
+                97,
+                110,
+                103,
+                101,
+                32,
+                109,
+                101,
+                33,
+                10 };
+
+        String fileName = "hotpotato/util/simplefile.txt";
+        byte[] result = new ClassUtil().loadResourceBytes(fileName, null);
+        assertTrue(Arrays.equals(result, simpleFileBytes));
+    }
+}
