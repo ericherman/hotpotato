@@ -1,12 +1,8 @@
 package hotpotato.util;
 
-public class Equals {
+public abstract class Equals {
 
-    public interface Block {
-        public boolean equal(Object left, Object right);
-    }
-
-    public boolean equal(Object left, Object right, Block block) {
+    public boolean check(Object left, Object right) {
         if (left == right) {
             return true;
         }
@@ -14,15 +10,17 @@ public class Equals {
             return false;
         }
 
-        if (classConstraintMisMatch(left, right)) {
+        if (!classConstraintMatch(left, right)) {
             return false;
         }
 
-        return block.equal(left, right);
+        return classCheck(left, right);
     }
 
     /** over-ride for "instanceof" or class.getName() matching */
-    protected boolean classConstraintMisMatch(Object left, Object right) {
-        return left.getClass() != right.getClass();
+    protected boolean classConstraintMatch(Object left, Object right) {
+        return left.getClass().equals(right.getClass());
     }
+
+    protected abstract boolean classCheck(Object left, Object right);
 }
