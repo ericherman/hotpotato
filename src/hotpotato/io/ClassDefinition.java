@@ -47,7 +47,7 @@ class ClassDefinition implements Serializable {
     }
 
     public String toString() {
-        return className() + ": " + classBytes().length;
+        return className() + ", size: " + classBytes().length;
     }
 
     public boolean equals(Object obj) {
