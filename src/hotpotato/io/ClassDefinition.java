@@ -1,5 +1,5 @@
 /**
- * Copyright (C) 2003 by Eric Herman. 
+ * Copyright (C) 2003, 2005 by Eric Herman. 
  * For licensing information see GnuGeneralPublicLicenseVersion2.txt 
  *  or http://www.fsf.org/licenses/gpl.txt
  *  or for alternative licensing, email Eric Herman: eric AT rnd DOT cx
@@ -11,10 +11,10 @@ import hotpotato.util.*;
 import java.io.*;
 import java.util.*;
 
-class ClassDefinition implements Serializable, Equals.Owner {
-	private static final long serialVersionUID = 1L;
+class ClassDefinition implements Serializable {
+    private static final long serialVersionUID = 1L;
 
-	private final String className;
+    private final String className;
 
     private final byte[] classBytes;
 
@@ -38,16 +38,16 @@ class ClassDefinition implements Serializable, Equals.Owner {
     public String toString() {
         return className() + ": " + classBytes().length;
     }
-    
-    public boolean equalsInner(Object obj){
-        ClassDefinition other = (ClassDefinition) obj;
-        if (!className().equals(other.className()))
-            return false;
-        return Arrays.equals(classBytes(), other.classBytes());
-    }
 
     public boolean equals(Object obj) {
-        return new Equals(this).check(obj);
+        return new Equals(this) {
+            protected boolean equalsInner(Object obj) {
+                ClassDefinition other = (ClassDefinition) obj;
+                if (!className().equals(other.className()))
+                    return false;
+                return Arrays.equals(classBytes(), other.classBytes());
+            }
+        }.check(obj);
     }
 
     public int hashCode() {
