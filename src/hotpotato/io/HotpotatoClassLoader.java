@@ -17,9 +17,13 @@ class HotpotatoClassLoader extends SecureClassLoader {
     private final ClassUtil classes;
 
     public HotpotatoClassLoader(ClassLoader parent) {
+        this(new StandardClassUtil(), parent);
+    }
+    
+    HotpotatoClassLoader(ClassUtil classes, ClassLoader parent) {
         super(parent);
-        defs = new HashMap();
-        classes = new ClassUtil();
+        this.defs = new HashMap();
+        this.classes = classes;
         SecurityManager manager = System.getSecurityManager();
 
         if (manager == null) {

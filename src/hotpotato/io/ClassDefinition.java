@@ -18,16 +18,13 @@ class ClassDefinition implements Serializable, Equals.Owner {
 
     private final byte[] classBytes;
 
-    private final ClassUtil classUtil;
-
     public ClassDefinition(Class aClass) throws IOException {
-        this.classUtil = new ClassUtil();
+        this(new StandardClassUtil(), aClass);
+    }
+
+    ClassDefinition(ClassUtil classUtil, Class aClass) throws IOException {
         this.className = aClass.getName();
-        
-        String resourceName = classUtil.toResourceName(className);
-        ClassLoader classLoader = classUtil.classLoaderFor(aClass);
-        this.classBytes = classUtil
-                .loadResourceBytes(resourceName, classLoader);
+        this.classBytes = classUtil.getResourceBytes(aClass);
     }
 
     public String className() {

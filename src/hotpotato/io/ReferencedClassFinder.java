@@ -20,11 +20,11 @@ final class ReferencedClassFinder {
     boolean ignoreHotpotatoClasses;
 
     ReferencedClassFinder() {
-        this(true);
+        this(true, new StandardClassUtil());
     }
 
-    ReferencedClassFinder(boolean ignoreHotpotatoClasses) {
-        classes = new ClassUtil();
+    ReferencedClassFinder(boolean ignoreHotpotatoClasses, ClassUtil classes) {
+        this.classes = classes;
         this.ignoreHotpotatoClasses = ignoreHotpotatoClasses;
     }
 
@@ -115,8 +115,8 @@ final class ReferencedClassFinder {
     private JavaClass toJavaClass(Class aClass) throws IOException {
         String classResourceName = classes.toResourceName(aClass);
         ClassLoader cl = classes.classLoaderFor(aClass);
-        InputStream str = cl.getResourceAsStream(classResourceName);
-        ClassParser parser = new ClassParser(str, classResourceName);
+        InputStream is = cl.getResourceAsStream(classResourceName);
+        ClassParser parser = new ClassParser(is, classResourceName);
         return parser.parse();
     }
 

@@ -16,12 +16,12 @@ public class ClassUtilTest extends TestCase {
         assertEquals("hotpotato.util.ClassUtilTest", className);
 
         String expected = "hotpotato/util/ClassUtilTest.class";
-        assertEquals(expected, new ClassUtil().toResourceName(className));
-        assertEquals(expected, new ClassUtil().toResourceName(getClass()));
+        assertEquals(expected, new StandardClassUtil().toResourceName(className));
+        assertEquals(expected, new StandardClassUtil().toResourceName(getClass()));
     }
 
     public void testToClassName() {
-        String className = new ClassUtil().toClassName("aliens/Alien.class");
+        String className = new StandardClassUtil().toClassName("aliens/Alien.class");
         assertEquals("aliens.Alien", className);
     }
 
@@ -48,7 +48,7 @@ public class ClassUtilTest extends TestCase {
 
         String fileName = "hotpotato/util/simplefile.txt";
         ClassLoader system = ClassLoader.getSystemClassLoader();
-        byte[] result = new ClassUtil().loadResourceBytes(fileName, system);
+        byte[] result = new StandardClassUtil().loadResourceBytes(fileName, system);
         assertTrue(Arrays.equals(result, simpleFileBytes));
     }
 }
