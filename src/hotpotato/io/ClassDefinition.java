@@ -33,12 +33,12 @@ class ClassDefinition implements Serializable {
         
         this.equals = new Equals(this) {
             private static final long serialVersionUID = 1L;
-            public boolean classCheck(Object other) {
-                ClassDefinition them = (ClassDefinition) other;
+            public boolean classCheck(Object obj) {
+                ClassDefinition other = (ClassDefinition) obj;
 
-                if (!className().equals(them.className()))
+                if (!className().equals(other.className()))
                     return false;
-                return Arrays.equals(classBytes(), them.classBytes());
+                return Arrays.equals(classBytes(), other.classBytes());
             }
         };
     }
