@@ -13,7 +13,9 @@ import java.util.*;
 
 class ClassDefinition implements Serializable {
     private final String className;
+
     private final byte[] classBytes;
+
     private final ClassUtil classUtil;
 
     public ClassDefinition(Class aClass) throws IOException {
@@ -21,8 +23,8 @@ class ClassDefinition implements Serializable {
         this.className = aClass.getName();
         String resourceName = classUtil.toResourceName(className);
         ClassLoader classLoader = classUtil.classLoaderFor(aClass);
-        this.classBytes =
-            classUtil.loadResourceBytes(resourceName, classLoader);
+        this.classBytes = classUtil
+                .loadResourceBytes(resourceName, classLoader);
     }
 
     public String className() {
@@ -38,15 +40,18 @@ class ClassDefinition implements Serializable {
     }
 
     public boolean equals(Object obj) {
-        if (obj == null)
-            return false;
-        if (!(getClass().equals(obj.getClass())))
-            return false;
-        ClassDefinition other = (ClassDefinition) obj;
+        Equals.Block block = new Equals.Block() {
+            public boolean equal(Object left, Object right) {
+                ClassDefinition us = (ClassDefinition) left;
+                ClassDefinition other = (ClassDefinition) right;
 
-        if (!className().equals(other.className()))
-            return false;
-        return Arrays.equals(classBytes(), other.classBytes());
+                if (!us.className().equals(other.className()))
+                    return false;
+                return Arrays.equals(us.classBytes(), other.classBytes());
+            }
+        };
+
+        return new Equals().equal(this, obj, block);
     }
 
     public int hashCode() {
