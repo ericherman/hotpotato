@@ -40,8 +40,8 @@ The goal of Hotpotato is to make all of the aspects of the
 distribution of work easy. Hopefully the only hard part will be 
 in writing the actual work to get distributed! With an easy 
 distribution framework available, work which we might normally 
-batch in serial may make more sense in parrallel. Of course, 
-not all problems lend themselves to parrallel solutions. 
+batch in serial may make more sense in parallel. Of course, 
+not all problems lend themselves to parallel solutions. 
 
 THANKS
 
@@ -54,7 +54,7 @@ as well as helping me debug various stuff along the way.
 
 The largest thanks goes to Brett Neumeier for everything, but 
 mostly for being The Guru. Countless times I got stuck in the 
-persnickity details of things like object stream headers or 
+persnickety details of things like object stream headers or 
 class loading or security management .... At least once, I was
 so badly stuck, that I think I would have given up without his 
 willingness to help me understand /why/ something was behaving 
@@ -116,7 +116,7 @@ worth of coding 4 or 5 times in a row. For this reason I want it
 to be easy and painless to run the tests early and often. In the 
 extreme, maybe I'd hook up the test running to my save key. :-)
 
-SYSTEM OF NAMES - Packages, Classes, Varaiables
+SYSTEM OF NAMES - Packages, Classes, Variables
 
 For starters, why "Hotpotato" anyway? Well, because when Ian and 
 I first wrote some code to pass objects around between two or 
@@ -202,7 +202,7 @@ are required, perhaps this is a clue that a new method is wanting
 to be extracted.
 
 Please use curly braces, even when they aren't strictly needed.
-Why? Sigh. Becuase I'm asking nicely. I just like to be able to
+Why? Sigh. Because I'm asking nicely. I just like to be able to
 drop an assertEquals() or println() in anywhere without having to
 add (and later remove) the curly braces.
 
