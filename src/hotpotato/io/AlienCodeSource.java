@@ -9,10 +9,7 @@ package hotpotato.io;
 import java.security.*;
 
 class AlienCodeSource extends CodeSource {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 3256725074055606838L;
+	private static final long serialVersionUID = 1L;
 
 	public AlienCodeSource() {
         super(null, (java.security.cert.Certificate[]) null);

@@ -12,10 +12,7 @@ import java.io.*;
 import java.util.*;
 
 class ClassDefinition implements Serializable {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 3761970484098839603L;
+	private static final long serialVersionUID = 1L;
 
 	private final String className;
 

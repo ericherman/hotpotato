@@ -23,10 +23,7 @@ public class ReferencedClassFinderTest extends TestCase {
     }
 
     class Wiz implements Baz {
-        /**
-		 * 
-		 */
-		private static final long serialVersionUID = 3832616266434294324L;
+		private static final long serialVersionUID = 1L;
 
 		public String interfaceMethod() {
             return "wiz";
