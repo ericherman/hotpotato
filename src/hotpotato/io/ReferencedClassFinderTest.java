@@ -23,7 +23,12 @@ public class ReferencedClassFinderTest extends TestCase {
     }
 
     class Wiz implements Baz {
-        public String interfaceMethod() {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 3832616266434294324L;
+
+		public String interfaceMethod() {
             return "wiz";
         }
     }
@@ -97,7 +102,11 @@ public class ReferencedClassFinderTest extends TestCase {
 
     public void testAnonymousAndInterfaceReferences() throws Exception {
         class Bar implements Baz {
-            public Foo getFoo() {
+            /**
+			 * 
+			 */
+			private static final long serialVersionUID = 3258413949669357368L;
+			public Foo getFoo() {
                 return new Foo() {
                     public String toString() {
                         return "anon";

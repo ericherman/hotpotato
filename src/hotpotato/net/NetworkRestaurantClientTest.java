@@ -21,7 +21,11 @@ public class NetworkRestaurantClientTest extends TestCase {
             server.shutdown();
     }
     static class FooRequest implements Request {
-        public Serializable exec(Restaurant restaurant) {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 3834031355196487474L;
+		public Serializable exec(Restaurant restaurant) {
             return null;
         }
         public String toString() {
