@@ -34,8 +34,8 @@ public abstract class Equals implements Serializable {
 
     /**
      * @deprecated over-ride with extreme caution: using "instanceof" or
-     *             class.getName() matching allows for breaking of the Equals
-     *             contract.
+     *             class.getName() matching allows for breaking of the 
+     *             ".equals(obj)" contract.
      */
     protected boolean classConstraintMatch(Object other) {
         return owner.getClass().equals(other.getClass());
