@@ -10,12 +10,12 @@ import java.util.*;
 
 import junit.framework.*;
 
-public class ClassUtilTest extends TestCase {
+public class StandardClassUtilTest extends TestCase {
     public void testResourceName() {
         String className = getClass().getName();
-        assertEquals("hotpotato.util.ClassUtilTest", className);
+        assertEquals("hotpotato.util.StandardClassUtilTest", className);
 
-        String expected = "hotpotato/util/ClassUtilTest.class";
+        String expected = "hotpotato/util/StandardClassUtilTest.class";
         assertEquals(expected, new StandardClassUtil().toResourceName(className));
         assertEquals(expected, new StandardClassUtil().toResourceName(getClass()));
     }

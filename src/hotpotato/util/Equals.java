@@ -41,6 +41,7 @@ public class Equals implements Serializable {
         return owner.getClass().equals(other.getClass());
     }
 
+    // ---------------------
     public static interface Owner {
         boolean equalsInner(Object other);
     }
