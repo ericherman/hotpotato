@@ -1,8 +1,7 @@
 /**
- * Copyright (C) 2003 by Eric Herman. 
- * For licensing information see GnuGeneralPublicLicenseVersion2.txt 
- *  or http://www.fsf.org/licenses/gpl.txt
- *  or for alternative licensing, email Eric Herman: eric AT rnd DOT cx
+ * Copyright (C) 2003 by Eric Herman. For licensing information see
+ * GnuGeneralPublicLicenseVersion2.txt or http://www.fsf.org/licenses/gpl.txt or
+ * for alternative licensing, email Eric Herman: eric AT rnd DOT cx
  */
 package hotpotato.io;
 
@@ -40,8 +39,8 @@ class ClassDefinition implements Serializable {
     }
 
     public boolean equals(Object obj) {
-        Equals.Block block = new Equals.Block() {
-            public boolean equal(Object left, Object right) {
+        return new Equals() {
+            public boolean classCheck(Object left, Object right) {
                 ClassDefinition us = (ClassDefinition) left;
                 ClassDefinition other = (ClassDefinition) right;
 
@@ -49,9 +48,7 @@ class ClassDefinition implements Serializable {
                     return false;
                 return Arrays.equals(us.classBytes(), other.classBytes());
             }
-        };
-
-        return new Equals().equal(this, obj, block);
+        }.check(this, obj);
     }
 
     public int hashCode() {
