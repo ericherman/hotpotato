@@ -19,14 +19,28 @@ class ClassDefinition implements Serializable {
     private final byte[] classBytes;
 
     private final ClassUtil classUtil;
+    
+    private final Equals equals;
 
     public ClassDefinition(Class aClass) throws IOException {
         this.classUtil = new ClassUtil();
         this.className = aClass.getName();
+        
         String resourceName = classUtil.toResourceName(className);
         ClassLoader classLoader = classUtil.classLoaderFor(aClass);
         this.classBytes = classUtil
                 .loadResourceBytes(resourceName, classLoader);
+        
+        this.equals = new Equals(this) {
+            private static final long serialVersionUID = 1L;
+            public boolean classCheck(Object other) {
+                ClassDefinition them = (ClassDefinition) other;
+
+                if (!className().equals(them.className()))
+                    return false;
+                return Arrays.equals(classBytes(), them.classBytes());
+            }
+        };
     }
 
     public String className() {
@@ -42,16 +56,7 @@ class ClassDefinition implements Serializable {
     }
 
     public boolean equals(Object obj) {
-        return new Equals(this) {
-            public boolean classCheck(Object right) {
-                ClassDefinition us = ClassDefinition.this;
-                ClassDefinition other = (ClassDefinition) right;
-
-                if (!us.className().equals(other.className()))
-                    return false;
-                return Arrays.equals(us.classBytes(), other.classBytes());
-            }
-        }.check(obj);
+        return equals.check(obj);
     }
 
     public int hashCode() {

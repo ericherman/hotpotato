@@ -6,7 +6,10 @@
  */
 package hotpotato.util;
 
-public abstract class Equals {
+import java.io.*;
+
+public abstract class Equals implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Object owner;
     
     public Equals(Object owner){
