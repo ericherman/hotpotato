@@ -20,7 +20,7 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
             if (passwd != null)
                 passwd.delete();
             super.tearDown();
-        } catch (Exception e) {
+        } catch (Exception e) { //
         }
     }
 
@@ -158,7 +158,7 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
         try {
             command.exec();
             fail("Violation should have thrown SecurityException");
-        } catch (SecurityException e) {
+        } catch (SecurityException e) { //
         }
     }
 
@@ -191,7 +191,7 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
         try {
             command.exec();
             fail("Violation should have thrown SecurityException");
-        } catch (SecurityException e) {
+        } catch (SecurityException e) { // 
         }
     }
 
@@ -214,7 +214,7 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
         try {
             command.exec();
             fail("Violation should have thrown SecurityException");
-        } catch (SecurityException e) {
+        } catch (SecurityException e) { //
         }
     }
 }

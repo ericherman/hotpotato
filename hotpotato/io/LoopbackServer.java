@@ -6,11 +6,10 @@
  */
 package hotpotato.io;
 
-import java.io.*;
-import java.net.*;
+import java.net.Socket;
 
 public class LoopbackServer extends ConnectionServer {
-    public LoopbackServer(int port) throws IOException {
+    public LoopbackServer(int port) {
         super(port, "LoopBack");
     }
 
@@ -22,6 +21,8 @@ public class LoopbackServer extends ConnectionServer {
                 sender.send(reciever.receive());
             }
         } catch (Exception quit) {
+        	// just die on exception
+        	// we're probably done
         }
     }
 }

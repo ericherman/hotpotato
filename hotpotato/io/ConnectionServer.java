@@ -105,7 +105,7 @@ public abstract class ConnectionServer {
 			}
 			try {
 				socket.close();
-			} catch (IOException e1) {
+			} catch (IOException e1) { //
 			}
 		}
 	}
