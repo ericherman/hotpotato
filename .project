@@ -3,7 +3,7 @@
 	<name>hotpotato</name>
 	<comment></comment>
 	<projects>
-		<project>bcel</project>
+		<project>jakarta</project>
 		<project>junit</project>
 	</projects>
 	<buildSpec>
