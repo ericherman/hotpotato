@@ -30,6 +30,8 @@ public final class Streams {
     }
 
     public void copy(InputStream from, OutputStream to) throws IOException {
+        // from = new BufferedInputStream(from);
+        // to = new BufferedOutputStream(to);
         while (true) {
             int i = from.read();
             if (i == END_OF_STREAM) {
@@ -37,6 +39,7 @@ public final class Streams {
             }
             to.write(i);
         }
+        // to.flush();
     }
 
     public String readString(InputStream from) throws IOException {
