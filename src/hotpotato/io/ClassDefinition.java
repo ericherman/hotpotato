@@ -11,7 +11,7 @@ import hotpotato.util.*;
 import java.io.*;
 import java.util.*;
 
-class ClassDefinition implements Serializable, Equals.Inner {
+class ClassDefinition implements Serializable, Equals.Owner {
 	private static final long serialVersionUID = 1L;
 
 	private final String className;

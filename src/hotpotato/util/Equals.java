@@ -10,9 +10,9 @@ import java.io.*;
 
 public class Equals implements Serializable {
     private static final long serialVersionUID = 1L;
-    private Equals.Inner owner;
+    private Equals.Owner owner;
     
-    public Equals(Equals.Inner owner){
+    public Equals(Equals.Owner owner){
         this.owner = owner;
     }
 
@@ -41,7 +41,7 @@ public class Equals implements Serializable {
         return owner.getClass().equals(other.getClass());
     }
 
-    public static interface Inner {
+    public static interface Owner {
         boolean equalsInner(Object other);
     }
 }
