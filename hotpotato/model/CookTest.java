@@ -8,6 +8,8 @@ package hotpotato.model;
 
 import hotpotato.*;
 import hotpotato.io.*;
+import hotpotato.testsupport.LocalRestaurantClient;
+import hotpotato.testsupport.ReturnStringOrder;
 
 import java.io.*;
 

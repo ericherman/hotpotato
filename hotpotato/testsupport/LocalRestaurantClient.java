@@ -4,7 +4,11 @@
  *  or http://www.fsf.org/licenses/gpl.txt 
  *  or for alternative licensing, email Eric Herman: eric AT rnd DOT cx 
  */
-package hotpotato;
+package hotpotato.testsupport;
+
+import hotpotato.Request;
+import hotpotato.Restaurant;
+import hotpotato.RestaurantClient;
 
 import java.io.*;
 

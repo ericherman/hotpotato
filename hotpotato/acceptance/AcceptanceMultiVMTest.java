@@ -9,6 +9,7 @@ package hotpotato.acceptance;
 import hotpotato.*;
 import hotpotato.io.*;
 import hotpotato.model.*;
+import hotpotato.testsupport.ReturnStringOrder;
 import hotpotato.util.*;
 
 import java.io.*;

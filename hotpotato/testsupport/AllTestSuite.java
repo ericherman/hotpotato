@@ -4,7 +4,7 @@
  *  or http://www.fsf.org/licenses/gpl.txt
  *  or for alternative licensing, email Eric Herman: eric AT rnd DOT cx
  */
-package hotpotato;
+package hotpotato.testsupport;
 
 import junit.framework.*;
 
@@ -15,7 +15,7 @@ public class AllTestSuite {
     }
 
     public static Test suite() {
-        TestSuite suite = new TestSuite("Top level Hotpotato Tests");
+        TestSuite suite = new TestSuite("Hotpotato 'Misc' Tests");
 
         suite.addTestSuite(ReturnStringOrderTest.class);
 

@@ -7,11 +7,11 @@
 package hotpotato.acceptance;
 
 import hotpotato.Order;
-import hotpotato.ReturnStringOrder;
 import hotpotato.io.ConnectionServer;
 import hotpotato.model.Cook;
 import hotpotato.model.Customer;
 import hotpotato.net.RestaurantServer;
+import hotpotato.testsupport.ReturnStringOrder;
 
 import java.io.Serializable;
 
