@@ -25,9 +25,9 @@ public class ReferencedClassFinderTest extends TestCase {
     }
 
     class Wiz implements Baz {
-		private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 1L;
 
-		public String interfaceMethod() {
+        public String interfaceMethod() {
             return "wiz";
         }
     }
@@ -43,7 +43,8 @@ public class ReferencedClassFinderTest extends TestCase {
                 this.baz = baz;
             }
         }
-        ReferencedClassFinder finder = new ReferencedClassFinder(false, new StandardClassUtil());
+        ReferencedClassFinder finder = new ReferencedClassFinder(false,
+                new StandardClassUtil());
         Wiz wiz = new Wiz();
         Foo foo = new Foo(wiz);
 
@@ -64,7 +65,8 @@ public class ReferencedClassFinderTest extends TestCase {
                 return baz.toString();
             }
         }
-        ReferencedClassFinder finder = new ReferencedClassFinder(false, new StandardClassUtil());
+        ReferencedClassFinder finder = new ReferencedClassFinder(false,
+                new StandardClassUtil());
         Wiz wiz = new Wiz();
         Foo foo = new Foo(wiz);
 
@@ -82,7 +84,8 @@ public class ReferencedClassFinderTest extends TestCase {
 
     public void testNoReferences() throws Exception {
         Set done = new HashSet();
-        new ReferencedClassFinder(false, new StandardClassUtil()).findReferences(done, new Foo());
+        new ReferencedClassFinder(false, new StandardClassUtil())
+                .findReferences(done, new Foo());
         assertContains(done, Foo.class);
     }
 
@@ -94,15 +97,16 @@ public class ReferencedClassFinderTest extends TestCase {
         }
 
         Set done = new HashSet();
-        new ReferencedClassFinder(false, new StandardClassUtil()).findReferences(done, new Bar());
+        new ReferencedClassFinder(false, new StandardClassUtil())
+                .findReferences(done, new Bar());
         assertContains(done, Bar.class);
         assertContains(done, Foo.class);
     }
 
     public void testAnonymousAndInterfaceReferences() throws Exception {
         class Bar implements Baz {
-    		private static final long serialVersionUID = 1L;
-			public Foo getFoo() {
+            private static final long serialVersionUID = 1L;
+            public Foo getFoo() {
                 return new Foo() {
                     public String toString() {
                         return "anon";
@@ -116,7 +120,8 @@ public class ReferencedClassFinderTest extends TestCase {
 
         Bar bar = new Bar();
         Set done = new HashSet();
-        new ReferencedClassFinder(false , new StandardClassUtil()).findReferences(done, bar);
+        new ReferencedClassFinder(false, new StandardClassUtil())
+                .findReferences(done, bar);
         assertContains(done, Bar.class);
         assertContains(done, Foo.class);
         assertContains(done, Baz.class);
@@ -134,7 +139,8 @@ public class ReferencedClassFinderTest extends TestCase {
                 return serializables.get(0).toString();
             }
         }
-        ReferencedClassFinder finder = new ReferencedClassFinder(false, new StandardClassUtil());
+        ReferencedClassFinder finder = new ReferencedClassFinder(false,
+                new StandardClassUtil());
         Foo foo = new Foo(new Wiz());
 
         List found = Arrays.asList(finder.find(foo));

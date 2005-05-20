@@ -6,7 +6,7 @@
  */
 package hotpotato.testsupport;
 
-import hotpotato.Order;
+import hotpotato.*;
 
 import java.io.*;
 

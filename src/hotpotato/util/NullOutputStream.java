@@ -6,7 +6,7 @@
  */
 package hotpotato.util;
 
-import java.io.OutputStream;
+import java.io.*;
 
 public class NullOutputStream extends OutputStream {
     public void write(int b) {

@@ -6,9 +6,7 @@
  */
 package hotpotato.testsupport;
 
-import hotpotato.Request;
-import hotpotato.Restaurant;
-import hotpotato.RestaurantClient;
+import hotpotato.*;
 
 import java.io.*;
 

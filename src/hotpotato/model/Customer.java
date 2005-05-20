@@ -24,7 +24,7 @@ public class Customer {
     }
 
     public String placeOrder(String prefix, final Order order)
-        throws IOException {
+            throws IOException {
         return "" + client.send(new PlaceOrderRequest(prefix, order));
     }
 

@@ -14,13 +14,13 @@ public class StreamsTest extends TestCase {
 
     public void testConnect() throws Exception {
         String expected = "sendMe";
-        ByteArrayInputStream send = new ByteArrayInputStream(expected.getBytes());
+        ByteArrayInputStream send = new ByteArrayInputStream(expected
+                .getBytes());
 
         ByteArrayOutputStream receive = new ByteArrayOutputStream();
 
         new Streams().connect(send, receive);
         Thread.sleep(20);
-
 
         assertEquals(expected, new String(receive.toByteArray()));
     }
@@ -33,8 +33,8 @@ public class StreamsTest extends TestCase {
      * we need an output stream to write to, and in order to tell what was sent
      * to the OutputStream we need to read it from an input stream.
      * 
-     * Less than obvious code, I know. It's easy to get lost in who's coming
-     * and who's going.
+     * Less than obvious code, I know. It's easy to get lost in who's coming and
+     * who's going.
      */
     public void testConnectMoreRealistically() throws Exception {
         PipedInputStream senderInputStream = new PipedInputStream();

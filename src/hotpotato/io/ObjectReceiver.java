@@ -10,9 +10,9 @@ import java.io.*;
 import java.net.*;
 
 /**
- * ObjectReceiver receives objects over a network connection. 
- * It loads all of the classes using a custom class loader, into
- * a security domain that has no privileges.
+ * ObjectReceiver receives objects over a network connection. It loads all of
+ * the classes using a custom class loader, into a security domain that has no
+ * privileges.
  */
 public class ObjectReceiver {
     private HotpotatoClassLoader loader;

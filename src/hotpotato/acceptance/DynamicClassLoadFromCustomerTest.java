@@ -31,58 +31,36 @@ public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
     }
 
     public void testRoundTripAlienOrder() throws Exception {
-        String[] source =
-            {
-                "package aliens;",
-                "import java.io.*;",
-                "import hotpotato.*;",
-                "public class Alien implements Order {",
+        String[] source = {"package aliens;", "import java.io.*;",
+                "import hotpotato.*;", "public class Alien implements Order {",
                 "    public Serializable exec() {",
-                "        return \"Alien\";",
-                "    }",
-                "}",
-                };
+                "        return \"Alien\";", "    }", "}",};
         roundTrip("Alien", source);
     }
 
     public void testComplexAlienOrder() throws Exception {
-        String[] source1 =
-            {
-                "package aliens;",
-                "public class AlienChild {",
-                "    public int foo = 0;",
-                "    public int getRand() {",
-                "        return (int) (10 * Math.random());",
-                "    }",
-                "}",
-                };
+        String[] source1 = {"package aliens;", "public class AlienChild {",
+                "    public int foo = 0;", "    public int getRand() {",
+                "        return (int) (10 * Math.random());", "    }", "}",};
 
         compileAlienClass("AlienChild", source1);
 
-        String[] source2 =
-            {
-                "package aliens;",
-                "import hotpotato.*;",
+        String[] source2 = {"package aliens;", "import hotpotato.*;",
                 "import java.io.*;",
                 "public class ComplexAlien implements Order {",
                 "    public Serializable exec() {",
                 "        AlienChild child = new AlienChild() {",
                 "            public int getRand() {",
                 "                return super.getRand() + 20;",
-                "            }",
-                "        };",
+                "            }", "        };",
                 "        if (child.getRand() > child.foo){",
-                "            return \"ComplexAlien\";",
-                "        }",
-                "        return null;",
-                "    }",
-                "}",
-                };
+                "            return \"ComplexAlien\";", "        }",
+                "        return null;", "    }", "}",};
         roundTrip("ComplexAlien", source2);
     }
 
     private void roundTrip(String shortClassName, String[] source)
-        throws Exception {
+            throws Exception {
 
         compileAlienClass(shortClassName, source);
         String className = "aliens." + shortClassName;
@@ -94,17 +72,10 @@ public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
         String maxSeconds = "10";
         String workUnits = "1";
 
-        String[] cookArgs =
-            new String[] {
-                "java",
-                "-cp",
-                CLASSPATH,
-                CookRunner.class.getName(),
-                maxSeconds,
-                workUnits,
+        String[] cookArgs = new String[]{"java", "-cp", CLASSPATH,
+                CookRunner.class.getName(), maxSeconds, workUnits,
                 InetAddress.getLocalHost().getHostName(),
-                "" + server.getPort(),
-                };
+                "" + server.getPort(),};
 
         new Shell(cookArgs, ENVP, "cook").start();
 
@@ -115,15 +86,8 @@ public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
 
         // System.out.println(CLASSPATH);
         // System.out.println(alienClasspath);
-        String[] args =
-            new String[] {
-                "java",
-                "-cp",
-                alienClasspath,
-                javaProgram,
-                maxSeconds,
-                "" + server.getPort(),
-                className,
+        String[] args = new String[]{"java", "-cp", alienClasspath,
+                javaProgram, maxSeconds, "" + server.getPort(), className,
                 "" + reportingServer.getLocalPort()};
 
         launched = new Shell(args, ENVP, "send alien");

@@ -15,9 +15,9 @@ import junit.framework.*;
 
 public abstract class DynamicClassLoadFixture extends TestCase {
     private final static String PATH = System.getProperty("java.library.path");
-    protected final static String CLASSPATH =
-        System.getProperty("java.class.path");
-    protected final static String[] ENVP = new String[] { "PATH=" + PATH };
+    protected final static String CLASSPATH = System
+            .getProperty("java.class.path");
+    protected final static String[] ENVP = new String[]{"PATH=" + PATH};
 
     protected String alienClasspath;
     protected Thread launched;
@@ -52,22 +52,17 @@ public abstract class DynamicClassLoadFixture extends TestCase {
     }
 
     protected void compileAlienClass(String shortClassName, String[] alienSrc)
-        throws Exception {
+            throws Exception {
 
         File alienJava = new File(aliensDir, shortClassName + ".java");
         File alienClass = new File(aliensDir, shortClassName + ".class");
         writeFile(alienJava, alienSrc);
         alienClasspath = CLASSPATH + File.pathSeparatorChar + testDir.getPath();
 
-        String[] args =
-            new String[] {
-                "javac",
-                "-classpath",
-                alienClasspath,
-                alienJava.getPath(),
-                };
+        String[] args = new String[]{"javac", "-classpath", alienClasspath,
+                alienJava.getPath(),};
 
-        Thread t = new Shell(args, ENVP, "javac Alien"); //, System.err);
+        Thread t = new Shell(args, ENVP, "javac Alien"); // , System.err);
         t.start();
         t.join();
         assertTrue("java file exists", alienJava.exists());
@@ -75,25 +70,19 @@ public abstract class DynamicClassLoadFixture extends TestCase {
     }
 
     protected void launchDynamicClassSender(String className, int port)
-        throws UnknownHostException {
+            throws UnknownHostException {
         String javaProgram = DynamicClassSender.class.getName();
         assertEquals("hotpotato.io.DynamicClassSender", javaProgram);
-        String[] args =
-            new String[] {
-                "java",
-                "-cp",
-                alienClasspath,
-                javaProgram,
-                InetAddress.getLocalHost().getHostName(),
-                Integer.toString(port),
-                className };
+        String[] args = new String[]{"java", "-cp", alienClasspath,
+                javaProgram, InetAddress.getLocalHost().getHostName(),
+                Integer.toString(port), className};
 
         launched = new Shell(args, ENVP, "send alien");
         launched.start();
     }
 
     protected void writeFile(File file, String[] contents)
-        throws FileNotFoundException, IOException {
+            throws FileNotFoundException, IOException {
         FileOutputStream fos = new FileOutputStream(file);
         PrintWriter out = new PrintWriter(fos);
         for (int i = 0; i < contents.length; i++)

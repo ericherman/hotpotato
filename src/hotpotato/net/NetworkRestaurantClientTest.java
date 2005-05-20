@@ -21,8 +21,8 @@ public class NetworkRestaurantClientTest extends TestCase {
             server.shutdown();
     }
     static class FooRequest implements Request {
-		private static final long serialVersionUID = 1L;
-		public Serializable exec(Restaurant restaurant) {
+        private static final long serialVersionUID = 1L;
+        public Serializable exec(Restaurant restaurant) {
             return null;
         }
         public String toString() {
@@ -35,8 +35,7 @@ public class NetworkRestaurantClientTest extends TestCase {
         server.start();
 
         NetworkRestaurantClient client = new NetworkRestaurantClient(server
-                .getInetAddress(),
-                server.getPort());
+                .getInetAddress(), server.getPort());
 
         Serializable s = client.send(new FooRequest());
 

@@ -10,9 +10,9 @@ import java.io.*;
 import java.net.*;
 
 /**
- * ObjectSender sends objects over a network connection. 
- * It also sends all class files that will be needed
- * in order to deserialize the object on the remote side.
+ * ObjectSender sends objects over a network connection. It also sends all class
+ * files that will be needed in order to deserialize the object on the remote
+ * side.
  */
 public class ObjectSender {
     private ObjectOutputStream oos;

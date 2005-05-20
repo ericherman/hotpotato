@@ -70,8 +70,8 @@ final class ReferencedClassFinder {
         return classes.toResourceName(inner.getClass()).startsWith("java/");
     }
 
-    void findReferences(Set done, Object obj)
-        throws ClassNotFoundException, IOException {
+    void findReferences(Set done, Object obj) throws ClassNotFoundException,
+            IOException {
 
         Set toDo = new HashSet();
         Class startingClass = obj.getClass();
@@ -85,12 +85,12 @@ final class ReferencedClassFinder {
             for (int i = 0; i < pool.getLength(); i++) {
                 Constant con = pool.getConstant(i);
                 if (con instanceof ConstantClass) {
-                    String refClass =
-                        pool.getConstantString(i, Constants.CONSTANT_Class);
+                    String refClass = pool.getConstantString(i,
+                            Constants.CONSTANT_Class);
                     if (!shouldIgnore(refClass)) {
                         ClassLoader cl = classes.classLoaderFor(aClass);
-                        Class nextClass =
-                            cl.loadClass(classes.toClassName(refClass));
+                        Class nextClass = cl.loadClass(classes
+                                .toClassName(refClass));
                         if (!done.contains(nextClass)) {
                             toDo.add(nextClass);
                         }
@@ -104,8 +104,8 @@ final class ReferencedClassFinder {
 
     private boolean shouldIgnore(String refClass) {
         return refClass.startsWith("java/")
-            || refClass.startsWith("[")
-            || (ignoreHotpotatoClasses && refClass.startsWith("hotpotato/"));
+                || refClass.startsWith("[")
+                || (ignoreHotpotatoClasses && refClass.startsWith("hotpotato/"));
     }
 
     private Class getOne(Set set) {

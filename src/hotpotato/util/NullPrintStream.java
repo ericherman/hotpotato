@@ -6,7 +6,7 @@
  */
 package hotpotato.util;
 
-import java.io.PrintStream;
+import java.io.*;
 
 public class NullPrintStream extends PrintStream {
     public NullPrintStream() {

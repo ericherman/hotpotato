@@ -22,9 +22,7 @@ public class RestaurantRunner {
         RestaurantServer server = new RestaurantServer(port, alices);
         server.start();
 
-        for (int i = 0;
-            (i < maxLoops) && (alices.ordersDelivered() < quota);
-            i++) {
+        for (int i = 0; (i < maxLoops) && (alices.ordersDelivered() < quota); i++) {
             Thread.sleep(250);
         }
 

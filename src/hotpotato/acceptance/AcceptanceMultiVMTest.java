@@ -9,7 +9,7 @@ package hotpotato.acceptance;
 import hotpotato.*;
 import hotpotato.io.*;
 import hotpotato.model.*;
-import hotpotato.testsupport.ReturnStringOrder;
+import hotpotato.testsupport.*;
 import hotpotato.util.*;
 
 import java.io.*;
@@ -32,18 +32,18 @@ public class AcceptanceMultiVMTest extends TestCase {
 
     public void test1Customer1Cook() throws Exception {
         String path = System.getProperty("java.library.path");
-        String[] envp = new String[] { "PATH=" + path };
+        String[] envp = new String[]{"PATH=" + path};
         String classpath = System.getProperty("java.class.path");
         String maxSeconds = "5";
         String workUnits = "1";
 
-        String[] restaurantArgs = new String[] { "java", "-cp", classpath,
+        String[] restaurantArgs = new String[]{"java", "-cp", classpath,
                 "hotpotato.acceptance.RestaurantRunner", maxSeconds, workUnits,
-                "" + port, };
+                "" + port,};
 
-        String[] cookArgs = new String[] { "java", "-cp", classpath,
+        String[] cookArgs = new String[]{"java", "-cp", classpath,
                 "hotpotato.acceptance.CookRunner", maxSeconds, workUnits,
-                InetAddress.getLocalHost().getHostName(), "" + port, };
+                InetAddress.getLocalHost().getHostName(), "" + port,};
 
         new Shell(restaurantArgs, envp, "Restaraunt").start();
         Thread.sleep(3 * ConnectionServer.SLEEP_DELAY);

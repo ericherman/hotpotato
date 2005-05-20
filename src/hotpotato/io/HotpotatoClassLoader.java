@@ -19,7 +19,7 @@ class HotpotatoClassLoader extends SecureClassLoader {
     public HotpotatoClassLoader(ClassLoader parent) {
         this(new StandardClassUtil(), parent);
     }
-    
+
     HotpotatoClassLoader(ClassUtil classes, ClassLoader parent) {
         super(parent);
         this.defs = new HashMap();

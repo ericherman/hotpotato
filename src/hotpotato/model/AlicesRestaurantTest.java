@@ -7,7 +7,7 @@
 package hotpotato.model;
 
 import hotpotato.*;
-import hotpotato.testsupport.ReturnStringOrder;
+import hotpotato.testsupport.*;
 import junit.framework.*;
 
 public class AlicesRestaurantTest extends TestCase {

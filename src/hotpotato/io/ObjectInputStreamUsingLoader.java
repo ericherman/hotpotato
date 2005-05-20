@@ -12,14 +12,14 @@ class ObjectInputStreamUsingLoader extends ObjectInputStream {
     private ClassLoader loader;
 
     public ObjectInputStreamUsingLoader(ClassLoader loader, InputStream in)
-        throws IOException {
+            throws IOException {
 
         super(in);
         this.loader = loader;
     }
 
     protected Class resolveClass(ObjectStreamClass desc)
-        throws ClassNotFoundException {
+            throws ClassNotFoundException {
 
         return loader.loadClass(desc.getName());
     }

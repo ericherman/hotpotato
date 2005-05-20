@@ -8,9 +8,9 @@ package hotpotato.util;
 
 import java.io.*;
 
-/** 
- * Bundle of utility methods that do name conversions from classes to
- * resources and back.  
+/**
+ * Bundle of utility methods that do name conversions from classes to resources
+ * and back.
  */
 public interface ClassUtil {
     public abstract ClassLoader classLoaderFor(Class aClass);
