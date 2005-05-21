@@ -11,6 +11,10 @@ import hotpotato.io.*;
 import java.net.*;
 
 public class LoopbackServer extends ConnectionServer {
+    public LoopbackServer() {
+        this(0);
+    }
+
     public LoopbackServer(int port) {
         super(port, "LoopBack");
     }

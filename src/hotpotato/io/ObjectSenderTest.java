@@ -61,7 +61,7 @@ public class ObjectSenderTest extends TestCase {
     }
 
     public void testWriteAndRead() throws Exception {
-        loopback = new LoopbackServer(0);
+        loopback = new LoopbackServer();
         loopback.start();
         Object obj1 = "";
         Object obj2 = "";
@@ -85,7 +85,7 @@ public class ObjectSenderTest extends TestCase {
     }
 
     public void testAssumptions() throws Exception {
-        loopback = new LoopbackServer(0);
+        loopback = new LoopbackServer();
         loopback.start();
 
         Object obj1 = "Foo";

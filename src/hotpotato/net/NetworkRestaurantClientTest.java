@@ -32,7 +32,7 @@ public class NetworkRestaurantClientTest extends TestCase {
     }
 
     public void testSend() throws Exception {
-        server = new LoopbackServer(0);
+        server = new LoopbackServer();
         server.start();
 
         NetworkRestaurantClient client = new NetworkRestaurantClient(server

@@ -17,7 +17,7 @@ public class ConnectionServerTest extends TestCase {
     private ConnectionServer server;
 
     protected void setUp() throws Exception {
-        server = new LoopbackServer(0);
+        server = new LoopbackServer();
         server.start();
     }
 

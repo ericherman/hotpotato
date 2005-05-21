@@ -54,7 +54,7 @@ public class ObjectRecieverTest extends TestCase {
     }
 
     public void testWriteAndRead() throws Exception {
-        loopback = new LoopbackServer(0);
+        loopback = new LoopbackServer();
         loopback.start();
         Object obj1 = "";
         Object obj2 = "";
