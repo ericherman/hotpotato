@@ -16,13 +16,13 @@ public class RestaurantRunner {
         int quota = Integer.parseInt(args[1]);
         int port = Integer.parseInt(args[2]);
 
-        int maxLoops = maxWorkTimeSeconds * 4;
+        int MAX = maxWorkTimeSeconds * 4;
 
         Restaurant alices = new AlicesRestaurant();
         RestaurantServer server = new RestaurantServer(port, alices);
         server.start();
 
-        for (int i = 0; (i < maxLoops) && (alices.ordersDelivered() < quota); i++) {
+        for (int i = 0; (i < MAX) && (alices.ordersDelivered() < quota); i++) {
             Thread.sleep(250);
         }
 

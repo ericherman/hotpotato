@@ -117,7 +117,7 @@ public class AcceptanceTest extends TestCase {
         Serializable cFries = null;
         Serializable dFries = null;
 
-        for (int i = 0; (bFries == null || cFries == null || dFries == null); i++) {
+        for (int i = 0; anyNull(bFries, cFries, dFries); i++) {
             String status = bFries + ", " + cFries + ", " + dFries;
             assertTrue("loop limit reached (" + status + ")", i < LOOP_LIMIT);
             if (cFries == null)
@@ -133,6 +133,14 @@ public class AcceptanceTest extends TestCase {
         assertEquals(bOrder.exec(), bFries);
         assertEquals(cOrder.exec(), cFries);
         assertEquals(dOrder.exec(), dFries);
+    }
+
+    private boolean anyNull(Object a, Object b, Object c) {
+        return a == null || b == null || c == null;
+    }
+
+    private boolean anyNull(Object a, Object b, Object c, Object d) {
+        return anyNull(a,b,c) || d== null;
     }
 
     public void test4Customers2Cooks() throws Exception {
@@ -163,7 +171,7 @@ public class AcceptanceTest extends TestCase {
         Serializable dFries = null;
         Serializable eFries = null;
 
-        for (int i = 0; (bFries == null || cFries == null || dFries == null || eFries == null); i++) {
+        for (int i = 0; anyNull(bFries, cFries, dFries, eFries); i++) {
 
             String status = bFries + ", " + cFries + ", " + dFries + ", "
                     + eFries;

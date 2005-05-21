@@ -38,7 +38,9 @@ class HotpotatoClassLoader extends SecureClassLoader {
         byte[] bytes = getBytes(name);
         if (bytes == null)
             throw new ClassNotFoundException(name);
-        return defineClass(name, bytes, 0, bytes.length, new AlienCodeSource());
+        int offset = 0;
+        CodeSource codeSource = new AlienCodeSource();
+        return defineClass(name, bytes, offset, bytes.length, codeSource);
     }
 
     private byte[] getBytes(String className) {

@@ -15,9 +15,9 @@ public class EqualsTest extends TestCase {
         class MyClass {
             public boolean equals(Object obj) {
                 return new Equals(this) {
-                    protected boolean equalsInner(Object obj) {
+                    protected boolean equalsInner(Object other) {
                         equalsInnerCalled = true;
-                        return this == obj;
+                        return this == other;
                     }
                 }.check(obj);
             }
@@ -66,7 +66,7 @@ public class EqualsTest extends TestCase {
 
             public boolean equals(Object obj) {
                 return new Equals(this) {
-                    protected boolean equalsInner(Object obj) {
+                    protected boolean equalsInner(Object other) {
                         return true;
                     }
                 }.check(obj);
@@ -95,9 +95,9 @@ public class EqualsTest extends TestCase {
 
             public boolean equals(Object obj) {
                 return new Equals(this) {
-                    protected boolean equalsInner(Object obj) {
+                    protected boolean equalsInner(Object other) {
                         equalsInnerCalled = true;
-                        return a == ((MyClass) obj).a;
+                        return a == ((MyClass) other).a;
                     }
                 }.check(obj);
             }

@@ -102,10 +102,18 @@ final class ReferencedClassFinder {
         }
     }
 
-    private boolean shouldIgnore(String refClass) {
-        return refClass.startsWith("java/")
-                || refClass.startsWith("[")
-                || (ignoreHotpotatoClasses && refClass.startsWith("hotpotato/"));
+    private boolean shouldIgnore(String className) {
+        return className.startsWith("java/")
+                || isArrayClass(className)
+                || (ignoreHotpotatoClasses && isHotpotatoClass(className));
+    }
+
+    private boolean isHotpotatoClass(String name) {
+        return name.startsWith("hotpotato/");
+    }
+
+    private boolean isArrayClass(String name) {
+        return name.startsWith("[");
     }
 
     private Class getOne(Set set) {

@@ -31,31 +31,47 @@ public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
     }
 
     public void testRoundTripAlienOrder() throws Exception {
-        String[] source = {"package aliens;", "import java.io.*;",
-                "import hotpotato.*;", "public class Alien implements Order {",
-                "    public Serializable exec() {",
-                "        return \"Alien\";", "    }", "}",};
+        String[] source = {"package aliens;", //
+                "import java.io.*;", //
+                "import hotpotato.*;", //
+                "public class Alien implements Order {", //
+                "    public Serializable exec() {", //
+                "        return \"Alien\";", //
+                "    }", //
+                "}", //
+        };
         roundTrip("Alien", source);
     }
 
     public void testComplexAlienOrder() throws Exception {
-        String[] source1 = {"package aliens;", "public class AlienChild {",
-                "    public int foo = 0;", "    public int getRand() {",
-                "        return (int) (10 * Math.random());", "    }", "}",};
+        String[] source1 = {"package aliens;", //
+                "public class AlienChild {", //
+                "    public int foo = 0;", //
+                "    public int getRand() {", //
+                "        return (int) (10 * Math.random());", //
+                "    }", //
+                "}", //
+        };
 
         compileAlienClass("AlienChild", source1);
 
-        String[] source2 = {"package aliens;", "import hotpotato.*;",
-                "import java.io.*;",
-                "public class ComplexAlien implements Order {",
-                "    public Serializable exec() {",
-                "        AlienChild child = new AlienChild() {",
-                "            public int getRand() {",
-                "                return super.getRand() + 20;",
-                "            }", "        };",
-                "        if (child.getRand() > child.foo){",
-                "            return \"ComplexAlien\";", "        }",
-                "        return null;", "    }", "}",};
+        String[] source2 = {"package aliens;", //
+                "import hotpotato.*;", //
+                "import java.io.*;", //
+                "public class ComplexAlien implements Order {", //
+                "    public Serializable exec() {", //
+                "        AlienChild child = new AlienChild() {", //
+                "            public int getRand() {", //
+                "                return super.getRand() + 20;", //
+                "            }", //
+                "        };", //
+                "        if (child.getRand() > child.foo){", //
+                "            return \"ComplexAlien\";", //
+                "        }", //
+                "        return null;", //
+                "    }", //
+                "}", //
+        };
         roundTrip("ComplexAlien", source2);
     }
 

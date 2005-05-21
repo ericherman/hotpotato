@@ -16,9 +16,9 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
     private File passwd;
 
     protected void tearDown() throws Exception {
+        if (passwd != null)
+            passwd.delete();
         try {
-            if (passwd != null)
-                passwd.delete();
             super.tearDown();
         } catch (Exception e) { //
         }
@@ -40,7 +40,7 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
     }
 
     private Order receiveOrder(String shortClassName, String[] alien_java_src)
-            throws Exception, IOException, UnknownHostException {
+            throws Exception {
 
         Serializable obj = receiveSerializable(shortClassName, alien_java_src);
         assertTrue(obj.getClass() + " should be an " + Order.class,
@@ -50,59 +50,67 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
     }
 
     public void testRecieveAlienTransmission() throws Exception {
-        String shortClassName = "Alien0";
-        String[] alien_java_src = new String[]{
-                "package aliens;",
-                "import java.io.*;",
-                "import hotpotato.io.*;",
-                "public class " + shortClassName + " implements Serializable {",
-                "    public String data = \"foo\";", "}",};
+        String shortName = "Alien0";
+        String[] alien_java_src = new String[]{"package aliens;", //
+                "import java.io.*;", //
+                "import hotpotato.io.*;", //
+                "public class " + shortName + " implements Serializable {", //
+                "    public String data = \"foo\";", //
+                "}", //
+        };
 
-        receiveSerializable(shortClassName, alien_java_src);
+        receiveSerializable(shortName, alien_java_src);
     }
 
     public void testRecieveMultiClassAlienTransmission() throws Exception {
-        String shortClassName = "Alien1";
-        String[] alien_java_src = new String[]{
-                "package aliens;",
-                "import java.io.*;",
-                "import hotpotato.io.*;",
-                "public class " + shortClassName + " implements Serializable {",
-                "    public static class Foo implements Serializable {",
-                "        public String data = \"foo\";", "    }",
-                "    public Foo foo = new Foo();", "}",};
+        String shortName = "Alien1";
+        String[] alien_java_src = new String[]{"package aliens;", //
+                "import java.io.*;", //
+                "import hotpotato.io.*;", //
+                "public class " + shortName + " implements Serializable {", //
+                "    public static class Foo implements Serializable {", //
+                "        public String data = \"foo\";", //
+                "    }", //
+                "    public Foo foo = new Foo();", //
+                "}", //
+        };
 
-        receiveSerializable(shortClassName, alien_java_src);
+        receiveSerializable(shortName, alien_java_src);
     }
 
     public void testReceiveAlienClassArray() throws Exception {
-        String shortClassName = "Alien2";
-        String[] alien_java_src = new String[]{
-                "package aliens;",
-                "import java.io.*;",
-                "import hotpotato.io.*;",
-                "public class " + shortClassName + " implements Serializable {",
-                "    public static class Foo implements Serializable {",
-                "        public String data = \"foo\";", "    }",
-                "    public Foo[] foo = new Foo[] {new Foo()};", "}",};
+        String shortName = "Alien2";
+        String[] alien_java_src = new String[]{"package aliens;", //
+                "import java.io.*;", //
+                "import hotpotato.io.*;", //
+                "public class " + shortName + " implements Serializable {", //
+                "    public static class Foo implements Serializable {", //
+                "        public String data = \"foo\";", //
+                "    }", //
+                "    public Foo[] foo = new Foo[] {new Foo()};", //
+                "}", //
+        };
 
-        receiveSerializable(shortClassName, alien_java_src);
+        receiveSerializable(shortName, alien_java_src);
     }
 
     public void testAlienAnonymousInner() throws Exception {
-        String shortClassName = "Alien3";
-        String[] alien_java_src = new String[]{
-                "package aliens;",
-                "import java.io.*;",
-                "import hotpotato.io.*;",
-                "public class " + shortClassName + " implements Serializable {",
-                "    public Serializable getSer() {",
-                "        return new Serializable(){",
-                "            public String toString() {",
-                "                return \"anonymous inner\";", "            }",
-                "        };", "    }", "}",};
+        String shortName = "Alien3";
+        String[] alien_java_src = new String[]{"package aliens;", //
+                "import java.io.*;", //
+                "import hotpotato.io.*;", //
+                "public class " + shortName + " implements Serializable {", //
+                "    public Serializable getSer() {", //
+                "        return new Serializable(){", //
+                "            public String toString() {", //
+                "                return \"anonymous inner\";", //
+                "            }", //
+                "        };", //
+                "    }", //
+                "}", //
+        };
 
-        receiveSerializable(shortClassName, alien_java_src);
+        receiveSerializable(shortName, alien_java_src);
     }
 
     public void testSecurityViolationFileRead() throws Exception {
@@ -110,73 +118,84 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
         writeFile(passwd, new String[]{"Shh ... it's secret."});
         String path = passwd.getPath();
 
-        String shortClassName = "Alien4";
-        String[] alien_java_src = new String[]{"package aliens;",
-                "import java.io.*;", "import hotpotato.*;",
-                "import hotpotato.util.*;",
-                "public class " + shortClassName + " implements Order {",
-                "    public Serializable exec() {", "      try {",
-                "        File passwd = new File(\"" + path + "\");",
-                "        if (!passwd.exists()) {",
-                "            String msg = \"no file: \" + passwd;",
-                "            throw new RuntimeException(msg);", "        }",
-                "        FileInputStream fis = new FileInputStream(passwd);",
-                "        byte[] bytes = new Streams().readBytes(fis);",
-                "        return new String(bytes);",
-                "      } catch(IOException e) {",
-                "          throw new RuntimeException(e);", "      }", "    }",
-                "}",};
+        String shortName = "Alien4";
+        String[] alien_java_src = new String[]{"package aliens;", //
+                "import java.io.*;", //
+                "import hotpotato.*;", //
+                "import hotpotato.util.*;", //
+                "public class " + shortName + " implements Order {", //
+                "    public Serializable exec() {", //
+                "      try {", //
+                "        File passwd = new File(\"" + path + "\");", //
+                "        if (!passwd.exists()) {", //
+                "            String msg = \"no file: \" + passwd;", //
+                "            throw new RuntimeException(msg);", //
+                "        }", //
+                "        FileInputStream fis = new FileInputStream(passwd);", //
+                "        byte[] bytes = new Streams().readBytes(fis);", //
+                "        return new String(bytes);", //
+                "      } catch(IOException e) {", //
+                "          throw new RuntimeException(e);", //
+                "      }", //
+                "    }", //
+                "}", //
+        };
 
-        Order command = receiveOrder(shortClassName, alien_java_src);
-        try {
-            command.exec();
-            fail("Violation should have thrown SecurityException");
-        } catch (SecurityException e) { //
-        }
+        recieveOrderWithSecurityViolation(shortName, alien_java_src);
     }
 
     public void testSecurityViolationSocketOpen() throws Exception {
-        String shortClassName = "Alien5";
-        String[] alien_java_src = new String[]{
-                "package aliens;",
-                "import java.io.*;",
-                "import hotpotato.*;",
-                "import hotpotato.net.*;",
-                "public class " + shortClassName + " implements Order {",
-                "    public Serializable exec() {",
-                "        RestaurantServer sysLoaded = new RestaurantServer(0);",
-                "        try {", "            sysLoaded.start();",
-                "        } catch (IOException e){",
-                "            throw new RuntimeException(e);", "        }",
-                "        return sysLoaded.getInetAddress().toString()",
-                "            + \":\" + sysLoaded.getPort();", "    }", "}",};
+        String shortName = "Alien5";
+        String[] alien_java_src = new String[]{"package aliens;", //
+                "import java.io.*;", //
+                "import hotpotato.*;", //
+                "import hotpotato.net.*;", //
+                "public class " + shortName + " implements Order {", //
+                "    public Serializable exec() {", //
+                "        RestaurantServer res = new RestaurantServer(0);", //
+                "        try {", //
+                "            res.start();", //
+                "        } catch (IOException e) {", //
+                "            throw new RuntimeException(e);", //
+                "        }", //
+                "        return res.getInetAddress().toString()", //
+                "            + \":\" + res.getPort();", //
+                "    }", //
+                "}", //
+        };
 
         RestaurantServer ensureClassLoaded = new RestaurantServer(0);
         ensureClassLoaded.start();
 
-        Order command = receiveOrder(shortClassName, alien_java_src);
-        try {
-            command.exec();
-            fail("Violation should have thrown SecurityException");
-        } catch (SecurityException e) { // 
-        }
+        recieveOrderWithSecurityViolation(shortName, alien_java_src);
     }
 
     public void testSecurityViolationPropertyRead() throws Exception {
         String shortClassName = "Alien6";
-        String[] alien_java_src = new String[]{"package aliens;",
-                "import java.io.*;", "import hotpotato.*;",
-                "import hotpotato.net.*;",
-                "public class " + shortClassName + " implements Order {",
-                "    public Serializable exec() {",
-                "        return System.getProperty(\"java.class.path\");",
-                "    }", "}",};
+        String[] alien_java_src = new String[]{"package aliens;", //
+                "import java.io.*;", //
+                "import hotpotato.*;", //
+                "import hotpotato.net.*;", //
+                "public class " + shortClassName + " implements Order {", //
+                "    public Serializable exec() {", //
+                "        return System.getProperty(\"java.class.path\");", //
+                "    }", //
+                "}", //
+        };
+
+        recieveOrderWithSecurityViolation(shortClassName, alien_java_src);
+    }
+
+    private void recieveOrderWithSecurityViolation(String shortClassName,
+            String[] alien_java_src) throws Exception {
 
         Order command = receiveOrder(shortClassName, alien_java_src);
+        SecurityException expected = null;
         try {
             command.exec();
-            fail("Violation should have thrown SecurityException");
-        } catch (SecurityException e) { //
+        } catch (SecurityException e) {
+            expected = e;
         }
+        assertNotNull("Should have thrown SecurityException", expected);
     }
 }

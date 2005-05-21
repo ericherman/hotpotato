@@ -24,7 +24,7 @@ public class ObjectSenderTest extends TestCase {
             loopback.shutdown();
     }
 
-    private ObjectInputStream getObjectInputStream(Socket s) throws IOException {
+    private ObjectInputStream objectInputStream(Socket s) throws IOException {
         InputStream in = s.getInputStream();
         return new ObjectInputStream(in);
     }
@@ -37,7 +37,7 @@ public class ObjectSenderTest extends TestCase {
             }
             protected void acceptConnection(Socket s) throws IOException {
                 try {
-                    ObjectInputStream ois = getObjectInputStream(s);
+                    ObjectInputStream ois = objectInputStream(s);
                     do {
                         obj = ois.readObject();
                     } while (obj instanceof ClassDefinition);
@@ -69,7 +69,7 @@ public class ObjectSenderTest extends TestCase {
         sender.send(null);
         sender.send("bar");
 
-        ObjectInputStream ois = getObjectInputStream(s);
+        ObjectInputStream ois = objectInputStream(s);
         do {
             obj1 = ois.readObject();
         } while (obj1 instanceof ClassDefinition);
