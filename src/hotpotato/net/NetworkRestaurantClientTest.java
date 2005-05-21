@@ -8,6 +8,7 @@ package hotpotato.net;
 
 import hotpotato.*;
 import hotpotato.io.*;
+import hotpotato.testsupport.*;
 
 import java.io.*;
 

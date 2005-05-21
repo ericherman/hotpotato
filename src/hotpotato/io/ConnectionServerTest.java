@@ -6,6 +6,8 @@
  */
 package hotpotato.io;
 
+import hotpotato.testsupport.*;
+
 import java.net.*;
 
 import junit.framework.*;
