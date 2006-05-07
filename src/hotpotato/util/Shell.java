@@ -35,10 +35,9 @@ public class Shell extends Thread {
     public void run() {
         try {
             returnCode = runtimeExec();
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
-            if (e instanceof RuntimeException) {
-                throw (RuntimeException) e;
-            }
             throw new RuntimeException(e);
         }
     }

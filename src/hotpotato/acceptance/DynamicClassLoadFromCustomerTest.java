@@ -16,11 +16,6 @@ import java.io.*;
 import java.net.*;
 
 public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
-
-    public static void main(String[] args) {
-        junit.swingui.TestRunner.run(DynamicClassLoadFromCustomerTest.class);
-    }
-
     private RestaurantServer server;
 
     protected void tearDown() throws Exception {

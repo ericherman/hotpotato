@@ -7,7 +7,6 @@
 package hotpotato.net;
 
 import hotpotato.*;
-import hotpotato.io.*;
 import hotpotato.testsupport.*;
 
 import java.io.*;
@@ -15,6 +14,7 @@ import java.io.*;
 import junit.framework.*;
 
 public class NetworkRestaurantClientTest extends TestCase {
+    
     private LoopbackServer server;
 
     protected void tearDown() throws Exception {
