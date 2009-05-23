@@ -14,13 +14,13 @@ import java.util.*;
 public class Hotpotatod implements HotpotatoServer {
     private int nextOrderNumber;
     private int ordersDelivered;
-    TicketWheel ticketWheel;
+    TicketQueue ticketWheel;
     Map counterTop;
 
     public Hotpotatod() {
         nextOrderNumber = 0;
         ordersDelivered = 0;
-        ticketWheel = new TicketWheel();
+        ticketWheel = new TicketQueue();
         counterTop = new HashMap();
     }
 

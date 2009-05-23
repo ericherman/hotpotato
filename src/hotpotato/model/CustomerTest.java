@@ -17,14 +17,14 @@ import junit.framework.*;
 public class CustomerTest extends TestCase {
 
     public void testPlaceOrder() throws Exception {
-        class FauxRestaurant extends HotpotatoServer.Stub {
+        class FauxHotpotatoServer extends HotpotatoServer.Stub {
             Order order = null;
             public String takeOrder(String id, Order in) {
                 order = in;
                 return id + "7";
             }
         }
-        FauxRestaurant alices = new FauxRestaurant();
+        FauxHotpotatoServer alices = new FauxHotpotatoServer();
         Customer bob = new Customer(new LocalHotpotatoClient(alices));
 
         Order foo = new ReturnStringOrder("foo");
@@ -33,14 +33,14 @@ public class CustomerTest extends TestCase {
     }
 
     public void testPickupOrder() throws Exception {
-        class FauxRestaurant extends HotpotatoServer.Stub {
+        class FauxHotpotatoServer extends HotpotatoServer.Stub {
             String id = null;
             public Serializable pickUpOrder(String in) {
                 this.id = in;
                 return (id == "bar") ? "bar" : null;
             }
         }
-        FauxRestaurant alices = new FauxRestaurant();
+        FauxHotpotatoServer alices = new FauxHotpotatoServer();
         Customer bob = new Customer(new LocalHotpotatoClient(alices));
 
         assertNull(bob.pickupOrder("foo"));
@@ -51,13 +51,13 @@ public class CustomerTest extends TestCase {
     }
 
     public void testCancelOrder() throws Exception {
-        class FauxRestaurant extends HotpotatoServer.Stub {
+        class FauxHotpotatoServer extends HotpotatoServer.Stub {
             Map map = new HashMap();
             public Ticket getTicket(String in) {
                 return (Ticket) map.get(in);
             }
         }
-        FauxRestaurant alices = new FauxRestaurant();
+        FauxHotpotatoServer alices = new FauxHotpotatoServer();
         Ticket foo = new Ticket("123", null);
         alices.map.put("123", foo);
 

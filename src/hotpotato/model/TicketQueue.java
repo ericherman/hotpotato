@@ -9,22 +9,22 @@ package hotpotato.model;
 import java.util.*;
 
 /**
- * TicketWheel is marked final as a hint to the compiler. It can safely be
+ * TicketQueue is marked final as a hint to the compiler. It can safely be
  * un-finalized.
  * 
- * When making multiple calls to a TicketWheel, please consider whether we need
+ * When making multiple calls to a TicketQueue, please consider whether we need
  * to perform all operations within a single block synchronized on the
  * TicketWheel.
  * 
  * <code>
- * if (ticketWheel.hasItems())  // possible threading problem
- *     a = ticketWhell.get();   // what if ticketWheel is now empty?
+ * if (ticketQueue.hasItems())  // possible threading problem
+ *     a = ticketQueue.get();   // what if ticketWheel is now empty?
  * </code>
  * 
  * <code>
- * synchronized (ticketWheel) {
- *     if (ticketWheel.hasItems())
- *         a = ticketWhell.get();
+ * synchronized (ticketQueue) {
+ *     if (ticketQueue.hasItems())
+ *         a = ticketQueue.get();
  * }
  * </code>
  */

@@ -17,13 +17,13 @@ import junit.framework.*;
 public class WorkerTest extends TestCase {
 
     public void testPickupOrder() throws Exception {
-        class FauxRestaurant extends HotpotatoServer.Stub {
+        class FauxHotpotatoServer extends HotpotatoServer.Stub {
             Serializable result = null;
             public void returnResult(String id, Serializable in) {
                 this.result = in;
             }
         }
-        FauxRestaurant alices = new FauxRestaurant();
+        FauxHotpotatoServer alices = new FauxHotpotatoServer();
         Worker mel = new Worker(new LocalHotpotatoClient(alices));
 
         mel.returnResult("1", "foo");
@@ -31,14 +31,14 @@ public class WorkerTest extends TestCase {
     }
 
     public void testGetNextOrderRequest() throws Exception {
-        class FauxRestaurant extends HotpotatoServer.Stub {
+        class FauxHotpotatoServer extends HotpotatoServer.Stub {
             Ticket ticket = null;
             public Ticket getNextTicket() {
                 return ticket;
             }
         }
 
-        FauxRestaurant alices = new FauxRestaurant();
+        FauxHotpotatoServer alices = new FauxHotpotatoServer();
         Worker mel = new Worker(new LocalHotpotatoClient(alices));
         alices.ticket = new Ticket("1", null);
 
@@ -64,7 +64,7 @@ public class WorkerTest extends TestCase {
     }
 
     public void testRoundTrip() throws Throwable {
-        class FauxRestaurant extends HotpotatoServer.Stub {
+        class FauxHotpotatoServer extends HotpotatoServer.Stub {
             Ticket toDo = null;
             Serializable done = null;
             public void returnResult(String id, Serializable in) {
@@ -77,7 +77,7 @@ public class WorkerTest extends TestCase {
             }
         }
 
-        FauxRestaurant alices = new FauxRestaurant();
+        FauxHotpotatoServer alices = new FauxHotpotatoServer();
         Worker cook = new Worker(new LocalHotpotatoClient(alices));
 
         new Thread(cook).start();
