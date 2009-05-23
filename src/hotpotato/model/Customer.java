@@ -1,8 +1,8 @@
 /**
- * Copyright (C) 2003 by Eric Herman. 
+ * Copyright (C) 2003 - 2009 by Eric Herman. 
  * For licensing information see GnuGeneralPublicLicenseVersion2.txt 
  *  or http://www.fsf.org/licenses/gpl.txt
- *  or for alternative licensing, email Eric Herman: eric AT rnd DOT cx
+ *  or for alternative licensing, email Eric Herman: eric AT freesa DOT org
  */
 package hotpotato.model;
 
@@ -13,13 +13,13 @@ import java.io.*;
 import java.net.*;
 
 public class Customer {
-    private RestaurantClient client;
+    private HotpotatoClient client;
 
     public Customer(InetAddress address, int orderPort) {
-        this(new NetworkRestaurantClient(address, orderPort));
+        this(new NetworkHotpotatoClient(address, orderPort));
     }
 
-    public Customer(RestaurantClient client) {
+    public Customer(HotpotatoClient client) {
         this.client = client;
     }
 
@@ -44,7 +44,7 @@ public class Customer {
             this.order = order;
             this.id = id;
         }
-        public Serializable exec(Restaurant restaurant) {
+        public Serializable exec(HotpotatoServer restaurant) {
             return restaurant.takeOrder(id, order);
         }
     }
@@ -55,7 +55,7 @@ public class Customer {
         public PickUpOrderRequest(String id) {
             this.id = id;
         }
-        public Serializable exec(Restaurant restaurant) {
+        public Serializable exec(HotpotatoServer restaurant) {
             return restaurant.pickUpOrder(id);
         }
     }
@@ -66,7 +66,7 @@ public class Customer {
         public CancelOrderRequest(String id) {
             this.id = id;
         }
-        public Serializable exec(Restaurant restaurant) {
+        public Serializable exec(HotpotatoServer restaurant) {
             return new Boolean(restaurant.getTicket(id) != null);
         }
     }

@@ -2,7 +2,7 @@
  * Copyright (C) 2003, 2005 by Eric Herman. 
  * For licensing information see GnuGeneralPublicLicenseVersion2.txt 
  *  or http://www.fsf.org/licenses/gpl.txt
- *  or for alternative licensing, email Eric Herman: eric AT rnd DOT cx
+ *  or for alternative licensing, email Eric Herman: eric AT freesa DOT org
  */
 package hotpotato.io;
 

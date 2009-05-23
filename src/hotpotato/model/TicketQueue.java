@@ -28,12 +28,12 @@ import java.util.*;
  * }
  * </code>
  */
-public final class TicketWheel {
+public final class TicketQueue {
 
     private Map map;
     private LinkedList queue;
 
-    public TicketWheel() {
+    public TicketQueue() {
         queue = new LinkedList();
         map = new HashMap();
     }

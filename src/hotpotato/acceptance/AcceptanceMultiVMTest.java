@@ -1,8 +1,8 @@
 /**
- * Copyright (C) 2003 by Eric Herman. 
+ * Copyright (C) 2003 - 2009 by Eric Herman. 
  * For licensing information see GnuGeneralPublicLicenseVersion2.txt 
  *  or http://www.fsf.org/licenses/gpl.txt
- *  or for alternative licensing, email Eric Herman: eric AT rnd DOT cx
+ *  or for alternative licensing, email Eric Herman: eric AT freesa DOT org
  */
 package hotpotato.acceptance;
 
@@ -38,11 +38,11 @@ public class AcceptanceMultiVMTest extends TestCase {
         String workUnits = "1";
 
         String[] restaurantArgs = new String[]{"java", "-cp", classpath,
-                "hotpotato.acceptance.RestaurantRunner", maxSeconds, workUnits,
+                "hotpotato.acceptance.ServerRunner", maxSeconds, workUnits,
                 "" + port,};
 
         String[] cookArgs = new String[]{"java", "-cp", classpath,
-                "hotpotato.acceptance.CookRunner", maxSeconds, workUnits,
+                "hotpotato.acceptance.WorkerRunner", maxSeconds, workUnits,
                 InetAddress.getLocalHost().getHostName(), "" + port,};
 
         new Shell(restaurantArgs, envp, "Restaraunt").start();

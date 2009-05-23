@@ -1,8 +1,8 @@
 /**
- * Copyright (C) 2003 by Eric Herman. 
+ * Copyright (C) 2003 - 2009 by Eric Herman. 
  * For licensing information see GnuGeneralPublicLicenseVersion2.txt 
  *  or http://www.fsf.org/licenses/gpl.txt
- *  or for alternative licensing, email Eric Herman: eric AT rnd DOT cx
+ *  or for alternative licensing, email Eric Herman: eric AT freesa DOT org
  */
 package hotpotato.acceptance;
 
@@ -17,14 +17,14 @@ import java.io.*;
 import junit.framework.*;
 
 public class AcceptanceTest extends TestCase {
-    private RestaurantServer server;
-    private Cook mel;
-    private Cook ophilia;
-    private Cook peter;
+    private SocketHotpotatoServer server;
+    private Worker mel;
+    private Worker ophilia;
+    private Worker peter;
     private static int LOOP_LIMIT = 10;
 
-    private Cook newCook() {
-        Cook c = new Cook(server.getInetAddress(), server.getPort());
+    private Worker newCook() {
+        Worker c = new Worker(server.getInetAddress(), server.getPort());
         new Thread(c).start();
         return c;
     }
@@ -35,7 +35,7 @@ public class AcceptanceTest extends TestCase {
     }
 
     protected void setUp() throws Exception {
-        server = new RestaurantServer(0);
+        server = new SocketHotpotatoServer(0);
         server.start();
     }
 

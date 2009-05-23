@@ -1,8 +1,8 @@
 /**
- * Copyright (C) 2003 by Eric Herman. 
+ * Copyright (C) 2003 - 2009 by Eric Herman. 
  * For licensing information see GnuGeneralPublicLicenseVersion2.txt 
  *  or http://www.fsf.org/licenses/gpl.txt
- *  or for alternative licensing, email Eric Herman: eric AT rnd DOT cx
+ *  or for alternative licensing, email Eric Herman: eric AT freesa DOT org
  */
 package hotpotato.io;
 
@@ -152,7 +152,7 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
                 "import hotpotato.net.*;", //
                 "public class " + shortName + " implements Order {", //
                 "    public Serializable exec() {", //
-                "        RestaurantServer res = new RestaurantServer(0);", //
+                "        SocketHotpotatoServer res = new SocketHotpotatoServer(0);", //
                 "        try {", //
                 "            res.start();", //
                 "        } catch (IOException e) {", //
@@ -164,7 +164,7 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
                 "}", //
         };
 
-        RestaurantServer ensureClassLoaded = new RestaurantServer(0);
+        SocketHotpotatoServer ensureClassLoaded = new SocketHotpotatoServer(0);
         ensureClassLoaded.start();
 
         recieveOrderWithSecurityViolation(shortName, alien_java_src);

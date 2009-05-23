@@ -1,8 +1,8 @@
 /**
- * Copyright (C) 2003 by Eric Herman. 
+ * Copyright (C) 2003 - 2009 by Eric Herman. 
  * For licensing information see GnuGeneralPublicLicenseVersion2.txt 
  *  or http://www.fsf.org/licenses/gpl.txt
- *  or for alternative licensing, email Eric Herman: eric AT rnd DOT cx
+ *  or for alternative licensing, email Eric Herman: eric AT freesa DOT org
  */
 package hotpotato.acceptance;
 
@@ -16,7 +16,7 @@ import java.io.*;
 import java.net.*;
 
 public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
-    private RestaurantServer server;
+    private SocketHotpotatoServer server;
 
     protected void tearDown() throws Exception {
         if (server != null)
@@ -76,15 +76,15 @@ public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
         compileAlienClass(shortClassName, source);
         String className = "aliens." + shortClassName;
 
-        Restaurant alices = new AlicesRestaurant();
-        server = new RestaurantServer(0, alices);
+        HotpotatoServer alices = new Hotpotatod();
+        server = new SocketHotpotatoServer(0, alices);
         server.start();
 
         String maxSeconds = "10";
         String workUnits = "1";
 
         String[] cookArgs = new String[]{"java", "-cp", CLASSPATH,
-                CookRunner.class.getName(), maxSeconds, workUnits,
+                WorkerRunner.class.getName(), maxSeconds, workUnits,
                 InetAddress.getLocalHost().getHostName(),
                 "" + server.getPort(),};
 

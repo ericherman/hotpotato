@@ -8,6 +8,6 @@ package hotpotato;
 
 import java.io.*;
 
-public interface Order extends Serializable {
-    Serializable exec();
+public interface HotpotatoClient {
+    Serializable send(Request request) throws IOException;
 }

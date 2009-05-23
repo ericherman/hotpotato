@@ -8,10 +8,10 @@ package hotpotato.model;
 
 import junit.framework.*;
 
-public class TicketWheelTest extends TestCase {
+public class TicketQueueTest extends TestCase {
 
     public void testBasicIO() {
-        TicketWheel theQueue = new TicketWheel();
+        TicketQueue theQueue = new TicketQueue();
 
         assertEquals(false, theQueue.hasItems());
 
@@ -35,7 +35,7 @@ public class TicketWheelTest extends TestCase {
     }
 
     public void testLookUp() {
-        TicketWheel theQueue = new TicketWheel();
+        TicketQueue theQueue = new TicketQueue();
 
         theQueue.add(new Ticket("1", null));
         theQueue.add(new Ticket("2", null));
@@ -46,7 +46,7 @@ public class TicketWheelTest extends TestCase {
     }
 
     public void testHasItem() {
-        TicketWheel theQueue = new TicketWheel();
+        TicketQueue theQueue = new TicketQueue();
         theQueue.add(new Ticket("First", null));
 
         assertTrue(theQueue.hasItem("First"));
