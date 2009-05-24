@@ -12,6 +12,10 @@ import junit.framework.*;
 
 public class StreamsTest extends TestCase {
 
+    public static void main(String[] args) {
+        junit.textui.TestRunner.run(StreamsTest.class);
+    }
+
     public void testConnect() throws Exception {
         String expected = "sendMe";
         ByteArrayInputStream send = new ByteArrayInputStream(expected
@@ -21,7 +25,7 @@ public class StreamsTest extends TestCase {
 
         new Streams().connect(send, receive);
         Thread.sleep(20);
-
+        send.close();
         assertEquals(expected, new String(receive.toByteArray()));
     }
 
@@ -51,8 +55,10 @@ public class StreamsTest extends TestCase {
 
         send.println("foo");
         send.flush();
+        send.close();
         Thread.sleep(20);
 
         assertEquals("foo", receive.readLine());
+        
     }
 }

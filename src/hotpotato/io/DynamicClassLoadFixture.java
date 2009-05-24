@@ -53,6 +53,7 @@ public abstract class DynamicClassLoadFixture extends TestCase {
             files[i].delete();
         }
         testDir.delete();
+        out.close();
         out = null;
         err = null;
     }
