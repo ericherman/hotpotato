@@ -14,10 +14,25 @@ import java.net.*;
 
 public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
     private File passwd;
+    private Socket s;
+    private SocketHotpotatoServer ensureClassLoaded;
+
+    public static void main(String[] args) {
+        junit.textui.TestRunner.run(ObjectReceiverDynamicLoadTest.class);
+    }
 
     protected void tearDown() throws Exception {
-        if (passwd != null)
+        if (passwd != null) {
             passwd.delete();
+        }
+        passwd = null;
+        if (s != null) {
+            s.close();
+        }
+        s = null;
+        if (ensureClassLoaded != null) {
+            ensureClassLoaded.shutdown();
+        }
         try {
             super.tearDown();
         } catch (Exception e) { //
@@ -31,10 +46,11 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
         ServerSocket server = new ServerSocket(0);
         int port = server.getLocalPort();
         launchDynamicClassSender("aliens." + shortClassName, port);
-        Socket s = server.accept();
+        s = server.accept();
 
         Serializable alienOrderItem = new ObjectReceiver(s).receive();
         s.close();
+        s = null;
         assertNotNull(alienOrderItem);
         return alienOrderItem;
     }
@@ -43,8 +59,8 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
             throws Exception {
 
         Serializable obj = receiveSerializable(shortClassName, alien_java_src);
-        assertTrue(obj.getClass() + " should be an " + Order.class,
-                obj instanceof Order);
+        String msg = obj.getClass() + " should be an " + Order.class;
+        assertTrue(msg, obj instanceof Order);
 
         return (Order) obj;
     }
@@ -164,7 +180,7 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
                 "}", //
         };
 
-        SocketHotpotatoServer ensureClassLoaded = new SocketHotpotatoServer(0);
+        ensureClassLoaded = new SocketHotpotatoServer(0);
         ensureClassLoaded.start();
 
         recieveOrderWithSecurityViolation(shortName, alien_java_src);

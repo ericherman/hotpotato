@@ -15,6 +15,12 @@ import junit.framework.*;
 public class ConnectionServerTest extends TestCase {
 
     private ConnectionServer server;
+    private Socket s1;
+    private Socket s2;
+
+    public static void main(String[] args) {
+        junit.textui.TestRunner.run(ConnectionServerTest.class);
+    }
 
     protected void setUp() throws Exception {
         server = new LoopbackServer();
@@ -22,25 +28,31 @@ public class ConnectionServerTest extends TestCase {
     }
 
     protected void tearDown() throws Exception {
+        if (s1 != null) {
+            s1.close();
+        }
+        if (s2 != null) {
+            s2.close();
+        }
         server.shutdown();
     }
 
     public void testSocketLoopback() throws Exception {
-        Socket s = new Socket("localhost", server.getPort());
+        s1 = new Socket("localhost", server.getPort());
 
-        new ObjectSender(s).send("Hello, World!");
+        new ObjectSender(s1).send("Hello, World!");
 
-        assertEquals("Hello, World!", new ObjectReceiver(s).receive());
+        assertEquals("Hello, World!", new ObjectReceiver(s1).receive());
     }
 
     public void testTwoSockets() throws Exception {
-        Socket socket = new Socket("localhost", server.getPort());
-        ObjectSender sender1 = new ObjectSender(socket);
-        ObjectReceiver receiver1 = new ObjectReceiver(socket);
+        s1 = new Socket("localhost", server.getPort());
+        ObjectSender sender1 = new ObjectSender(s1);
+        ObjectReceiver receiver1 = new ObjectReceiver(s1);
 
-        Socket socket2 = new Socket("localhost", server.getPort());
-        ObjectSender sender2 = new ObjectSender(socket2);
-        ObjectReceiver receiver2 = new ObjectReceiver(socket2);
+        s2 = new Socket("localhost", server.getPort());
+        ObjectSender sender2 = new ObjectSender(s2);
+        ObjectReceiver receiver2 = new ObjectReceiver(s2);
 
         sender1.send("Nevada Test Site Potatoe");
         sender2.send("Idaho Potato");

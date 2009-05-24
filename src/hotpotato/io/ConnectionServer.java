@@ -16,7 +16,7 @@ public abstract class ConnectionServer {
     private volatile boolean isRunning;
     private final String name;
     private int count = 0;
-    int port;
+    private int port;
 
     public ConnectionServer(int port, String name) {
         isRunning = true;
@@ -34,8 +34,9 @@ public abstract class ConnectionServer {
     abstract protected void acceptConnection(Socket s) throws IOException;
 
     public int getPort() {
-        if (server == null)
+        if (server == null) {
             return port;
+        }
         return server.getLocalPort();
     }
 
@@ -46,8 +47,9 @@ public abstract class ConnectionServer {
     public void shutdown() throws IOException {
         isRunning = false;
         listener.interrupt();
-        if (server != null)
+        if (server != null) {
             server.close();
+        }
         pause();
     }
 
@@ -76,18 +78,22 @@ public abstract class ConnectionServer {
             }
         }
         protected void runIO() throws IOException {
-            while (true) {
+            while (isRunning()) {
                 String nextName = name + "[" + count++ + "]";
                 Socket socket;
                 socket = server.accept();
                 ConnectionAcceptor acceptor = new ConnectionAcceptor(socket);
-                new Thread(acceptor, nextName).start();
+                execute(acceptor, nextName);
             }
+        }
+        /* override with a threadpool if needed */
+        protected void execute(Runnable target, String name) {
+            new Thread(target, name).start();
         }
         protected boolean toRuntime(IOException e) {
             String msg = e.getMessage();
-            return !("Socket closed".equals(msg) || "Socket is closed"
-                    .equals(msg));
+            return !("Socket closed".equals(msg) //
+                || "Socket is closed".equals(msg));
         }
     }
 
@@ -103,10 +109,11 @@ public abstract class ConnectionServer {
                 acceptConnection(socket);
             } catch (IOException e) {
                 throw new RuntimeException(e);
-            }
-            try {
-                socket.close();
-            } catch (IOException e1) { //
+            } finally {
+                try {
+                    socket.close();
+                } catch (IOException e1) { //
+                }
             }
         }
     }

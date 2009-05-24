@@ -23,7 +23,7 @@ public class LoopbackServer extends ConnectionServer {
         try {
             ObjectSender sender = new ObjectSender(s);
             ObjectReceiver reciever = new ObjectReceiver(s);
-            while (true) {
+            while (isRunning()) {
                 sender.send(reciever.receive());
             }
         } catch (Exception quit) {

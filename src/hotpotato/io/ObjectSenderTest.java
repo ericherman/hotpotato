@@ -16,14 +16,19 @@ import junit.framework.*;
 public class ObjectSenderTest extends TestCase {
     private ConnectionServer loopback;
     private InetAddress localhost;
+    private Socket s;
 
     protected void setUp() throws Exception {
         localhost = InetAddress.getLocalHost();
     }
 
     protected void tearDown() throws Exception {
-        if (loopback != null)
+        if (loopback != null) {
             loopback.shutdown();
+        }
+        if (s != null) {
+            s.close();
+        }
     }
 
     private ObjectInputStream objectInputStream(Socket s) throws IOException {
@@ -42,7 +47,7 @@ public class ObjectSenderTest extends TestCase {
                     ObjectInputStream ois = objectInputStream(s);
                     do {
                         obj = ois.readObject();
-                    } while (obj instanceof ClassDefinition);
+                    } while (isRunning() && obj instanceof ClassDefinition);
                 } catch (ClassNotFoundException e) {
                     throw new RuntimeException(e);
                 }
@@ -53,8 +58,8 @@ public class ObjectSenderTest extends TestCase {
         server.start();
 
         loopback = server;
-        ObjectSender sender = new ObjectSender(new Socket(localhost, server
-                .getPort()));
+        s = new Socket(localhost, server.getPort());
+        ObjectSender sender = new ObjectSender(s);
         sender.send("FOO");
         Thread.sleep(ConnectionServer.SLEEP_DELAY);
         assertEquals("FOO", server.obj);
@@ -66,7 +71,7 @@ public class ObjectSenderTest extends TestCase {
         Object obj1 = "";
         Object obj2 = "";
 
-        Socket s = new Socket(localhost, loopback.getPort());
+        s = new Socket(localhost, loopback.getPort());
         ObjectSender sender = new ObjectSender(s);
         sender.send(null);
         sender.send("bar");
@@ -78,7 +83,6 @@ public class ObjectSenderTest extends TestCase {
         do {
             obj2 = ois.readObject();
         } while (obj2 instanceof ClassDefinition);
-        s.close();
 
         assertEquals(null, obj1);
         assertEquals("bar", obj2);
@@ -93,7 +97,7 @@ public class ObjectSenderTest extends TestCase {
 
         assertSame(arr[0], arr[1]);
 
-        Socket s = new Socket(localhost, loopback.getPort());
+        s = new Socket(localhost, loopback.getPort());
         new ObjectSender(s).send(arr);
         arr = (Object[]) new ObjectReceiver(s).receive();
 
