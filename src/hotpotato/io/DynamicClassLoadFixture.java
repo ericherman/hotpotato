@@ -22,6 +22,8 @@ public abstract class DynamicClassLoadFixture extends TestCase {
     protected String alienClasspath;
     protected Thread launched;
     protected File testDir;
+    protected PrintStream out;
+    protected PrintStream err;
 
     private File tmpDir;
     private File aliensDir;
@@ -31,6 +33,8 @@ public abstract class DynamicClassLoadFixture extends TestCase {
         testDir = new File(tmpDir, "test" + System.currentTimeMillis());
         aliensDir = new File(testDir, "aliens");
         aliensDir.mkdirs();
+        out = new NullPrintStream();
+        err = out;
     }
 
     protected void tearDown() throws Exception {
@@ -49,6 +53,8 @@ public abstract class DynamicClassLoadFixture extends TestCase {
             files[i].delete();
         }
         testDir.delete();
+        out = null;
+        err = null;
     }
 
     protected void compileAlienClass(String shortClassName, String[] alienSrc)
@@ -62,7 +68,7 @@ public abstract class DynamicClassLoadFixture extends TestCase {
         String[] args = new String[]{"javac", "-classpath", alienClasspath,
                 alienJava.getPath(),};
 
-        Thread t = new Shell(args, ENVP, "javac Alien"); // , System.err);
+        Thread t = new Shell(args, ENVP, "javac Alien", out, err);
         t.start();
         t.join();
         assertTrue("java file exists", alienJava.exists());
@@ -77,7 +83,7 @@ public abstract class DynamicClassLoadFixture extends TestCase {
                 javaProgram, InetAddress.getLocalHost().getHostName(),
                 Integer.toString(port), className};
 
-        launched = new Shell(args, ENVP, "send alien");
+        launched = new Shell(args, ENVP, "send alien", out, err);
         launched.start();
     }
 

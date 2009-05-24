@@ -21,6 +21,8 @@ public class AcceptanceMultiVMTest extends TestCase {
 
     // netstat -anpt | grep 16
     private int port;
+    private PrintStream out;
+    private PrintStream err;
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(AcceptanceMultiVMTest.class);
@@ -28,8 +30,15 @@ public class AcceptanceMultiVMTest extends TestCase {
 
     protected void setUp() throws Exception {
         port = 16000 + (int) (1000 * Math.random());
+        out = new NullPrintStream();
+        err = out;
     }
 
+    protected void tearDown() {
+        out = null;
+        err = null;
+    }
+    
     public void test1Customer1Cook() throws Exception {
         String path = System.getProperty("java.library.path");
         String[] envp = new String[]{"PATH=" + path};
@@ -45,9 +54,9 @@ public class AcceptanceMultiVMTest extends TestCase {
                 "hotpotato.acceptance.WorkerRunner", maxSeconds, workUnits,
                 InetAddress.getLocalHost().getHostName(), "" + port,};
 
-        new Shell(restaurantArgs, envp, "Restaraunt").start();
+        new Shell(restaurantArgs, envp, "Restaraunt", out, err).start();
         Thread.sleep(3 * ConnectionServer.SLEEP_DELAY);
-        new Shell(cookArgs, envp, "cook").start();
+        new Shell(cookArgs, envp, "cook", out, err).start();
 
         Customer bob = new Customer(InetAddress.getLocalHost(), port);
 

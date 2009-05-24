@@ -19,10 +19,13 @@ public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
     private SocketHotpotatoServer server;
 
     protected void tearDown() throws Exception {
-        if (server != null)
-            server.shutdown();
-
-        super.tearDown();
+        try {
+            if (server != null) {
+                server.shutdown();
+            }
+        } finally {
+            super.tearDown();
+        }
     }
 
     public void testRoundTripAlienOrder() throws Exception {
@@ -88,7 +91,7 @@ public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
                 InetAddress.getLocalHost().getHostName(),
                 "" + server.getPort(),};
 
-        new Shell(cookArgs, ENVP, "cook").start();
+        new Shell(cookArgs, ENVP, "cook", out, err).start();
 
         String javaProgram = CustomerRunner.class.getName();
         assertEquals("hotpotato.acceptance.CustomerRunner", javaProgram);
@@ -101,7 +104,7 @@ public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
                 javaProgram, maxSeconds, "" + server.getPort(), className,
                 "" + reportingServer.getLocalPort()};
 
-        launched = new Shell(args, ENVP, "send alien");
+        launched = new Shell(args, ENVP, "send alien", out, err);
         launched.start();
 
         Socket s = reportingServer.accept();

@@ -29,7 +29,7 @@ public class Shell extends Thread {
     }
 
     public Shell(String[] args, String[] envp, String name) {
-        this(args, envp, name, null, null);
+        this(args, envp, name, System.out, System.err);
     }
 
     public void run() {
@@ -52,4 +52,28 @@ public class Shell extends Thread {
     public int getReturnCode() {
         return returnCode;
     }
+
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+        buf.append(getName());
+        buf.append(" envp: ");
+        for (int i = 0; i < envp.length; i++) {
+            buf.append(envp[i]);
+            buf.append(", ");
+        }
+        if (envp.length > 0) {
+            buf.delete(buf.length() - 2, buf.length());
+        }
+        buf.append("\n");
+        buf.append(" args: ");
+        for (int i = 0; i < args.length; i++) {
+            buf.append(args[i]);
+            buf.append(" ");
+        }
+        if (args.length > 0) {
+            buf.delete(buf.length() - 1, buf.length());
+        }
+        return buf.toString();
+    }
+
 }

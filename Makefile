@@ -13,7 +13,7 @@ clean:
 	find $(BUILD_DIR) -name "*.class" -exec rm -v \{} \;
 
 compile: clean
-	JAVAC -cp $(CLASSPATH) -sourcepath $(SOURCE_DIR) -d $(BUILD_DIR) $(SOURCE_DIR)/hotpotato/AllTestSuites.java
+	JAVAC -cp $(CLASSPATH) -sourcepath $(SOURCE_DIR) -d $(BUILD_DIR) $(SOURCE_DIR)/hotpotato/AllTestSuites.java $(SOURCE_DIR)/hotpotato/acceptance/ServerRunner.java
 
 test:
 	JAVA -cp $(BUILD_DIR):$(CLASSPATH) hotpotato.AllTestSuites
