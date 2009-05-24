@@ -40,12 +40,15 @@ public class AcceptanceTest extends TestCase {
     }
 
     protected void tearDown() throws Exception {
-        if (mel != null)
+        if (mel != null) {
             mel.shutdown();
-        if (ophilia != null)
+        }
+        if (ophilia != null) {
             ophilia.shutdown();
-        if (peter != null)
+        }
+        if (peter != null) {
             peter.shutdown();
+        }
         server.shutdown();
 
         mel = null;

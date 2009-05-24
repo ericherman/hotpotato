@@ -25,14 +25,15 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
         if (passwd != null) {
             passwd.delete();
         }
-        passwd = null;
         if (s != null) {
             s.close();
         }
-        s = null;
         if (ensureClassLoaded != null) {
             ensureClassLoaded.shutdown();
         }
+        passwd = null;
+        s = null;
+        ensureClassLoaded = null;
         try {
             super.tearDown();
         } catch (Exception e) { //

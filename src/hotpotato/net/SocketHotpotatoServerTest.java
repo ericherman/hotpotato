@@ -19,8 +19,10 @@ public class SocketHotpotatoServerTest extends TestCase {
     private SocketHotpotatoServer server;
 
     protected void tearDown() throws Exception {
-        if (server != null)
+        if (server != null) {
             server.shutdown();
+        }
+        server = null;
     }
 
     static class Foo implements Request {

@@ -22,6 +22,7 @@ public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
         try {
             if (server != null) {
                 server.shutdown();
+                server = null;
             }
         } finally {
             super.tearDown();

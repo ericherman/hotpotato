@@ -18,9 +18,12 @@ public class NetworkHotpotatoClientTest extends TestCase {
     private LoopbackServer server;
 
     protected void tearDown() throws Exception {
-        if (server != null)
+        if (server != null) {
             server.shutdown();
+        }
+        server = null;
     }
+
     static class FooRequest implements Request {
         private static final long serialVersionUID = 1L;
         public Serializable exec(HotpotatoServer restaurant) {

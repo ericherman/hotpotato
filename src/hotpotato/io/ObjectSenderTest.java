@@ -29,6 +29,9 @@ public class ObjectSenderTest extends TestCase {
         if (s != null) {
             s.close();
         }
+        localhost = null;
+        loopback = null;
+        s = null;
     }
 
     private ObjectInputStream objectInputStream(Socket s) throws IOException {

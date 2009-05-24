@@ -54,8 +54,14 @@ public abstract class DynamicClassLoadFixture extends TestCase {
         }
         testDir.delete();
         out.close();
+
+        alienClasspath = null;
+        launched = null;
+        testDir = null;
         out = null;
         err = null;
+        tmpDir = null;
+        aliensDir = null;
     }
 
     protected void compileAlienClass(String shortClassName, String[] alienSrc)

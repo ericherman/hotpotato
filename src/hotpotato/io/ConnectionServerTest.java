@@ -35,6 +35,10 @@ public class ConnectionServerTest extends TestCase {
             s2.close();
         }
         server.shutdown();
+
+        s1 = null;
+        s2 = null;
+        server = null;
     }
 
     public void testSocketLoopback() throws Exception {

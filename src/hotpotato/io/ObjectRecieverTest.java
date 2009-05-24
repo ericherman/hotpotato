@@ -22,8 +22,11 @@ public class ObjectRecieverTest extends TestCase {
     }
 
     protected void tearDown() throws Exception {
-        if (loopback != null)
+        if (loopback != null) {
             loopback.shutdown();
+        }
+        localhost = null;
+        loopback = null;
     }
 
     public void testWriteObject() throws Exception {
