@@ -197,6 +197,6 @@ public class AcceptanceTest extends TestCase {
     }
 
     public static void main(String[] args) {
-        junit.swingui.TestRunner.run(AcceptanceTest.class);
+        junit.textui.TestRunner.run(AcceptanceTest.class);
     }
 }

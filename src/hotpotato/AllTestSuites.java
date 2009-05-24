@@ -11,7 +11,7 @@ import junit.framework.*;
 public class AllTestSuites {
 
     public static void main(String[] args) {
-        junit.swingui.TestRunner.run(AllTestSuites.class);
+        junit.textui.TestRunner.run(AllTestSuites.suite());
     }
 
     public static Test suite() {

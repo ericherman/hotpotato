@@ -23,7 +23,7 @@ public class AcceptanceMultiVMTest extends TestCase {
     private int port;
 
     public static void main(String[] args) {
-        junit.swingui.TestRunner.run(AcceptanceMultiVMTest.class);
+        junit.textui.TestRunner.run(AcceptanceMultiVMTest.class);
     }
 
     protected void setUp() throws Exception {

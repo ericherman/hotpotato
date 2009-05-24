@@ -22,6 +22,6 @@ public class AllTestSuite {
     }
 
     public static void main(String[] args) {
-        junit.swingui.TestRunner.run(AllTestSuite.class);
+        junit.textui.TestRunner.run(AllTestSuite.suite());
     }
 }
