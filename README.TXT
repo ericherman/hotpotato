@@ -81,6 +81,29 @@ At the time of this writing, Hotpotato depends on:
 The hotpotato codebase compiles using Sun's JDK 1.4.2 on linux 
 ... and probably any 1.4.x ... but I haven't done the testing. 
 
+BUILDING
+
+Since javac will naturally compile all dependencies, the build
+is very easy, simply compile the main test suite, and every
+class should be reached. If not, that would indicate that a
+class is not tested. At present, there is one text resource
+which must also be included for tests: "simplefile.txt". Thus,
+the build consists of just two commands -- "javac" and "copy":
+
+javac \
+  -classpath /path/to/bcel-5.2.jar:/path/to/junit.jar \
+  -sourcepath src \
+  -d bin \
+  src/hotpotato/AllTestSuites.java
+
+cp src/hotpotato/util/simplefile.txt \
+   bin/hotpotato/util/simplefile.txt
+
+To create the jar, it's very easy. I simply:
+
+cd bin
+jar cvf ../hotpotato-verison.jar *
+
 TESTING
 
 Speaking of testing, all the code has been written test-first, 
