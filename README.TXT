@@ -106,6 +106,10 @@ jar cvf ../hotpotato-verison.jar *
 
 TESTING
 
+java \
+ -classpath hotpotato-version.jar:/path/to/bcel-5.2.jar:/path/to/junit.jar \
+ hotpotato.AllTestSuites
+
 Speaking of testing, all the code has been written test-first, 
 so there should be no untested code. If there is code that can 
 be removed without causing tests to break, it should probably 
