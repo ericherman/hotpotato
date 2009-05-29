@@ -1,6 +1,6 @@
 JAVA = java
 JAVAC = javac
-LIBDIR = /home/eric/libs
+LIBDIR = $(HOME)/libs
 JUNIT_JAR = $(LIBDIR)/junit.jar
 BCEL_JAR = $(LIBDIR)/bcel-5.2.jar
 CLASSPATH = $(BCEL_JAR):$(JUNIT_JAR)
