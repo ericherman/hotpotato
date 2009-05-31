@@ -42,6 +42,11 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
 
     private Serializable receiveSerializable(String shortClassName,
             String[] alien_java_src) throws Exception {
+    	return receiveSerializable(shortClassName, alien_java_src, true);
+    }
+
+    private Serializable receiveSerializable(String shortClassName,
+           String[] alien_java_src, boolean sandbox) throws Exception {
 
         compileAlienClass(shortClassName, alien_java_src);
         ServerSocket server = new ServerSocket(0);
@@ -49,7 +54,7 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
         launchDynamicClassSender("aliens." + shortClassName, port);
         s = server.accept();
 
-        Serializable alienOrderItem = new ObjectReceiver(s).receive();
+        Serializable alienOrderItem = new ObjectReceiver(s, sandbox).receive();
         s.close();
         s = null;
         assertNotNull(alienOrderItem);
@@ -58,8 +63,13 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
 
     private Order receiveOrder(String shortClassName, String[] alien_java_src)
             throws Exception {
+    	return receiveOrder(shortClassName, alien_java_src, true);
+    }
 
-        Serializable obj = receiveSerializable(shortClassName, alien_java_src);
+    private Order receiveOrder(String shortClassName, String[] alien_java_src,
+    		boolean sandbox) throws Exception {
+
+    	Serializable obj = receiveSerializable(shortClassName, alien_java_src, sandbox);
         String msg = obj.getClass() + " should be an " + Order.class;
         assertTrue(msg, obj instanceof Order);
 
@@ -215,4 +225,26 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
         }
         assertNotNull("Should have thrown SecurityException", expected);
     }
+
+
+    public void testPropertyRead() throws Exception {
+        String shortClassName = "Alien6";
+        String[] alien_java_src = new String[]{"package aliens;", //
+                "import java.io.*;", //
+                "import hotpotato.*;", //
+                "import hotpotato.net.*;", //
+                "public class " + shortClassName + " implements Order {", //
+                "    public Serializable exec() {", //
+                "        return System.getProperty(\"java.class.path\");", //
+                "    }", //
+                "}", //
+        };
+
+        boolean sandbox = false;
+		Order command = receiveOrder(shortClassName, alien_java_src, sandbox);
+		Serializable obj = command.exec();
+		String expected = System.getProperty("java.class.path");
+		assertEquals(expected, obj);
+    }
+
 }

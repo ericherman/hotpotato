@@ -15,17 +15,23 @@ import java.net.*;
 public class NetworkHotpotatoClient implements HotpotatoClient {
     private InetAddress serverAddress;
     private int port;
+    private boolean sandbox;
 
     public NetworkHotpotatoClient(InetAddress address, int orderPort) {
+    	this(address, orderPort, true);
+    }
+
+    public NetworkHotpotatoClient(InetAddress address, int orderPort, boolean sandbox) {
         this.serverAddress = address;
         this.port = orderPort;
+        this.sandbox = sandbox;
     }
 
     public Serializable send(Request request) throws IOException {
         Socket s = new Socket(serverAddress, port);
 
         new ObjectSender(s).send(request);
-        Serializable obj = new ObjectReceiver(s).receive();
+        Serializable obj = new ObjectReceiver(s, sandbox).receive();
 
         s.close();
         return obj;

@@ -7,6 +7,7 @@ MAX_TIME=0
 QUOTA=0;
 HOST=localhost
 PORT=4211
+SANDBOX=true
 
 java \
   -classpath ${CLASSPATH} \
@@ -14,4 +15,5 @@ java \
   ${HOST} \
   ${PORT} \
   ${MAX_TIME} \
-  ${QUOTA} &
+  ${QUOTA} \
+  ${SANDBOX} &

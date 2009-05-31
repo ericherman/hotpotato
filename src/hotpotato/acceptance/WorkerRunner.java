@@ -22,8 +22,12 @@ public class WorkerRunner {
         if (args.length > 3) {
         	quota = Integer.parseInt(args[3]);
         }
+        boolean sandbox = true;
+		if (args.length > 4) {
+			sandbox = args[4].equalsIgnoreCase(Boolean.TRUE.toString());
+		}
 
-        Worker worker = new Worker(addr, port);
+        Worker worker = new Worker(addr, port, sandbox);
         new Thread(worker).start();
 
         long start = System.currentTimeMillis();

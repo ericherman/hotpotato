@@ -18,7 +18,11 @@ public class Worker implements Runnable {
     private HotpotatoClient client;
 
     public Worker(InetAddress restaurantAddress, int port) {
-        this(new NetworkHotpotatoClient(restaurantAddress, port));
+        this(restaurantAddress, port, true);
+    }
+
+    public Worker(InetAddress restaurantAddress, int port, boolean sandbox) {
+        this(new NetworkHotpotatoClient(restaurantAddress, port, sandbox));
     }
 
     public Worker(HotpotatoClient client) {

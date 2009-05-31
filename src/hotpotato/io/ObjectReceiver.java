@@ -8,6 +8,7 @@ package hotpotato.io;
 
 import java.io.*;
 import java.net.*;
+import java.security.CodeSource;
 
 /**
  * ObjectReceiver receives objects over a network connection. It loads all of
@@ -19,7 +20,13 @@ public class ObjectReceiver {
     private ObjectInputStream ois;
 
     public ObjectReceiver(Socket s) throws IOException {
+    	this(s, true);
+    }
+
+    public ObjectReceiver(Socket s, boolean sandbox) throws IOException {
         loader = new HotpotatoClassLoader(getClass().getClassLoader());
+        loader.useSandBox(sandbox);
+
         InputStream in = s.getInputStream();
         ois = new ObjectInputStreamUsingLoader(loader, in);
     }
