@@ -1,0 +1,17 @@
+#!/bin/bash
+LIBDIR=${HOME}/libs
+BCEL_JAR=${LIBDIR}/bcel-5.2.jar
+BUILD_DIR=bin
+CLASSPATH=${BUILD_DIR}:${BCEL_JAR}
+MAX_TIME=0
+QUOTA=0;
+HOST=localhost
+PORT=4211
+
+java \
+  -classpath ${CLASSPATH} \
+  hotpotato.acceptance.WorkerRunner \
+  ${HOST} \
+  ${PORT} \
+  ${MAX_TIME} \
+  ${QUOTA} &

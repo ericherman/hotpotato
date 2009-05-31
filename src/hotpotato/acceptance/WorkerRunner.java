@@ -12,19 +12,45 @@ import java.net.*;
 
 public class WorkerRunner {
     public static void main(String[] args) throws Exception {
-        int maxWorkTimeSeconds = Integer.parseInt(args[0]);
-        int maxLoops = maxWorkTimeSeconds * 4;
-        int quota = Integer.parseInt(args[1]);
-        InetAddress addr = InetAddress.getByName(args[2]);
-        int port = Integer.parseInt(args[3]);
+        InetAddress addr = InetAddress.getByName(args[0]);
+        int port = Integer.parseInt(args[1]);
+        int maxWorkTimeSeconds = 0;
+        if (args.length > 2) {
+        	maxWorkTimeSeconds = Integer.parseInt(args[2]);
+        }
+        int quota = 0;
+        if (args.length > 3) {
+        	quota = Integer.parseInt(args[3]);
+        }
 
-        Worker cook = new Worker(addr, port);
-        new Thread(cook).start();
+        Worker worker = new Worker(addr, port);
+        new Thread(worker).start();
 
-        for (int i = 0; i < maxLoops && cook.ordersFilled() < quota; i++) {
+        long start = System.currentTimeMillis();
+        while (!done(worker, start, maxWorkTimeSeconds, quota)) {
             Thread.sleep(250);
         }
 
-        cook.shutdown();
+        worker.shutdown();
     }
+
+	private static boolean done(Worker worker, long start,
+			int maxWorkTimeSeconds, int quota) {
+
+		if (maxWorkTimeSeconds > 0) {
+			long end = start + (maxWorkTimeSeconds * 1000L);
+			if (System.currentTimeMillis() > end) {
+				return true;
+			}
+		}
+
+		if (quota > 0) {
+			if (worker.ordersFilled() >= quota) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
 }

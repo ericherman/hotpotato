@@ -48,13 +48,13 @@ public class AcceptanceMultiVMTest extends TestCase {
         String workUnits = "1";
 
         String[] restaurantArgs = new String[]{"java", "-cp", classpath,
-                hotpotato.acceptance.ServerRunner.class.getName(), maxSeconds,
-                workUnits, "" + port,};
+                hotpotato.acceptance.ServerRunner.class.getName(), "" + port,
+                maxSeconds, workUnits,};
 
         String[] cookArgs = new String[]{"java", "-cp", classpath,
-                hotpotato.acceptance.WorkerRunner.class.getName(), maxSeconds,
-                workUnits, InetAddress.getLocalHost().getHostName(),
-                "" + port,};
+                hotpotato.acceptance.WorkerRunner.class.getName(),
+                InetAddress.getLocalHost().getHostName(), "" + port,
+                maxSeconds, workUnits,};
 
         new Shell(restaurantArgs, envp, "Restaraunt", out, err).start();
         Thread.sleep(3 * ConnectionServer.SLEEP_DELAY);

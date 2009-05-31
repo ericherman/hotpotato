@@ -1,0 +1,16 @@
+#!/bin/bash
+LIBDIR=${HOME}/libs
+BCEL_JAR=${LIBDIR}/bcel-5.2.jar
+BUILD_DIR=bin
+CLASSPATH=${BUILD_DIR}:${BCEL_JAR}
+HOST=localhost
+PORT=4211
+MESSAGE=$1
+
+java \
+  -classpath ${CLASSPATH} \
+  hotpotato.acceptance.ReverseRunner \
+  ${HOST} \
+  ${PORT} \
+  ${MESSAGE}
+

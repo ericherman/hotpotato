@@ -88,9 +88,10 @@ public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
         String workUnits = "1";
 
         String[] cookArgs = new String[]{"java", "-cp", CLASSPATH,
-                WorkerRunner.class.getName(), maxSeconds, workUnits,
+                WorkerRunner.class.getName(),
                 InetAddress.getLocalHost().getHostName(),
-                "" + server.getPort(),};
+                "" + server.getPort(),
+                maxSeconds, workUnits,};
 
         new Shell(cookArgs, ENVP, "cook", out, err).start();
 

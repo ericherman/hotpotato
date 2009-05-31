@@ -110,6 +110,22 @@ java \
  -classpath hotpotato-version.jar:/path/to/bcel-5.2.jar:/path/to/junit.jar \
  hotpotato.AllTestSuites
 
+TRYING IT
+
+Some bash wrapper scripts are available to start the daemons and there
+is a demo client which simply reverses a string.
+
+(1) start the server:
+./hotpotatod
+
+(2) start a worker:
+./workerd
+
+(3) run a reverse request:
+./reverse foo
+
+CONTRIBUTING
+
 Speaking of testing, all the code has been written test-first, 
 so there should be no untested code. If there is code that can 
 be removed without causing tests to break, it should probably 
