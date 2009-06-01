@@ -16,16 +16,16 @@ public class WorkerRunner {
         int port = Integer.parseInt(args[1]);
         int maxWorkTimeSeconds = 0;
         if (args.length > 2) {
-        	maxWorkTimeSeconds = Integer.parseInt(args[2]);
+            maxWorkTimeSeconds = Integer.parseInt(args[2]);
         }
         int quota = 0;
         if (args.length > 3) {
-        	quota = Integer.parseInt(args[3]);
+            quota = Integer.parseInt(args[3]);
         }
         boolean sandbox = true;
-		if (args.length > 4) {
-			sandbox = args[4].equalsIgnoreCase(Boolean.TRUE.toString());
-		}
+        if (args.length > 4) {
+            sandbox = args[4].equalsIgnoreCase(Boolean.TRUE.toString());
+        }
 
         Worker worker = new Worker(addr, port, sandbox);
         new Thread(worker).start();
@@ -38,23 +38,23 @@ public class WorkerRunner {
         worker.shutdown();
     }
 
-	private static boolean done(Worker worker, long start,
-			int maxWorkTimeSeconds, int quota) {
+    private static boolean done(Worker worker, long start,
+            int maxWorkTimeSeconds, int quota) {
 
-		if (maxWorkTimeSeconds > 0) {
-			long end = start + (maxWorkTimeSeconds * 1000L);
-			if (System.currentTimeMillis() > end) {
-				return true;
-			}
-		}
+        if (maxWorkTimeSeconds > 0) {
+            long end = start + (maxWorkTimeSeconds * 1000L);
+            if (System.currentTimeMillis() > end) {
+                return true;
+            }
+        }
 
-		if (quota > 0) {
-			if (worker.ordersFilled() >= quota) {
-				return true;
-			}
-		}
+        if (quota > 0) {
+            if (worker.ordersFilled() >= quota) {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 }

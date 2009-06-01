@@ -200,26 +200,26 @@ public class AcceptanceTest extends TestCase {
         assertEquals(4, mel.ordersFilled() + ophilia.ordersFilled());
     }
 
-	public void testReverseExample() throws Exception {
-		mel = newCook();
+    public void testReverseExample() throws Exception {
+        mel = newCook();
 
-		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		PrintStream out = new PrintStream(baos);
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        PrintStream out = new PrintStream(baos);
 
-		Thread.sleep(ConnectionServer.SLEEP_DELAY);
+        Thread.sleep(ConnectionServer.SLEEP_DELAY);
 
-		InetAddress host = InetAddress.getLocalHost();
-		int port = server.getPort();
-		ReverseRunner runner = new ReverseRunner(host, port);
-		runner.setOut(out);
-		runner.setMaxWorkTimeSeconds(10);
+        InetAddress host = InetAddress.getLocalHost();
+        int port = server.getPort();
+        ReverseRunner runner = new ReverseRunner(host, port);
+        runner.setOut(out);
+        runner.setMaxWorkTimeSeconds(10);
 
-		runner.reverse("foo");
+        runner.reverse("foo");
 
-		String EOL = System.getProperty("line.separator");
-		String oof = "oof" + EOL;
-		assertEquals(oof, new String(baos.toByteArray()));
-	}
+        String EOL = System.getProperty("line.separator");
+        String oof = "oof" + EOL;
+        assertEquals(oof, new String(baos.toByteArray()));
+    }
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(AcceptanceTest.class);

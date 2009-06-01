@@ -20,7 +20,7 @@ public class ObjectReceiver {
     private ObjectInputStream ois;
 
     public ObjectReceiver(Socket s) throws IOException {
-    	this(s, true);
+        this(s, true);
     }
 
     public ObjectReceiver(Socket s, boolean sandbox) throws IOException {

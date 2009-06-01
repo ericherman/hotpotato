@@ -42,7 +42,7 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
 
     private Serializable receiveSerializable(String shortClassName,
             String[] alien_java_src) throws Exception {
-    	return receiveSerializable(shortClassName, alien_java_src, true);
+            return receiveSerializable(shortClassName, alien_java_src, true);
     }
 
     private Serializable receiveSerializable(String shortClassName,
@@ -63,13 +63,13 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
 
     private Order receiveOrder(String shortClassName, String[] alien_java_src)
             throws Exception {
-    	return receiveOrder(shortClassName, alien_java_src, true);
+        return receiveOrder(shortClassName, alien_java_src, true);
     }
 
     private Order receiveOrder(String shortClassName, String[] alien_java_src,
-    		boolean sandbox) throws Exception {
+            boolean sandbox) throws Exception {
 
-    	Serializable obj = receiveSerializable(shortClassName, alien_java_src, sandbox);
+        Serializable obj = receiveSerializable(shortClassName, alien_java_src, sandbox);
         String msg = obj.getClass() + " should be an " + Order.class;
         assertTrue(msg, obj instanceof Order);
 
@@ -227,7 +227,7 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
     }
 
 
-    public void testPropertyRead() throws Exception {
+    public void testNoSanboxPropertyRead() throws Exception {
         String shortClassName = "Alien6";
         String[] alien_java_src = new String[]{"package aliens;", //
                 "import java.io.*;", //
@@ -241,10 +241,10 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadFixture {
         };
 
         boolean sandbox = false;
-		Order command = receiveOrder(shortClassName, alien_java_src, sandbox);
-		Serializable obj = command.exec();
-		String expected = System.getProperty("java.class.path");
-		assertEquals(expected, obj);
+        Order command = receiveOrder(shortClassName, alien_java_src, sandbox);
+        Serializable obj = command.exec();
+        String expected = System.getProperty("java.class.path");
+        assertEquals(expected, obj);
     }
 
 }

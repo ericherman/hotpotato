@@ -15,56 +15,56 @@ import java.net.InetAddress;
 
 public class ReverseRunner {
 
-	private InetAddress host;
-	private int port;
-	private int maxWorkTimeSeconds;
-	private PrintStream out;
+    private InetAddress host;
+    private int port;
+    private int maxWorkTimeSeconds;
+    private PrintStream out;
 
-	public ReverseRunner(InetAddress host, int port) {
-		this.host = host;
-		this.port = port;
-		out = System.out;
-		maxWorkTimeSeconds = Integer.MAX_VALUE;
-	}
+    public ReverseRunner(InetAddress host, int port) {
+        this.host = host;
+        this.port = port;
+        out = System.out;
+        maxWorkTimeSeconds = Integer.MAX_VALUE;
+    }
 
-	public void setMaxWorkTimeSeconds(int maxWorkTimeSeconds) {
-		this.maxWorkTimeSeconds = maxWorkTimeSeconds;
-	}
+    public void setMaxWorkTimeSeconds(int maxWorkTimeSeconds) {
+        this.maxWorkTimeSeconds = maxWorkTimeSeconds;
+    }
 
-	public void setOut(PrintStream out) {
-		this.out = out;
-	}
+    public void setOut(PrintStream out) {
+        this.out = out;
+    }
 
-	public void reverse(String message) throws Exception {
-		Customer us = new Customer(host, port);
-		Order order = new ReverseOrder(message);
-		String orderNumber = us.placeOrder("foo", order);
-		Serializable completedWork = null;
+    public void reverse(String message) throws Exception {
+        Customer us = new Customer(host, port);
+        Order order = new ReverseOrder(message);
+        String orderNumber = us.placeOrder("foo", order);
+        Serializable completedWork = null;
 
-		long start = System.currentTimeMillis();
-		long end = start + (maxWorkTimeSeconds * 1000L);
-		while (completedWork == null && System.currentTimeMillis() < end) {
-			Thread.sleep(250);
-			completedWork = us.pickupOrder(orderNumber);
-		}
+        long start = System.currentTimeMillis();
+        long end = start + (maxWorkTimeSeconds * 1000L);
+        while (completedWork == null && System.currentTimeMillis() < end) {
+            Thread.sleep(250);
+            completedWork = us.pickupOrder(orderNumber);
+        }
 
-		out.println(completedWork);
-		out.flush();
-	}
+        out.println(completedWork);
+        out.flush();
+    }
 
-	public static void main(String[] args) throws Exception {
-		InetAddress host = InetAddress.getByName(args[0]);
-		int port = Integer.parseInt(args[1]);
+    public static void main(String[] args) throws Exception {
+        InetAddress host = InetAddress.getByName(args[0]);
+        int port = Integer.parseInt(args[1]);
 
-		ReverseRunner runner = new ReverseRunner(host, port);
-		runner.setOut(System.out);
+        ReverseRunner runner = new ReverseRunner(host, port);
+        runner.setOut(System.out);
 
-		if (args.length > 3) {
-			runner.setMaxWorkTimeSeconds(Integer.parseInt(args[3]));
-		}
+        if (args.length > 3) {
+            runner.setMaxWorkTimeSeconds(Integer.parseInt(args[3]));
+        }
 
-		String message = args[2];
-		runner.reverse(message);
-	}
+        String message = args[2];
+        runner.reverse(message);
+    }
 
 }

@@ -15,11 +15,11 @@ public class ServerRunner {
         int port = Integer.parseInt(args[0]);
         int maxWorkTimeSeconds = 0;
         if(args.length > 1)  {
-        	maxWorkTimeSeconds = Integer.parseInt(args[1]);
+            maxWorkTimeSeconds = Integer.parseInt(args[1]);
         }
         int quota = 0;
         if(args.length > 2)  {
-        	quota = Integer.parseInt(args[2]);
+            quota = Integer.parseInt(args[2]);
         }
 
         HotpotatoServer alices = new Hotpotatod();
@@ -34,23 +34,23 @@ public class ServerRunner {
         server.shutdown();
     }
 
-	private static boolean done(HotpotatoServer alices, long start,
-			int maxWorkTimeSeconds, int quota) {
+    private static boolean done(HotpotatoServer alices, long start,
+            int maxWorkTimeSeconds, int quota) {
 
-		if (maxWorkTimeSeconds > 0) {
-			long end = start + (maxWorkTimeSeconds * 1000L);
-			if (System.currentTimeMillis() > end) {
-				return true;
-			}
-		}
+        if (maxWorkTimeSeconds > 0) {
+            long end = start + (maxWorkTimeSeconds * 1000L);
+            if (System.currentTimeMillis() > end) {
+                return true;
+            }
+        }
 
-		if (quota > 0) {
-			if (alices.ordersDelivered() >= quota) {
-				return true;
-			}
-		}
+        if (quota > 0) {
+            if (alices.ordersDelivered() >= quota) {
+                return true;
+            }
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 }

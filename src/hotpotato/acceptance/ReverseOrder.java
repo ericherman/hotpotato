@@ -12,16 +12,16 @@ import hotpotato.Order;
 
 public class ReverseOrder implements Order {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final String message;
+    private final String message;
 
-	public ReverseOrder(String message) {
-		this.message = message;
-	}
+    public ReverseOrder(String message) {
+        this.message = message;
+    }
 
-	public Serializable exec() {
-		return new StringBuffer(message).reverse().toString();
-	}
+    public Serializable exec() {
+        return new StringBuffer(message).reverse().toString();
+    }
 
 }

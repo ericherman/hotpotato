@@ -16,7 +16,7 @@ import java.util.*;
 class HotpotatoClassLoader extends SecureClassLoader {
     private final Map defs;
     private final ClassUtil classes;
-	private CodeSource codeSource;
+        private CodeSource codeSource;
 
     public HotpotatoClassLoader(ClassLoader parent) {
         this(new StandardClassUtil(), parent);
@@ -58,17 +58,17 @@ class HotpotatoClassLoader extends SecureClassLoader {
     }
 
     public CodeSource codeSource() {
-    	return (codeSource != null) ? codeSource : new AlienCodeSource();
+            return (codeSource != null) ? codeSource : new AlienCodeSource();
     }
 
-	public void useSandBox(boolean sandbox) {
+    public void useSandBox(boolean sandbox) {
         if (sandbox) {
-        	codeSource = new AlienCodeSource();
+            codeSource = new AlienCodeSource();
         } else {
-        	URL url = null;
-        	java.security.cert.Certificate[] certs = null;
-        	codeSource = new CodeSource(url, certs);
+            URL url = null;
+            java.security.cert.Certificate[] certs = null;
+            codeSource = new CodeSource(url, certs);
         }
-	}
+    }
 
 }

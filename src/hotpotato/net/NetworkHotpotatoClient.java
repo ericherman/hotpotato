@@ -18,7 +18,7 @@ public class NetworkHotpotatoClient implements HotpotatoClient {
     private boolean sandbox;
 
     public NetworkHotpotatoClient(InetAddress address, int orderPort) {
-    	this(address, orderPort, true);
+        this(address, orderPort, true);
     }
 
     public NetworkHotpotatoClient(InetAddress address, int orderPort, boolean sandbox) {
