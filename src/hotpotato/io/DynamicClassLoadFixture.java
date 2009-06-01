@@ -97,10 +97,10 @@ public abstract class DynamicClassLoadFixture extends TestCase {
     protected void writeFile(File file, String[] contents)
             throws FileNotFoundException, IOException {
         FileOutputStream fos = new FileOutputStream(file);
-        PrintWriter out = new PrintWriter(fos);
-        for (int i = 0; i < contents.length; i++)
-            out.println(contents[i]);
-
-        out.close();
+        PrintWriter pw = new PrintWriter(fos);
+        for (int i = 0; i < contents.length; i++) {
+            pw.println(contents[i]);
+        }
+        pw.close();
     }
 }
