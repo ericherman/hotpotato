@@ -5,17 +5,18 @@ It's current as of 2003/08/23.
 
 LICENSING
 
-The Hotpotato programs are free software; you can redistribute 
-them and/or modify them under the terms of the GNU General Public 
-License as published by the Free Software Foundation; either 
-version 2 of the License, or (at your option) any later version.
+The Hotpotato library and programs are free software; you can
+redistribute them and/or modify them under the terms of the GNU
+Lesser General Public License as published by the Free Software
+Foundation; either version 2.1 of the License, or (at your option)
+any later version.
 
-These programs are distributed in the hope that they will be 
-useful, but WITHOUT ANY WARRANTY; without even the implied 
-warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+This software is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-See the GNU General Public License for more details.
-
+See the GNU Lesser General Public License for more details.
+ 
 You should have received a copy of the GNU General Public License
 (GnuGeneralPublicLicenseVersion2.txt) along with these programs; 
 if not, write to:
@@ -24,8 +25,8 @@ the Free Software Foundation, Inc.
 59 Temple Place, Suite 330
 Boston, MA  02111-1307  USA
 
-The GPL may not suit some users. No problem, feel free to contact 
-Eric Herman by email <eric AT rnd DOT cx> for alternative 
+The LGPL may not suit some users. No problem, feel free to contact 
+Eric Herman by email <eric AT freesa DOT org> for alternative 
 licensing, I'm sure we can work something out. 
 
 SUMMARY
