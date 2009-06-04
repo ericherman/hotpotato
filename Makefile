@@ -9,6 +9,8 @@ BUILD_DIR = bin
 # Absolutely all classes should be referenced by the top level test suite
 JAVAC_TARGET = $(SOURCE_DIR)/hotpotato/AllTestSuites.java
 VERSION = R-1-4
+HOTPOTATO_JAR = hotpotato.jar
+DIST_TAR = ../hotpotato-$(VERSION).tar.gz
 
 all: clean compile
 
@@ -26,7 +28,7 @@ check:
 	$(JAVA) -cp $(BUILD_DIR):$(CLASSPATH) hotpotato.AllTestSuites
 
 dist:
-	rm hotpotato.jar
-	jar cvf hotpotato.jar -C bin/ .
-	tar --directory=.. --create --verbose --file=../hotpotato-$(VERSION).tar.gz --gzip --exclude="hotpotato/.git" --exclude="hotpotato/bin" --exclude="hotpotato/.settings" hotpotato
+	rm -f $(HOTPOTATO_JAR)
+	jar cf $(HOTPOTATO_JAR) -C bin/ .
+	tar --directory=.. --create --file=$(DIST_TAR) --gzip --exclude="hotpotato/.git" --exclude="hotpotato/bin" --exclude="hotpotato/.settings" hotpotato
 
