@@ -12,11 +12,11 @@ import java.security.*;
  * I'd like to extend a super special thanks to Brett Neumeier for finding the
  * correct way to implement this very simple-seeming class.
  */
-class HotpotatoPolicy extends Policy {
+class AlienCodeSourcePolicy extends Policy {
     private Permissions allPriv;
     private Permissions noPriv;
 
-    public HotpotatoPolicy() {
+    public AlienCodeSourcePolicy() {
         allPriv = new Permissions();
         allPriv.add(new AllPermission());
         noPriv = new Permissions();

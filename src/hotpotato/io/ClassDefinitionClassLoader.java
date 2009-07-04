@@ -13,16 +13,16 @@ import java.net.URL;
 import java.security.*;
 import java.util.*;
 
-class HotpotatoClassLoader extends SecureClassLoader {
+class ClassDefinitionClassLoader extends SecureClassLoader {
     private final Map defs;
     private final ClassUtil classes;
         private CodeSource codeSource;
 
-    public HotpotatoClassLoader(ClassLoader parent) {
+    public ClassDefinitionClassLoader(ClassLoader parent) {
         this(new StandardClassUtil(), parent);
     }
 
-    HotpotatoClassLoader(ClassUtil classes, ClassLoader parent) {
+    ClassDefinitionClassLoader(ClassUtil classes, ClassLoader parent) {
         super(parent);
         this.defs = new HashMap();
         this.classes = classes;
@@ -30,7 +30,7 @@ class HotpotatoClassLoader extends SecureClassLoader {
 
         if (manager == null) {
             manager = new SecurityManager();
-            Policy myPolicy = new HotpotatoPolicy();
+            Policy myPolicy = new AlienCodeSourcePolicy();
             Policy.setPolicy(myPolicy);
             System.setSecurityManager(manager);
         }

@@ -16,7 +16,7 @@ import java.security.CodeSource;
  * privileges.
  */
 public class ObjectReceiver {
-    private HotpotatoClassLoader loader;
+    private ClassDefinitionClassLoader loader;
     private ObjectInputStream ois;
 
     public ObjectReceiver(Socket s) throws IOException {
@@ -24,7 +24,7 @@ public class ObjectReceiver {
     }
 
     public ObjectReceiver(Socket s, boolean sandbox) throws IOException {
-        loader = new HotpotatoClassLoader(getClass().getClassLoader());
+        loader = new ClassDefinitionClassLoader(getClass().getClassLoader());
         loader.useSandBox(sandbox);
 
         InputStream in = s.getInputStream();
