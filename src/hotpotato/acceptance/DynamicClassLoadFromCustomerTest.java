@@ -7,7 +7,7 @@
 package hotpotato.acceptance;
 
 import hotpotato.HotpotatoServer;
-import hotpotato.io.DynamicClassLoadFixture;
+import hotpotato.io.DynamicClassLoadTestFixture;
 import hotpotato.io.ObjectReceiver;
 import hotpotato.model.Hotpotatod;
 import hotpotato.net.SocketHotpotatoServer;
@@ -18,107 +18,109 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
-    private SocketHotpotatoServer server;
+public class DynamicClassLoadFromCustomerTest extends
+		DynamicClassLoadTestFixture {
 
-    protected void tearDown() throws Exception {
-        try {
-            if (server != null) {
-                server.shutdown();
-                server = null;
-            }
-        } finally {
-            super.tearDown();
-        }
-    }
+	private SocketHotpotatoServer server;
 
-    public void testRoundTripAlienOrder() throws Exception {
-        String[] source = {
-                "package aliens;", //
-                "import java.io.*;", //
-                "import java.util.concurrent.Callable;", //
-                "import hotpotato.*;", //
-                "public class Alien implements Callable<Serializable>, Serializable {", //
-                "    public Serializable call() {", //
-                "        return \"Alien\";", //
-                "    }", //
-                "}", //
-        };
-        roundTrip("Alien", source);
-    }
+	protected void tearDown() throws Exception {
+		try {
+			if (server != null) {
+				server.shutdown();
+				server = null;
+			}
+		} finally {
+			super.tearDown();
+		}
+	}
 
-    public void testComplexAlienOrder() throws Exception {
-        String[] source1 = { "package aliens;", //
-                "public class AlienChild {", //
-                "    public int foo = 0;", //
-                "    public int getRand() {", //
-                "        return (int) (10 * Math.random());", //
-                "    }", //
-                "}", //
-        };
+	public void testRoundTripAlienOrder() throws Exception {
+		String[] source = {
+				"package aliens;", //
+				"import java.io.*;", //
+				"import java.util.concurrent.Callable;", //
+				"import hotpotato.*;", //
+				"public class Alien implements Callable<Serializable>, Serializable {", //
+				"    public Serializable call() {", //
+				"        return \"Alien\";", //
+				"    }", //
+				"}", //
+		};
+		roundTrip("Alien", source);
+	}
 
-        compileAlienClass("AlienChild", source1);
+	public void testComplexAlienOrder() throws Exception {
+		String[] source1 = { "package aliens;", //
+				"public class AlienChild {", //
+				"    public int foo = 0;", //
+				"    public int getRand() {", //
+				"        return (int) (10 * Math.random());", //
+				"    }", //
+				"}", //
+		};
 
-        String[] source2 = {
-                "package aliens;", //
-                "import hotpotato.*;", //
-                "import java.io.*;", //
-                "import java.util.concurrent.Callable;", //
-                "public class ComplexAlien implements Callable<Serializable>, Serializable {", //
-                "    public Serializable call() {", //
-                "        AlienChild child = new AlienChild() {", //
-                "            public int getRand() {", //
-                "                return super.getRand() + 20;", //
-                "            }", //
-                "        };", //
-                "        if (child.getRand() > child.foo){", //
-                "            return \"ComplexAlien\";", //
-                "        }", //
-                "        return null;", //
-                "    }", //
-                "}", //
-        };
-        roundTrip("ComplexAlien", source2);
-    }
+		compileAlienClass("AlienChild", source1);
 
-    private void roundTrip(String shortClassName, String[] source)
-            throws Exception {
+		String[] source2 = {
+				"package aliens;", //
+				"import hotpotato.*;", //
+				"import java.io.*;", //
+				"import java.util.concurrent.Callable;", //
+				"public class ComplexAlien implements Callable<Serializable>, Serializable {", //
+				"    public Serializable call() {", //
+				"        AlienChild child = new AlienChild() {", //
+				"            public int getRand() {", //
+				"                return super.getRand() + 20;", //
+				"            }", //
+				"        };", //
+				"        if (child.getRand() > child.foo){", //
+				"            return \"ComplexAlien\";", //
+				"        }", //
+				"        return null;", //
+				"    }", //
+				"}", //
+		};
+		roundTrip("ComplexAlien", source2);
+	}
 
-        compileAlienClass(shortClassName, source);
-        String className = "aliens." + shortClassName;
+	private void roundTrip(String shortClassName, String[] source)
+			throws Exception {
 
-        HotpotatoServer alices = new Hotpotatod();
-        server = new SocketHotpotatoServer(0, alices);
-        server.start();
+		compileAlienClass(shortClassName, source);
+		String className = "aliens." + shortClassName;
 
-        String maxSeconds = "10";
-        String workUnits = "1";
+		HotpotatoServer alices = new Hotpotatod();
+		server = new SocketHotpotatoServer(0, alices);
+		server.start();
 
-        String[] cookArgs = new String[] { "java", "-cp", CLASSPATH,
-                WorkerRunner.class.getName(),
-                InetAddress.getLocalHost().getHostName(),
-                "" + server.getPort(), maxSeconds, workUnits, };
+		String maxSeconds = "10";
+		String workUnits = "1";
 
-        new Shell(cookArgs, ENVP, "cook", out, err).start();
+		String[] cookArgs = new String[] { "java", "-cp", CLASSPATH,
+				WorkerRunner.class.getName(),
+				InetAddress.getLocalHost().getHostName(),
+				"" + server.getPort(), maxSeconds, workUnits, };
 
-        String javaProgram = CustomerRunner.class.getName();
-        assertEquals("hotpotato.acceptance.CustomerRunner", javaProgram);
+		new Shell(cookArgs, ENVP, "cook", out, err).start();
 
-        ServerSocket reportingServer = new ServerSocket(0);
+		String javaProgram = CustomerRunner.class.getName();
+		assertEquals("hotpotato.acceptance.CustomerRunner", javaProgram);
 
-        // System.out.println(CLASSPATH);
-        // System.out.println(alienClasspath);
-        String[] args = new String[] { "java", "-cp", alienClasspath,
-                javaProgram, maxSeconds, "" + server.getPort(), className,
-                "" + reportingServer.getLocalPort() };
+		ServerSocket reportingServer = new ServerSocket(0);
 
-        launched = new Shell(args, ENVP, "send alien", out, err);
-        launched.start();
+		// System.out.println(CLASSPATH);
+		// System.out.println(alienClasspath);
+		String[] args = new String[] { "java", "-cp", alienClasspath,
+				javaProgram, maxSeconds, "" + server.getPort(), className,
+				"" + reportingServer.getLocalPort() };
 
-        Socket s = reportingServer.accept();
-        Serializable obj = new ObjectReceiver(s).receive();
-        s.close();
-        assertEquals(shortClassName, obj);
-        assertEquals(1, alices.ordersDelivered());
-    }
+		launched = new Shell(args, ENVP, "send alien", out, err);
+		launched.start();
+
+		Socket s = reportingServer.accept();
+		Serializable obj = new ObjectReceiver(s).receive();
+		s.close();
+		assertEquals(shortClassName, obj);
+		assertEquals(1, alices.ordersDelivered());
+	}
 }

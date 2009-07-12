@@ -20,7 +20,7 @@ import java.net.UnknownHostException;
 
 import junit.framework.TestCase;
 
-public abstract class DynamicClassLoadFixture extends TestCase {
+public abstract class DynamicClassLoadTestFixture extends TestCase {
     private final static String PATH = System.getProperty("java.library.path");
     protected final static String CLASSPATH = System
             .getProperty("java.class.path");
