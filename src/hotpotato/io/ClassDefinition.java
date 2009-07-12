@@ -6,10 +6,13 @@
  */
 package hotpotato.io;
 
-import hotpotato.util.*;
+import hotpotato.util.ClassUtil;
+import hotpotato.util.Equals;
+import hotpotato.util.StandardClassUtil;
 
-import java.io.*;
-import java.util.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Arrays;
 
 class ClassDefinition implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -20,11 +23,11 @@ class ClassDefinition implements Serializable {
 
     private Equals equals;
 
-    public ClassDefinition(Class aClass) throws IOException {
+    public ClassDefinition(Class<?> aClass) throws IOException {
         this(new StandardClassUtil(), aClass);
     }
 
-    ClassDefinition(ClassUtil classUtil, Class aClass) throws IOException {
+    ClassDefinition(ClassUtil classUtil, Class<?> aClass) throws IOException {
         this.className = aClass.getName();
         this.classBytes = classUtil.getResourceBytes(aClass);
 

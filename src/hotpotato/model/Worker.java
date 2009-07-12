@@ -6,11 +6,15 @@
  */
 package hotpotato.model;
 
-import hotpotato.*;
-import hotpotato.net.*;
+import hotpotato.HotpotatoClient;
+import hotpotato.HotpotatoServer;
+import hotpotato.Request;
+import hotpotato.net.NetworkHotpotatoClient;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.InetAddress;
+import java.util.concurrent.Callable;
 
 public class Worker implements Runnable {
     private int ordersFilled;
@@ -35,24 +39,32 @@ public class Worker implements Runnable {
         Ticket work = null;
         running = true;
         while (running) {
+            Thread.yield();
             try {
                 work = getNextOrder();
             } catch (IOException e) { //
                 // should we do anything here?
             }
-            if (work != null) {
-                Order order = work.getOrder();
-                if (order != null) {
-                    Serializable result = order.exec();
-                    try {
-                        returnResult(work.getId(), result);
-                    } catch (IOException e1) {
-                        throw new RuntimeException(e1);
-                    }
-                    ordersFilled++;
-                }
+            if (work == null) {
+                continue;
             }
-            Thread.yield();
+            Callable<Serializable> order = work.getOrder();
+            if (order == null) {
+                continue;
+            }
+            Serializable result;
+            try {
+                result = order.call();
+            } catch (Exception e) {
+                e.printStackTrace();
+                continue;
+            }
+            try {
+                returnResult(work.getId(), result);
+                ordersFilled++;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -74,6 +86,7 @@ public class Worker implements Runnable {
 
     private static class GetNextOrderRequest implements Request {
         private static final long serialVersionUID = 1L;
+
         public Serializable exec(HotpotatoServer restaurant) {
             return restaurant.getNextTicket();
         }
@@ -83,10 +96,12 @@ public class Worker implements Runnable {
         private static final long serialVersionUID = 1L;
         String id;
         Serializable result;
+
         public ReturnOrderRequest(String id, Serializable result) {
             this.id = id;
             this.result = result;
         }
+
         public Serializable exec(HotpotatoServer restaurant) {
             restaurant.returnResult(id, result);
             return null;

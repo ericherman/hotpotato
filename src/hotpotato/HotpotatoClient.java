@@ -6,7 +6,8 @@
  */
 package hotpotato;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.Serializable;
 
 public interface HotpotatoClient {
     Serializable send(Request request) throws IOException;

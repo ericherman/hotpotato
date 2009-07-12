@@ -7,10 +7,9 @@
 package hotpotato.acceptance;
 
 import java.io.Serializable;
+import java.util.concurrent.Callable;
 
-import hotpotato.Order;
-
-public class ReverseOrder implements Order {
+public class ReverseOrder implements Callable<Serializable>, Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -20,7 +19,7 @@ public class ReverseOrder implements Order {
         this.message = message;
     }
 
-    public Serializable exec() {
+    public Serializable call() {
         return new StringBuffer(message).reverse().toString();
     }
 

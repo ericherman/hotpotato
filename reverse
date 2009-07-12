@@ -7,12 +7,12 @@ HOTPOTATO=hotpotato.jar
 CLASSPATH=${HOTPOTATO}:${BCEL_JAR}
 HOST=localhost
 PORT=4211
-MESSAGE=$1
+MESSAGE=${1}
 
 java \
   -classpath ${CLASSPATH} \
   hotpotato.acceptance.ReverseRunner \
   ${HOST} \
   ${PORT} \
-  ${MESSAGE}
+  "${MESSAGE}"
 

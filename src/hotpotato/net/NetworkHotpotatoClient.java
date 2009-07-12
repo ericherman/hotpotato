@@ -6,11 +6,15 @@
  */
 package hotpotato.net;
 
-import hotpotato.*;
-import hotpotato.io.*;
+import hotpotato.HotpotatoClient;
+import hotpotato.Request;
+import hotpotato.io.ObjectReceiver;
+import hotpotato.io.ObjectSender;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.Socket;
 
 public class NetworkHotpotatoClient implements HotpotatoClient {
     private InetAddress serverAddress;
@@ -21,7 +25,8 @@ public class NetworkHotpotatoClient implements HotpotatoClient {
         this(address, orderPort, true);
     }
 
-    public NetworkHotpotatoClient(InetAddress address, int orderPort, boolean sandbox) {
+    public NetworkHotpotatoClient(InetAddress address, int orderPort,
+            boolean sandbox) {
         this.serverAddress = address;
         this.port = orderPort;
         this.sandbox = sandbox;

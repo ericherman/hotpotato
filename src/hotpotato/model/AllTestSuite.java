@@ -6,13 +6,15 @@
  */
 package hotpotato.model;
 
-import junit.framework.*;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 public class AllTestSuite {
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(AllTestSuite.suite());
     }
+
     public static Test suite() {
         TestSuite suite = new TestSuite("Hotpotato Model Tests");
         suite.addTestSuite(TicketQueueTest.class);

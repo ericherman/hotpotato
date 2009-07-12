@@ -6,7 +6,10 @@
  */
 package hotpotato.io;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectStreamClass;
 
 class ObjectInputStreamUsingLoader extends ObjectInputStream {
     private ClassLoader loader;
@@ -18,7 +21,7 @@ class ObjectInputStreamUsingLoader extends ObjectInputStream {
         this.loader = loader;
     }
 
-    protected Class resolveClass(ObjectStreamClass desc)
+    protected Class<?> resolveClass(ObjectStreamClass desc)
             throws ClassNotFoundException {
 
         return loader.loadClass(desc.getName());

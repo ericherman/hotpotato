@@ -6,17 +6,16 @@
  */
 package hotpotato.model;
 
-import hotpotato.*;
-
-import java.io.*;
+import java.io.Serializable;
+import java.util.concurrent.Callable;
 
 public class Ticket implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String id;
-    private Order order;
+    private Callable<Serializable> order;
 
-    public Ticket(String id, Order order) {
+    public Ticket(String id, Callable<Serializable> order) {
         this.id = id;
         this.order = order;
     }
@@ -25,7 +24,7 @@ public class Ticket implements Serializable {
         return id;
     }
 
-    public Order getOrder() {
+    public Callable<Serializable> getOrder() {
         return order;
     }
 

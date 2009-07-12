@@ -6,19 +6,19 @@
  */
 package hotpotato.acceptance;
 
-import hotpotato.*;
-import hotpotato.model.*;
-import hotpotato.net.*;
+import hotpotato.HotpotatoServer;
+import hotpotato.model.Hotpotatod;
+import hotpotato.net.SocketHotpotatoServer;
 
 public class ServerRunner {
     public static void main(String[] args) throws Exception {
         int port = Integer.parseInt(args[0]);
         int maxWorkTimeSeconds = 0;
-        if(args.length > 1)  {
+        if (args.length > 1) {
             maxWorkTimeSeconds = Integer.parseInt(args[1]);
         }
         int quota = 0;
-        if(args.length > 2)  {
+        if (args.length > 2) {
             quota = Integer.parseInt(args[2]);
         }
 

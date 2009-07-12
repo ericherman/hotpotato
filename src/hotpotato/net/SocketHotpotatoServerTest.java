@@ -6,13 +6,16 @@
  */
 package hotpotato.net;
 
-import hotpotato.*;
-import hotpotato.io.*;
+import hotpotato.HotpotatoServer;
+import hotpotato.Request;
+import hotpotato.io.ObjectReceiver;
+import hotpotato.io.ObjectSender;
 
-import java.io.*;
-import java.net.*;
+import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.Socket;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 public class SocketHotpotatoServerTest extends TestCase {
 
@@ -27,6 +30,7 @@ public class SocketHotpotatoServerTest extends TestCase {
 
     static class Foo implements Request {
         private static final long serialVersionUID = 1L;
+
         public Serializable exec(HotpotatoServer restaurant) {
             return "foo";
         }

@@ -5,13 +5,16 @@
  *  or for alternative licensing, email Eric Herman: eric AT freesa DOT org 
  */
 package hotpotato.net;
-import junit.framework.*;
+
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 public class AllTestSuite {
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(AllTestSuite.suite());
     }
+
     public static Test suite() {
         TestSuite suite = new TestSuite("Hotpotato 'net' Tests");
         suite.addTestSuite(SocketHotpotatoServerTest.class);

@@ -6,12 +6,16 @@
  */
 package hotpotato.net;
 
-import hotpotato.*;
-import hotpotato.io.*;
-import hotpotato.model.*;
+import hotpotato.HotpotatoServer;
+import hotpotato.Request;
+import hotpotato.io.ConnectionServer;
+import hotpotato.io.ObjectReceiver;
+import hotpotato.io.ObjectSender;
+import hotpotato.model.Hotpotatod;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.Socket;
 
 public class SocketHotpotatoServer extends ConnectionServer {
     private HotpotatoServer restaurant;

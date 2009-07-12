@@ -6,7 +6,7 @@
  */
 package hotpotato.io;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 public class ClassDefinitionTest extends TestCase {
 

@@ -6,25 +6,27 @@
  */
 package hotpotato.model;
 
-import hotpotato.*;
+import hotpotato.HotpotatoServer;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
 public class Hotpotatod implements HotpotatoServer {
     private int nextOrderNumber;
     private int ordersDelivered;
     TicketQueue ticketWheel;
-    Map counterTop;
+    Map<String, Serializable> counterTop;
 
     public Hotpotatod() {
         nextOrderNumber = 0;
         ordersDelivered = 0;
         ticketWheel = new TicketQueue();
-        counterTop = new HashMap();
+        counterTop = new HashMap<String, Serializable>();
     }
 
-    public String takeOrder(String prefix, Order order) {
+    public String takeOrder(String prefix, Callable<Serializable> order) {
         String orderNumberStr = Integer.toString(nextOrderNumber++);
         Ticket ticket = new Ticket(prefix + orderNumberStr, order);
         ticketWheel.add(ticket);
@@ -59,7 +61,7 @@ public class Hotpotatod implements HotpotatoServer {
         Serializable out = null;
         synchronized (counterTop) {
             if (counterTop.get(id) != null) {
-                out = (Serializable) counterTop.get(id);
+                out = counterTop.get(id);
                 counterTop.remove(id);
                 ordersDelivered++;
             }

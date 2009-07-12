@@ -6,7 +6,8 @@
  */
 package hotpotato.util;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintStream;
 
 public class Shell extends Thread {
     private String[] args;

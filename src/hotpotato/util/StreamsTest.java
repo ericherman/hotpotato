@@ -6,9 +6,15 @@
  */
 package hotpotato.util;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.InputStreamReader;
+import java.io.PipedInputStream;
+import java.io.PipedOutputStream;
+import java.io.PrintWriter;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 public class StreamsTest extends TestCase {
 
@@ -59,6 +65,6 @@ public class StreamsTest extends TestCase {
         Thread.sleep(20);
 
         assertEquals("foo", receive.readLine());
-        
+
     }
 }

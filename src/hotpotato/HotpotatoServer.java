@@ -6,16 +6,23 @@
  */
 package hotpotato;
 
-import hotpotato.model.*;
+import hotpotato.model.Ticket;
 
-import java.io.*;
+import java.io.Serializable;
+import java.util.concurrent.Callable;
 
 public interface HotpotatoServer {
-    String takeOrder(String prefix, Order obj); // return value is Ticket ID
+    String takeOrder(String prefix, Callable<Serializable> obj); // return value
+                                                                 // is Ticket ID
+
     Ticket getNextTicket();
+
     Ticket getTicket(String id);
+
     void returnResult(String ticketId, Serializable orderResult);
+
     Serializable pickUpOrder(String id);
+
     int ordersDelivered();
 
     public static class Stub implements HotpotatoServer {
@@ -39,7 +46,7 @@ public interface HotpotatoServer {
             throw new UnsupportedOperationException();
         }
 
-        public String takeOrder(String prefix, Order obj) {
+        public String takeOrder(String prefix, Callable<Serializable> obj) {
             throw new UnsupportedOperationException();
         }
     }

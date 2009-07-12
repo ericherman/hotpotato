@@ -6,9 +6,11 @@
  */
 package hotpotato.io;
 
-import java.io.*;
-import java.net.*;
-import java.security.CodeSource;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.Serializable;
+import java.net.Socket;
 
 /**
  * ObjectReceiver receives objects over a network connection. It loads all of
@@ -24,10 +26,13 @@ public class ObjectReceiver {
     }
 
     public ObjectReceiver(Socket s, boolean sandbox) throws IOException {
+        this(s.getInputStream(), sandbox);
+    }
+
+    public ObjectReceiver(InputStream in, boolean sandbox) throws IOException {
         loader = new ClassDefinitionClassLoader(getClass().getClassLoader());
         loader.useSandBox(sandbox);
 
-        InputStream in = s.getInputStream();
         ois = new ObjectInputStreamUsingLoader(loader, in);
     }
 

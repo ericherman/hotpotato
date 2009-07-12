@@ -6,9 +6,9 @@
  */
 package hotpotato.acceptance;
 
-import hotpotato.model.*;
+import hotpotato.model.Worker;
 
-import java.net.*;
+import java.net.InetAddress;
 
 public class WorkerRunner {
     public static void main(String[] args) throws Exception {

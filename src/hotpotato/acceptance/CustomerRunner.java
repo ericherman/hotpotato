@@ -6,14 +6,16 @@
  */
 package hotpotato.acceptance;
 
-import hotpotato.*;
-import hotpotato.io.*;
-import hotpotato.model.*;
+import hotpotato.io.ObjectSender;
+import hotpotato.model.Customer;
 
-import java.io.*;
-import java.net.*;
+import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.concurrent.Callable;
 
 public class CustomerRunner {
+    @SuppressWarnings("unchecked")
     public static void main(String[] args) throws Exception {
         int maxWorkTimeSeconds = Integer.parseInt(args[0]);
         int orderPort = Integer.parseInt(args[1]);
@@ -24,8 +26,9 @@ public class CustomerRunner {
         int maxLoops = maxWorkTimeSeconds * 4;
 
         Customer bob = new Customer(host, orderPort);
-        Class aClass = Class.forName(className);
-        Order order = (Order) aClass.newInstance();
+        Class<?> aClass = Class.forName(className);
+        Callable<Serializable> order;
+        order = (Callable<Serializable>) aClass.newInstance();
         String orderNumber = bob.placeOrder("foo", order);
         Serializable completedWork = null;
 

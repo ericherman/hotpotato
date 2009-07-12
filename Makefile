@@ -8,7 +8,7 @@ SOURCE_DIR = src
 BUILD_DIR = bin
 # Absolutely all classes should be referenced by the top level test suite
 JAVAC_TARGET = $(SOURCE_DIR)/hotpotato/AllTestSuites.java
-VERSION = R-1-4
+VERSION = R-1-5
 HOTPOTATO_JAR = hotpotato.jar
 DIST_TAR = ../hotpotato-$(VERSION).tar.gz
 

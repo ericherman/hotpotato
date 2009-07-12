@@ -6,14 +6,17 @@
  */
 package hotpotato.acceptance;
 
-import hotpotato.*;
-import hotpotato.io.*;
-import hotpotato.model.*;
-import hotpotato.net.*;
-import hotpotato.util.*;
+import hotpotato.HotpotatoServer;
+import hotpotato.io.DynamicClassLoadFixture;
+import hotpotato.io.ObjectReceiver;
+import hotpotato.model.Hotpotatod;
+import hotpotato.net.SocketHotpotatoServer;
+import hotpotato.util.Shell;
 
-import java.io.*;
-import java.net.*;
+import java.io.Serializable;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
     private SocketHotpotatoServer server;
@@ -30,11 +33,13 @@ public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
     }
 
     public void testRoundTripAlienOrder() throws Exception {
-        String[] source = {"package aliens;", //
+        String[] source = {
+                "package aliens;", //
                 "import java.io.*;", //
+                "import java.util.concurrent.Callable;", //
                 "import hotpotato.*;", //
-                "public class Alien implements Order {", //
-                "    public Serializable exec() {", //
+                "public class Alien implements Callable<Serializable>, Serializable {", //
+                "    public Serializable call() {", //
                 "        return \"Alien\";", //
                 "    }", //
                 "}", //
@@ -43,7 +48,7 @@ public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
     }
 
     public void testComplexAlienOrder() throws Exception {
-        String[] source1 = {"package aliens;", //
+        String[] source1 = { "package aliens;", //
                 "public class AlienChild {", //
                 "    public int foo = 0;", //
                 "    public int getRand() {", //
@@ -54,11 +59,13 @@ public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
 
         compileAlienClass("AlienChild", source1);
 
-        String[] source2 = {"package aliens;", //
+        String[] source2 = {
+                "package aliens;", //
                 "import hotpotato.*;", //
                 "import java.io.*;", //
-                "public class ComplexAlien implements Order {", //
-                "    public Serializable exec() {", //
+                "import java.util.concurrent.Callable;", //
+                "public class ComplexAlien implements Callable<Serializable>, Serializable {", //
+                "    public Serializable call() {", //
                 "        AlienChild child = new AlienChild() {", //
                 "            public int getRand() {", //
                 "                return super.getRand() + 20;", //
@@ -87,11 +94,10 @@ public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
         String maxSeconds = "10";
         String workUnits = "1";
 
-        String[] cookArgs = new String[]{"java", "-cp", CLASSPATH,
+        String[] cookArgs = new String[] { "java", "-cp", CLASSPATH,
                 WorkerRunner.class.getName(),
                 InetAddress.getLocalHost().getHostName(),
-                "" + server.getPort(),
-                maxSeconds, workUnits,};
+                "" + server.getPort(), maxSeconds, workUnits, };
 
         new Shell(cookArgs, ENVP, "cook", out, err).start();
 
@@ -102,9 +108,9 @@ public class DynamicClassLoadFromCustomerTest extends DynamicClassLoadFixture {
 
         // System.out.println(CLASSPATH);
         // System.out.println(alienClasspath);
-        String[] args = new String[]{"java", "-cp", alienClasspath,
+        String[] args = new String[] { "java", "-cp", alienClasspath,
                 javaProgram, maxSeconds, "" + server.getPort(), className,
-                "" + reportingServer.getLocalPort()};
+                "" + reportingServer.getLocalPort() };
 
         launched = new Shell(args, ENVP, "send alien", out, err);
         launched.start();

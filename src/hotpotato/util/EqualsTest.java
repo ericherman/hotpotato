@@ -6,7 +6,7 @@
  */
 package hotpotato.util;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 public class EqualsTest extends TestCase {
     private boolean equalsInnerCalled;
@@ -15,6 +15,8 @@ public class EqualsTest extends TestCase {
         class MyClass {
             public boolean equals(Object obj) {
                 return new Equals(this) {
+                    private static final long serialVersionUID = 1L;
+
                     protected boolean equalsInner(Object other) {
                         equalsInnerCalled = true;
                         return this == other;
@@ -25,7 +27,8 @@ public class EqualsTest extends TestCase {
             public int hashCode() {
                 return 0;
             }
-        };
+        }
+        ;
         final Object a = new MyClass();
         final Object b = new MyClass();
         equalsInnerCalled = false;
@@ -39,6 +42,8 @@ public class EqualsTest extends TestCase {
 
     public void testNullOther() {
         Equals eq = new Equals("foo") {
+            private static final long serialVersionUID = 1L;
+
             protected boolean equalsInner(Object obj) {
                 return true;
             }
@@ -50,6 +55,8 @@ public class EqualsTest extends TestCase {
         final Object owner = "1";
         Object other = new Integer(1);
         Equals eq = new Equals(owner) {
+            private static final long serialVersionUID = 1L;
+
             protected boolean equalsInner(Object obj) {
                 return true;
             }
@@ -60,12 +67,15 @@ public class EqualsTest extends TestCase {
     public void testDifferentHashCodes() {
         class HashCoder {
             private int hc;
+
             public HashCoder(int hashCode) {
                 this.hc = hashCode;
             }
 
             public boolean equals(Object obj) {
                 return new Equals(this) {
+                    private static final long serialVersionUID = 1L;
+
                     protected boolean equalsInner(Object other) {
                         return true;
                     }
@@ -89,12 +99,15 @@ public class EqualsTest extends TestCase {
     public void testEqualsInner() {
         class MyClass {
             private int a;
+
             public MyClass(int a) {
                 this.a = a;
             }
 
             public boolean equals(Object obj) {
                 return new Equals(this) {
+                    private static final long serialVersionUID = 1L;
+
                     protected boolean equalsInner(Object other) {
                         equalsInnerCalled = true;
                         return a == ((MyClass) other).a;
@@ -123,6 +136,8 @@ public class EqualsTest extends TestCase {
         Exception expected = null;
         try {
             new Equals(null) {
+                private static final long serialVersionUID = 1L;
+
                 protected boolean equalsInner(Object other) {
                     return false;
                 }

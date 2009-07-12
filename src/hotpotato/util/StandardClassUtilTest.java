@@ -6,9 +6,9 @@
  */
 package hotpotato.util;
 
-import java.util.*;
+import java.util.Arrays;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 public class StandardClassUtilTest extends TestCase {
     public void testResourceName() {
@@ -29,8 +29,8 @@ public class StandardClassUtilTest extends TestCase {
     }
 
     public void testLoadResourceBytes() throws Exception {
-        byte[] simpleFileBytes = new byte[]{68, 111, 110, 39, 116, 32, 99, 104,
-                97, 110, 103, 101, 32, 109, 101, 33, 10};
+        byte[] simpleFileBytes = new byte[] { 68, 111, 110, 39, 116, 32, 99,
+                104, 97, 110, 103, 101, 32, 109, 101, 33, 10 };
 
         String fileName = "hotpotato/util/simplefile.txt";
         ClassLoader system = ClassLoader.getSystemClassLoader();

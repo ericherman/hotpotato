@@ -6,7 +6,7 @@
  */
 package hotpotato;
 
-import java.io.*;
+import java.io.Serializable;
 
 public interface Request extends Serializable {
     Serializable exec(HotpotatoServer restaurant);

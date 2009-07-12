@@ -6,8 +6,10 @@
  */
 package hotpotato.io;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public abstract class ConnectionServer {
     public static final int SLEEP_DELAY = 25;
@@ -67,6 +69,7 @@ public abstract class ConnectionServer {
 
     private class SocketListener implements Runnable {
         public IOException caught = null;
+
         public void run() {
             try {
                 runIO();
@@ -77,6 +80,7 @@ public abstract class ConnectionServer {
                 }
             }
         }
+
         protected void runIO() throws IOException {
             while (isRunning()) {
                 String nextName = name + "[" + count++ + "]";
@@ -86,14 +90,16 @@ public abstract class ConnectionServer {
                 execute(acceptor, nextName);
             }
         }
+
         /* override with a threadpool if needed */
-        protected void execute(Runnable target, String name) {
-            new Thread(target, name).start();
+        protected void execute(Runnable target, String nextName) {
+            new Thread(target, nextName).start();
         }
+
         protected boolean toRuntime(IOException e) {
             String msg = e.getMessage();
             return !("Socket closed".equals(msg) //
-                || "Socket is closed".equals(msg));
+            || "Socket is closed".equals(msg));
         }
     }
 

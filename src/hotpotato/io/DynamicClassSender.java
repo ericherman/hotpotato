@@ -6,19 +6,19 @@
  */
 package hotpotato.io;
 
-import java.io.*;
-import java.net.*;
+import java.io.Serializable;
+import java.net.Socket;
 
 public class DynamicClassSender {
     public static void main(String[] args) throws Exception {
         String hostName = args[0];
         int port = Integer.parseInt(args[1]);
         String className = args[2];
-        Class aClass = Class.forName(className);
-        Serializable orderItem = (Serializable) aClass.newInstance();
+        Class<?> aClass = Class.forName(className);
+        Serializable payload = (Serializable) aClass.newInstance();
         Socket socket = new Socket(hostName, port);
         ObjectSender sender = new ObjectSender(socket);
-        sender.send(orderItem);
+        sender.send(payload);
         socket.close();
     }
 }

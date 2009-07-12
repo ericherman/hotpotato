@@ -6,12 +6,14 @@
  */
 package hotpotato.io;
 
-import hotpotato.testsupport.*;
+import hotpotato.testsupport.LoopbackServer;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 public class ObjectRecieverTest extends TestCase {
     private ConnectionServer loopback;
@@ -32,9 +34,11 @@ public class ObjectRecieverTest extends TestCase {
     public void testWriteObject() throws Exception {
         class Server extends ConnectionServer {
             Object obj;
+
             public Server() {
                 super(0, "testWriteObject");
             }
+
             protected void acceptConnection(Socket s) throws IOException {
                 obj = new ObjectReceiver(s).receive();
             }
@@ -42,14 +46,15 @@ public class ObjectRecieverTest extends TestCase {
 
         Server server = new Server();
         server.start();
-
         loopback = server;
-        ObjectOutputStream oos = getOutputStream(new Socket(localhost, server
-                .getPort()));
+
+        Socket s = new Socket(localhost, server.getPort());
+        ObjectOutputStream oos = getOutputStream(s);
         oos.writeObject("FOO");
 
         Thread.sleep(ConnectionServer.SLEEP_DELAY);
         assertEquals("FOO", server.obj);
+        s.close();
     }
 
     private ObjectOutputStream getOutputStream(Socket s) throws IOException {

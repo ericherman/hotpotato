@@ -6,9 +6,11 @@
  */
 package hotpotato.testsupport;
 
-import hotpotato.io.*;
+import hotpotato.io.ConnectionServer;
+import hotpotato.io.ObjectReceiver;
+import hotpotato.io.ObjectSender;
 
-import java.net.*;
+import java.net.Socket;
 
 public class LoopbackServer extends ConnectionServer {
     public LoopbackServer() {

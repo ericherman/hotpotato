@@ -6,7 +6,9 @@
  */
 package hotpotato.model;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * TicketQueue is marked final as a hint to the compiler. It can safely be
@@ -30,12 +32,12 @@ import java.util.*;
  */
 public final class TicketQueue {
 
-    private Map map;
-    private LinkedList queue;
+    private Map<String, Ticket> map;
+    private LinkedList<Ticket> queue;
 
     public TicketQueue() {
-        queue = new LinkedList();
-        map = new HashMap();
+        queue = new LinkedList<Ticket>();
+        map = new HashMap<String, Ticket>();
     }
 
     synchronized public int size() {
@@ -62,13 +64,13 @@ public final class TicketQueue {
     }
 
     synchronized public Ticket get() {
-        Ticket ticket = (Ticket) queue.removeFirst();
+        Ticket ticket = queue.removeFirst();
         map.remove(ticket.getId());
         return ticket;
     }
 
     synchronized public Ticket get(String id) {
-        Ticket ticket = (Ticket) map.get(id);
+        Ticket ticket = map.get(id);
         queue.remove(ticket);
         return ticket;
     }

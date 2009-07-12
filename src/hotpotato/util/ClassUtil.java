@@ -6,16 +6,20 @@
  */
 package hotpotato.util;
 
-import java.io.*;
+import java.io.IOException;
 
 /**
  * Bundle of utility methods that do name conversions from classes to resources
  * and back.
  */
 public interface ClassUtil {
-    public abstract ClassLoader classLoaderFor(Class aClass);
+    public abstract ClassLoader classLoaderFor(Class<?> aClass);
+
     public abstract String toClassName(String classResourceName);
-    public abstract String toResourceName(Class aClass);
+
+    public abstract String toResourceName(Class<?> aClass);
+
     public abstract String toResourceName(String className);
-    public abstract byte[] getResourceBytes(Class aClass) throws IOException;
+
+    public abstract byte[] getResourceBytes(Class<?> aClass) throws IOException;
 }

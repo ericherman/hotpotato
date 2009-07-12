@@ -6,11 +6,11 @@
  */
 package hotpotato.io;
 
-import hotpotato.testsupport.*;
+import hotpotato.testsupport.LoopbackServer;
 
-import java.net.*;
+import java.net.Socket;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 public class ConnectionServerTest extends TestCase {
 

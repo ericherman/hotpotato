@@ -6,7 +6,11 @@
  */
 package hotpotato.io;
 
-import java.security.*;
+import java.security.AllPermission;
+import java.security.CodeSource;
+import java.security.PermissionCollection;
+import java.security.Permissions;
+import java.security.Policy;
 
 /**
  * I'd like to extend a super special thanks to Brett Neumeier for finding the

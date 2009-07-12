@@ -6,11 +6,15 @@
  */
 package hotpotato.model;
 
-import hotpotato.*;
-import hotpotato.net.*;
+import hotpotato.HotpotatoClient;
+import hotpotato.HotpotatoServer;
+import hotpotato.Request;
+import hotpotato.net.NetworkHotpotatoClient;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.Serializable;
+import java.net.InetAddress;
+import java.util.concurrent.Callable;
 
 public class Customer {
     private HotpotatoClient client;
@@ -23,7 +27,7 @@ public class Customer {
         this.client = client;
     }
 
-    public String placeOrder(String prefix, final Order order)
+    public String placeOrder(String prefix, final Callable<Serializable> order)
             throws IOException {
         return "" + client.send(new PlaceOrderRequest(prefix, order));
     }
@@ -38,12 +42,14 @@ public class Customer {
 
     public static class PlaceOrderRequest implements Request {
         private static final long serialVersionUID = 1L;
-        private Order order;
+        private Callable<Serializable> order;
         private String id;
-        public PlaceOrderRequest(String id, Order order) {
+
+        public PlaceOrderRequest(String id, Callable<Serializable> order) {
             this.order = order;
             this.id = id;
         }
+
         public Serializable exec(HotpotatoServer restaurant) {
             return restaurant.takeOrder(id, order);
         }
@@ -52,9 +58,11 @@ public class Customer {
     public static class PickUpOrderRequest implements Request {
         private static final long serialVersionUID = 1L;
         private String id;
+
         public PickUpOrderRequest(String id) {
             this.id = id;
         }
+
         public Serializable exec(HotpotatoServer restaurant) {
             return restaurant.pickUpOrder(id);
         }
@@ -63,9 +71,11 @@ public class Customer {
     public static class CancelOrderRequest implements Request {
         private static final long serialVersionUID = 1L;
         private String id;
+
         public CancelOrderRequest(String id) {
             this.id = id;
         }
+
         public Serializable exec(HotpotatoServer restaurant) {
             return new Boolean(restaurant.getTicket(id) != null);
         }

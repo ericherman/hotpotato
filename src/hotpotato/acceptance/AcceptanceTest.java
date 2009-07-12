@@ -6,16 +6,19 @@
  */
 package hotpotato.acceptance;
 
-import hotpotato.*;
-import hotpotato.io.*;
-import hotpotato.model.*;
-import hotpotato.net.*;
-import hotpotato.testsupport.*;
+import hotpotato.io.ConnectionServer;
+import hotpotato.model.Customer;
+import hotpotato.model.Worker;
+import hotpotato.net.SocketHotpotatoServer;
+import hotpotato.testsupport.ReturnStringOrder;
 
-import java.io.*;
-import java.net.*;
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
+import java.io.Serializable;
+import java.net.InetAddress;
+import java.util.concurrent.Callable;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 public class AcceptanceTest extends TestCase {
     private SocketHotpotatoServer server;
@@ -62,7 +65,7 @@ public class AcceptanceTest extends TestCase {
         mel = newCook();
 
         Customer bob = newCustomer();
-        Order order = new ReturnStringOrder("fries");
+        Callable<Serializable> order = new ReturnStringOrder("fries");
         String orderNumber = bob.placeOrder("bob", order);
 
         Thread.sleep(ConnectionServer.SLEEP_DELAY);
@@ -74,7 +77,7 @@ public class AcceptanceTest extends TestCase {
             Thread.sleep(ConnectionServer.SLEEP_DELAY);
         }
 
-        assertEquals(order.exec(), fries);
+        assertEquals(order.call(), fries);
         assertEquals(1, mel.ordersFilled());
     }
 
@@ -84,7 +87,7 @@ public class AcceptanceTest extends TestCase {
         peter = newCook();
 
         Customer bob = newCustomer();
-        Order order = new ReturnStringOrder("fries");
+        Callable<Serializable> order = new ReturnStringOrder("fries");
         String orderNumber = bob.placeOrder("bob", order);
 
         Thread.sleep(ConnectionServer.SLEEP_DELAY);
@@ -97,22 +100,22 @@ public class AcceptanceTest extends TestCase {
 
         }
 
-        assertEquals(order.exec(), fries);
+        assertEquals(order.call(), fries);
     }
 
     public void test3Customers1Cook() throws Exception {
         mel = newCook();
 
         Customer bob = newCustomer();
-        Order bOrder = new ReturnStringOrder("Bob's fries");
+        Callable<Serializable> bOrder = new ReturnStringOrder("Bob's fries");
         String bNum = bob.placeOrder("bob", bOrder);
 
         Customer chris = newCustomer();
-        Order cOrder = new ReturnStringOrder("Chris' Fries");
+        Callable<Serializable> cOrder = new ReturnStringOrder("Chris' Fries");
         String cNum = chris.placeOrder("bob", cOrder);
 
         Customer david = newCustomer();
-        Order dOrder = new ReturnStringOrder("David's Fries");
+        Callable<Serializable> dOrder = new ReturnStringOrder("David's Fries");
         String dNum = david.placeOrder("bob", dOrder);
 
         Thread.sleep(ConnectionServer.SLEEP_DELAY);
@@ -134,9 +137,9 @@ public class AcceptanceTest extends TestCase {
             Thread.sleep(ConnectionServer.SLEEP_DELAY);
         }
 
-        assertEquals(bOrder.exec(), bFries);
-        assertEquals(cOrder.exec(), cFries);
-        assertEquals(dOrder.exec(), dFries);
+        assertEquals(bOrder.call(), bFries);
+        assertEquals(cOrder.call(), cFries);
+        assertEquals(dOrder.call(), dFries);
     }
 
     private boolean anyNull(Object a, Object b, Object c) {
@@ -144,7 +147,7 @@ public class AcceptanceTest extends TestCase {
     }
 
     private boolean anyNull(Object a, Object b, Object c, Object d) {
-        return anyNull(a,b,c) || d== null;
+        return anyNull(a, b, c) || d == null;
     }
 
     public void test4Customers2Cooks() throws Exception {
@@ -156,16 +159,16 @@ public class AcceptanceTest extends TestCase {
         Customer david = newCustomer();
         Customer eve = newCustomer();
 
-        Order bOrder = new ReturnStringOrder("bob's fries");
+        Callable<Serializable> bOrder = new ReturnStringOrder("bob's fries");
         String bNum = bob.placeOrder("bob", bOrder);
 
-        Order cOrder = new ReturnStringOrder("chris' fries");
+        Callable<Serializable> cOrder = new ReturnStringOrder("chris' fries");
         String cNum = chris.placeOrder("chris", cOrder);
 
-        Order dOrder = new ReturnStringOrder("david's fries");
+        Callable<Serializable> dOrder = new ReturnStringOrder("david's fries");
         String dNum = david.placeOrder("david", dOrder);
 
-        Order eOrder = new ReturnStringOrder("eve's fries");
+        Callable<Serializable> eOrder = new ReturnStringOrder("eve's fries");
         String eNum = eve.placeOrder("eve", eOrder);
 
         Thread.sleep(ConnectionServer.SLEEP_DELAY);
@@ -193,10 +196,10 @@ public class AcceptanceTest extends TestCase {
             Thread.sleep(ConnectionServer.SLEEP_DELAY);
         }
 
-        assertEquals(bOrder.exec(), bFries);
-        assertEquals(cOrder.exec(), cFries);
-        assertEquals(dOrder.exec(), dFries);
-        assertEquals(eOrder.exec(), eFries);
+        assertEquals(bOrder.call(), bFries);
+        assertEquals(cOrder.call(), cFries);
+        assertEquals(dOrder.call(), dFries);
+        assertEquals(eOrder.call(), eFries);
         assertEquals(4, mel.ordersFilled() + ophilia.ordersFilled());
     }
 

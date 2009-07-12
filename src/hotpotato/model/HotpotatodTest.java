@@ -6,9 +6,12 @@
  */
 package hotpotato.model;
 
-import hotpotato.*;
-import hotpotato.testsupport.*;
-import junit.framework.*;
+import hotpotato.testsupport.ReturnStringOrder;
+
+import java.io.Serializable;
+import java.util.concurrent.Callable;
+
+import junit.framework.TestCase;
 
 public class HotpotatodTest extends TestCase {
 
@@ -16,7 +19,7 @@ public class HotpotatodTest extends TestCase {
         Hotpotatod alices = new Hotpotatod();
         assertEquals(0, alices.ticketWheel.size());
 
-        Order foo = new ReturnStringOrder("foo");
+        Callable<Serializable> foo = new ReturnStringOrder("foo");
         String orderNumber = alices.takeOrder("bob", foo);
 
         assertEquals("bob0", orderNumber);
@@ -33,10 +36,9 @@ public class HotpotatodTest extends TestCase {
         assertNull(alices.getNextTicket());
     }
 
-    public void testReturnCompletedOrder() {
+    public void testReturnCompletedOrder() throws Exception {
         Hotpotatod alices = new Hotpotatod();
-        Order foo = new ReturnStringOrder("foo");
-        alices.returnResult("1", foo);
+        alices.returnResult("1", "foo");
         assertEquals(1, alices.counterTop.size());
     }
 

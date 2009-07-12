@@ -6,20 +6,24 @@
  */
 package hotpotato.model;
 
-import hotpotato.*;
-import hotpotato.testsupport.*;
+import hotpotato.HotpotatoServer;
+import hotpotato.testsupport.LocalHotpotatoClient;
+import hotpotato.testsupport.ReturnStringOrder;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 public class CustomerTest extends TestCase {
 
     public void testPlaceOrder() throws Exception {
         class FauxHotpotatoServer extends HotpotatoServer.Stub {
-            Order order = null;
-            public String takeOrder(String id, Order in) {
+            Callable<Serializable> order = null;
+
+            public String takeOrder(String id, Callable<Serializable> in) {
                 order = in;
                 return id + "7";
             }
@@ -27,7 +31,7 @@ public class CustomerTest extends TestCase {
         FauxHotpotatoServer alices = new FauxHotpotatoServer();
         Customer bob = new Customer(new LocalHotpotatoClient(alices));
 
-        Order foo = new ReturnStringOrder("foo");
+        Callable<Serializable> foo = new ReturnStringOrder("foo");
         bob.placeOrder("bob", foo);
         assertEquals(foo, alices.order);
     }
@@ -35,6 +39,7 @@ public class CustomerTest extends TestCase {
     public void testPickupOrder() throws Exception {
         class FauxHotpotatoServer extends HotpotatoServer.Stub {
             String id = null;
+
             public Serializable pickUpOrder(String in) {
                 this.id = in;
                 return (id == "bar") ? "bar" : null;
@@ -52,9 +57,10 @@ public class CustomerTest extends TestCase {
 
     public void testCancelOrder() throws Exception {
         class FauxHotpotatoServer extends HotpotatoServer.Stub {
-            Map map = new HashMap();
+            Map<String, Ticket> map = new HashMap<String, Ticket>();
+
             public Ticket getTicket(String in) {
-                return (Ticket) map.get(in);
+                return map.get(in);
             }
         }
         FauxHotpotatoServer alices = new FauxHotpotatoServer();

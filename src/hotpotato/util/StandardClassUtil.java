@@ -6,7 +6,9 @@
  */
 package hotpotato.util;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Serializable;
 
 /**
  * This is final simply as a hint to the compiler, it can be un-finalized
@@ -15,12 +17,12 @@ import java.io.*;
 public final class StandardClassUtil implements Serializable, ClassUtil {
     private static final long serialVersionUID = 1L;
 
-    public ClassLoader classLoaderFor(Class aClass) {
+    public ClassLoader classLoaderFor(Class<?> aClass) {
         ClassLoader cl = aClass.getClassLoader();
         return (cl != null) ? cl : ClassLoader.getSystemClassLoader();
     }
 
-    public byte[] getResourceBytes(Class aClass) throws IOException {
+    public byte[] getResourceBytes(Class<?> aClass) throws IOException {
         String resourceName = toResourceName(aClass.getName());
         ClassLoader classLoader = classLoaderFor(aClass);
         return loadResourceBytes(resourceName, classLoader);
@@ -41,7 +43,7 @@ public final class StandardClassUtil implements Serializable, ClassUtil {
         return classResourceName.replace('/', '.');
     }
 
-    public String toResourceName(Class aClass) {
+    public String toResourceName(Class<?> aClass) {
         return toResourceName(aClass.getName());
     }
 

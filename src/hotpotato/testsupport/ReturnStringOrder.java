@@ -6,11 +6,10 @@
  */
 package hotpotato.testsupport;
 
-import hotpotato.*;
+import java.io.Serializable;
+import java.util.concurrent.Callable;
 
-import java.io.*;
-
-public class ReturnStringOrder implements Order {
+public class ReturnStringOrder implements Callable<Serializable>, Serializable {
     private static final long serialVersionUID = 1L;
 
     private String val;
@@ -19,7 +18,7 @@ public class ReturnStringOrder implements Order {
         this.val = val;
     }
 
-    public Serializable exec() {
+    public Serializable call() {
         return val;
     }
 }

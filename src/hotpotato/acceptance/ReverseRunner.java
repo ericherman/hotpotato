@@ -6,12 +6,12 @@
  */
 package hotpotato.acceptance;
 
-import hotpotato.Order;
 import hotpotato.model.Customer;
 
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.util.concurrent.Callable;
 
 public class ReverseRunner {
 
@@ -37,7 +37,7 @@ public class ReverseRunner {
 
     public void reverse(String message) throws Exception {
         Customer us = new Customer(host, port);
-        Order order = new ReverseOrder(message);
+        Callable<Serializable> order = new ReverseOrder(message);
         String orderNumber = us.placeOrder("foo", order);
         Serializable completedWork = null;
 

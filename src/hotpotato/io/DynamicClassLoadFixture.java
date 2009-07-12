@@ -6,18 +6,25 @@
  */
 package hotpotato.io;
 
-import hotpotato.util.*;
+import hotpotato.util.NullPrintStream;
+import hotpotato.util.Shell;
 
-import java.io.*;
-import java.net.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 public abstract class DynamicClassLoadFixture extends TestCase {
     private final static String PATH = System.getProperty("java.library.path");
     protected final static String CLASSPATH = System
             .getProperty("java.class.path");
-    protected final static String[] ENVP = new String[]{"PATH=" + PATH};
+    protected final static String[] ENVP = new String[] { "PATH=" + PATH };
 
     protected String alienClasspath;
     protected Thread launched;
@@ -35,6 +42,8 @@ public abstract class DynamicClassLoadFixture extends TestCase {
         aliensDir.mkdirs();
         out = new NullPrintStream();
         err = out;
+        // out = System.out;
+        // err = System.err;
     }
 
     protected void tearDown() throws Exception {
@@ -72,8 +81,8 @@ public abstract class DynamicClassLoadFixture extends TestCase {
         writeFile(alienJava, alienSrc);
         alienClasspath = CLASSPATH + File.pathSeparatorChar + testDir.getPath();
 
-        String[] args = new String[]{"javac", "-classpath", alienClasspath,
-                alienJava.getPath(),};
+        String[] args = new String[] { "javac", "-classpath", alienClasspath,
+                alienJava.getPath(), };
 
         Thread t = new Shell(args, ENVP, "javac Alien", out, err);
         t.start();
@@ -85,10 +94,10 @@ public abstract class DynamicClassLoadFixture extends TestCase {
     protected void launchDynamicClassSender(String className, int port)
             throws UnknownHostException {
         String javaProgram = DynamicClassSender.class.getName();
-        assertEquals("hotpotato.io.DynamicClassSender", javaProgram);
-        String[] args = new String[]{"java", "-cp", alienClasspath,
+        // assertEquals("hotpotato.io.DynamicClassSender", javaProgram);
+        String[] args = new String[] { "java", "-cp", alienClasspath,
                 javaProgram, InetAddress.getLocalHost().getHostName(),
-                Integer.toString(port), className};
+                Integer.toString(port), className };
 
         launched = new Shell(args, ENVP, "send alien", out, err);
         launched.start();

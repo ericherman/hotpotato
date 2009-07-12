@@ -6,14 +6,24 @@
  */
 package hotpotato.io;
 
-import hotpotato.util.*;
+import hotpotato.util.ClassUtil;
+import hotpotato.util.StandardClassUtil;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-import org.apache.bcel.*;
-import org.apache.bcel.classfile.*;
+import org.apache.bcel.Constants;
+import org.apache.bcel.classfile.ClassParser;
+import org.apache.bcel.classfile.Constant;
+import org.apache.bcel.classfile.ConstantClass;
+import org.apache.bcel.classfile.ConstantPool;
+import org.apache.bcel.classfile.JavaClass;
 
 final class ReferencedClassFinder {
     private ClassUtil classes;
@@ -28,9 +38,9 @@ final class ReferencedClassFinder {
         this.ignoreHotpotatoClasses = ignoreHotpotatoClasses;
     }
 
-    public Class[] find(Object obj) {
-        Set references = new HashSet();
-        List list = discoverObjectsForInspection(obj);
+    public Collection<Class<?>> find(Object obj) {
+        Set<Class<?>> references = new HashSet<Class<?>>();
+        List<Object> list = discoverObjectsForInspection(obj);
         try {
             for (int i = 0; i < list.size(); i++) {
                 findReferences(references, list.get(i));
@@ -40,16 +50,16 @@ final class ReferencedClassFinder {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        return (Class[]) references.toArray(new Class[references.size()]);
+        return references;
     }
 
-    List discoverObjectsForInspection(Object obj) {
-        Set set = new HashSet();
+    List<Object> discoverObjectsForInspection(Object obj) {
+        Set<Object> set = new HashSet<Object>();
         discoverFields(obj, set);
-        return new ArrayList(set);
+        return new ArrayList<Object>(set);
     }
 
-    private void discoverFields(Object obj, Set set) {
+    private void discoverFields(Object obj, Set<Object> set) {
         if (obj != null && !set.contains(obj)) {
             set.add(obj);
             Field[] fields = obj.getClass().getDeclaredFields();
@@ -70,16 +80,16 @@ final class ReferencedClassFinder {
         return classes.toResourceName(inner.getClass()).startsWith("java/");
     }
 
-    void findReferences(Set done, Object obj) throws ClassNotFoundException,
-            IOException {
+    void findReferences(Set<Class<?>> done, Object obj)
+            throws ClassNotFoundException, IOException {
 
-        Set toDo = new HashSet();
-        Class startingClass = obj.getClass();
+        Set<Class<?>> toDo = new HashSet<Class<?>>();
+        Class<?> startingClass = obj.getClass();
         if (!shouldIgnore(classes.toResourceName(startingClass))) {
             toDo.add(startingClass);
         }
         while (toDo.size() > 0) {
-            Class aClass = getOne(toDo);
+            Class<?> aClass = getOne(toDo);
             JavaClass jClass = toJavaClass(aClass);
             ConstantPool pool = jClass.getConstantPool();
             for (int i = 0; i < pool.getLength(); i++) {
@@ -89,7 +99,7 @@ final class ReferencedClassFinder {
                             Constants.CONSTANT_Class);
                     if (!shouldIgnore(refClass)) {
                         ClassLoader cl = classes.classLoaderFor(aClass);
-                        Class nextClass = cl.loadClass(classes
+                        Class<?> nextClass = cl.loadClass(classes
                                 .toClassName(refClass));
                         if (!done.contains(nextClass)) {
                             toDo.add(nextClass);
@@ -103,8 +113,7 @@ final class ReferencedClassFinder {
     }
 
     private boolean shouldIgnore(String className) {
-        return className.startsWith("java/")
-                || isArrayClass(className)
+        return className.startsWith("java/") || isArrayClass(className)
                 || (ignoreHotpotatoClasses && isHotpotatoClass(className));
     }
 
@@ -116,11 +125,11 @@ final class ReferencedClassFinder {
         return name.startsWith("[");
     }
 
-    private Class getOne(Set set) {
-        return (Class) set.iterator().next();
+    private Class<?> getOne(Set<Class<?>> set) {
+        return set.iterator().next();
     }
 
-    private JavaClass toJavaClass(Class aClass) throws IOException {
+    private JavaClass toJavaClass(Class<?> aClass) throws IOException {
         String classResourceName = classes.toResourceName(aClass);
         ClassLoader cl = classes.classLoaderFor(aClass);
         InputStream is = cl.getResourceAsStream(classResourceName);

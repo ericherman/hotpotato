@@ -6,15 +6,16 @@
  */
 package hotpotato.net;
 
-import hotpotato.*;
-import hotpotato.testsupport.*;
+import hotpotato.HotpotatoServer;
+import hotpotato.Request;
+import hotpotato.testsupport.LoopbackServer;
 
-import java.io.*;
+import java.io.Serializable;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 public class NetworkHotpotatoClientTest extends TestCase {
-    
+
     private LoopbackServer server;
 
     protected void tearDown() throws Exception {
@@ -26,9 +27,11 @@ public class NetworkHotpotatoClientTest extends TestCase {
 
     static class FooRequest implements Request {
         private static final long serialVersionUID = 1L;
+
         public Serializable exec(HotpotatoServer restaurant) {
             return null;
         }
+
         public String toString() {
             return "foo";
         }

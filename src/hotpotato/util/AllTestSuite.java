@@ -6,7 +6,8 @@
  */
 package hotpotato.util;
 
-import junit.framework.*;
+import junit.framework.Test;
+import junit.framework.TestSuite;
 
 public class AllTestSuite {
 

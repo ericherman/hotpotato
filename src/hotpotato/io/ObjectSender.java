@@ -6,8 +6,12 @@
  */
 package hotpotato.io;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.net.Socket;
+import java.util.Collection;
 
 /**
  * ObjectSender sends objects over a network connection. It also sends all class
@@ -19,15 +23,18 @@ public class ObjectSender {
     private ReferencedClassFinder finder;
 
     public ObjectSender(Socket s) throws IOException {
-        OutputStream out = s.getOutputStream();
+        this(s.getOutputStream());
+    }
+
+    public ObjectSender(OutputStream out) throws IOException {
         oos = new ObjectOutputStream(out);
         finder = new ReferencedClassFinder();
     }
 
     public void send(Serializable obj) throws IOException {
-        Class[] classes = finder.find(obj);
-        for (int i = 0; i < classes.length; i++) {
-            oos.writeObject(new ClassDefinition(classes[i]));
+        Collection<Class<?>> classes = finder.find(obj);
+        for (Class<?> cls : classes) {
+            oos.writeObject(new ClassDefinition(cls));
         }
 
         oos.writeObject(obj);

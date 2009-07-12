@@ -6,16 +6,15 @@
  */
 package hotpotato.testsupport;
 
-import hotpotato.*;
+import java.io.Serializable;
+import java.util.concurrent.Callable;
 
-import java.io.*;
-
-import junit.framework.*;
+import junit.framework.TestCase;
 
 public class ReturnStringOrderTest extends TestCase {
     public void testExec() throws Exception {
-        Order order = new ReturnStringOrder("foo");
-        Serializable result = order.exec();
+        Callable<Serializable> order = new ReturnStringOrder("foo");
+        Serializable result = order.call();
         assertEquals("foo", result);
     }
 }

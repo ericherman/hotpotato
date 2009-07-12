@@ -6,7 +6,7 @@
  */
 package hotpotato.io;
 
-import java.security.*;
+import java.security.CodeSource;
 
 class AlienCodeSource extends CodeSource {
     private static final long serialVersionUID = 1L;

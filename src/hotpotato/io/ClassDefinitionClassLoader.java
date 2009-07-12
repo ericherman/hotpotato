@@ -6,17 +6,22 @@
  */
 package hotpotato.io;
 
-import hotpotato.util.*;
+import hotpotato.util.ClassUtil;
+import hotpotato.util.StandardClassUtil;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.net.URL;
-import java.security.*;
-import java.util.*;
+import java.security.CodeSource;
+import java.security.Policy;
+import java.security.SecureClassLoader;
+import java.util.HashMap;
+import java.util.Map;
 
 class ClassDefinitionClassLoader extends SecureClassLoader {
-    private final Map defs;
+    private final Map<String, byte[]> defs;
     private final ClassUtil classes;
-        private CodeSource codeSource;
+    private CodeSource codeSource;
 
     public ClassDefinitionClassLoader(ClassLoader parent) {
         this(new StandardClassUtil(), parent);
@@ -24,7 +29,7 @@ class ClassDefinitionClassLoader extends SecureClassLoader {
 
     ClassDefinitionClassLoader(ClassUtil classes, ClassLoader parent) {
         super(parent);
-        this.defs = new HashMap();
+        this.defs = new HashMap<String, byte[]>();
         this.classes = classes;
         SecurityManager manager = System.getSecurityManager();
 
@@ -36,7 +41,7 @@ class ClassDefinitionClassLoader extends SecureClassLoader {
         }
     }
 
-    protected Class findClass(String name) throws ClassNotFoundException {
+    protected Class<?> findClass(String name) throws ClassNotFoundException {
         byte[] bytes = getBytes(name);
         if (bytes == null)
             throw new ClassNotFoundException(name);
@@ -45,7 +50,7 @@ class ClassDefinitionClassLoader extends SecureClassLoader {
     }
 
     private byte[] getBytes(String className) {
-        return (byte[]) defs.get(className);
+        return defs.get(className);
     }
 
     public void register(ClassDefinition classDef) {
@@ -58,7 +63,7 @@ class ClassDefinitionClassLoader extends SecureClassLoader {
     }
 
     public CodeSource codeSource() {
-            return (codeSource != null) ? codeSource : new AlienCodeSource();
+        return (codeSource != null) ? codeSource : new AlienCodeSource();
     }
 
     public void useSandBox(boolean sandbox) {

@@ -6,7 +6,12 @@
  */
 package hotpotato.util;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Stream operation utility methods. This class is final simply as a hint to the

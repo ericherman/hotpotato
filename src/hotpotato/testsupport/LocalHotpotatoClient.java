@@ -6,15 +6,19 @@
  */
 package hotpotato.testsupport;
 
-import hotpotato.*;
+import hotpotato.HotpotatoClient;
+import hotpotato.HotpotatoServer;
+import hotpotato.Request;
 
-import java.io.*;
+import java.io.Serializable;
 
 public class LocalHotpotatoClient implements HotpotatoClient {
     HotpotatoServer restaurant;
+
     public LocalHotpotatoClient(HotpotatoServer alices) {
         this.restaurant = alices;
     }
+
     public Serializable send(Request request) {
         return request.exec(restaurant);
     }

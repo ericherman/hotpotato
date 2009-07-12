@@ -6,12 +6,15 @@
  */
 package hotpotato.io;
 
-import hotpotato.testsupport.*;
+import hotpotato.testsupport.LoopbackServer;
 
-import java.io.*;
-import java.net.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.net.InetAddress;
+import java.net.Socket;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 public class ObjectSenderTest extends TestCase {
     private ConnectionServer loopback;
@@ -34,20 +37,22 @@ public class ObjectSenderTest extends TestCase {
         s = null;
     }
 
-    private ObjectInputStream objectInputStream(Socket s) throws IOException {
-        InputStream in = s.getInputStream();
+    private ObjectInputStream objectInputStream(Socket sock) throws IOException {
+        InputStream in = sock.getInputStream();
         return new ObjectInputStream(in);
     }
 
     public void testWriteObject() throws Exception {
         class Server extends ConnectionServer {
             Object obj;
+
             public Server() {
                 super(0, "testWriteObject");
             }
-            protected void acceptConnection(Socket s) throws IOException {
+
+            protected void acceptConnection(Socket sock) throws IOException {
                 try {
-                    ObjectInputStream ois = objectInputStream(s);
+                    ObjectInputStream ois = objectInputStream(sock);
                     do {
                         obj = ois.readObject();
                     } while (isRunning() && obj instanceof ClassDefinition);
@@ -96,7 +101,7 @@ public class ObjectSenderTest extends TestCase {
         loopback.start();
 
         Object obj1 = "Foo";
-        Object[] arr = new Object[]{obj1, obj1};
+        Object[] arr = new Object[] { obj1, obj1 };
 
         assertSame(arr[0], arr[1]);
 

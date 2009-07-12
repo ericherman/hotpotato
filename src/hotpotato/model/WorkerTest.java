@@ -6,19 +6,24 @@
  */
 package hotpotato.model;
 
-import hotpotato.*;
-import hotpotato.io.*;
-import hotpotato.testsupport.*;
+import hotpotato.HotpotatoClient;
+import hotpotato.HotpotatoServer;
+import hotpotato.Request;
+import hotpotato.io.ConnectionServer;
+import hotpotato.testsupport.LocalHotpotatoClient;
+import hotpotato.testsupport.ReturnStringOrder;
 
-import java.io.*;
+import java.io.Serializable;
+import java.util.concurrent.Callable;
 
-import junit.framework.*;
+import junit.framework.TestCase;
 
 public class WorkerTest extends TestCase {
 
     public void testPickupOrder() throws Exception {
         class FauxHotpotatoServer extends HotpotatoServer.Stub {
             Serializable result = null;
+
             public void returnResult(String id, Serializable in) {
                 this.result = in;
             }
@@ -33,6 +38,7 @@ public class WorkerTest extends TestCase {
     public void testGetNextOrderRequest() throws Exception {
         class FauxHotpotatoServer extends HotpotatoServer.Stub {
             Ticket ticket = null;
+
             public Ticket getNextTicket() {
                 return ticket;
             }
@@ -67,9 +73,11 @@ public class WorkerTest extends TestCase {
         class FauxHotpotatoServer extends HotpotatoServer.Stub {
             Ticket toDo = null;
             Serializable done = null;
+
             public void returnResult(String id, Serializable in) {
                 this.done = in;
             }
+
             public Ticket getNextTicket() {
                 Ticket get = toDo;
                 toDo = null;
@@ -83,7 +91,7 @@ public class WorkerTest extends TestCase {
         new Thread(cook).start();
         Thread.sleep(ConnectionServer.SLEEP_DELAY);
 
-        Order order = new ReturnStringOrder("foo");
+        Callable<Serializable> order = new ReturnStringOrder("foo");
         alices.toDo = new Ticket("123", order);
 
         for (int i = 0; i < 200 && alices.done == null; i++) {
@@ -92,7 +100,7 @@ public class WorkerTest extends TestCase {
 
         assertNotNull(alices.done);
 
-        assertEquals(order.exec(), alices.done);
+        assertEquals(order.call(), alices.done);
 
         cook.shutdown();
     }
