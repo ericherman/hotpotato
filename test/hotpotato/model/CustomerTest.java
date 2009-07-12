@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import junit.framework.TestCase;
 
@@ -69,6 +70,40 @@ public class CustomerTest extends TestCase {
 
         assertEquals(Boolean.TRUE, bob.cancelOrder("123"));
         assertEquals(Boolean.FALSE, bob.cancelOrder("not there"));
+    }
+
+    public static class MyOrder implements Runnable, Serializable {
+        private static final long serialVersionUID = 1L;
+        public static AtomicInteger timesRun = new AtomicInteger(0);
+
+        public void run() {
+            timesRun.incrementAndGet();
+        }
+    }
+
+    public void testExecute() {
+        class FauxHotpotatoServer extends HotpotatoServer.Stub {
+            String id = null;
+
+            public String takeOrder(String prefix, Callable<Serializable> obj) {
+                try {
+                    obj.call();
+                } catch (Exception e) {
+                    //
+                }
+                return "foo";
+            }
+
+            public Serializable pickUpOrder(String in) {
+                this.id = in;
+                return (id == "bar") ? "bar" : null;
+            }
+        }
+        FauxHotpotatoServer alices = new FauxHotpotatoServer();
+        Customer bob = new Customer(new LocalHotpotatoClient(alices));
+        assertEquals(0, MyOrder.timesRun.get());
+        bob.execute(new MyOrder());
+        assertEquals(1, MyOrder.timesRun.get());
     }
 
 }

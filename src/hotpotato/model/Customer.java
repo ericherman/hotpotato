@@ -15,8 +15,9 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.util.concurrent.Callable;
+import java.util.concurrent.Executor;
 
-public class Customer {
+public class Customer implements Executor {
     private HotpotatoClient client;
 
     public Customer(InetAddress address, int orderPort) {
@@ -25,6 +26,14 @@ public class Customer {
 
     public Customer(HotpotatoClient client) {
         this.client = client;
+    }
+
+    public void execute(Runnable command) {
+        try {
+            placeOrder(null, new SerializableCallable(command));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public String placeOrder(String prefix, final Callable<Serializable> order)
