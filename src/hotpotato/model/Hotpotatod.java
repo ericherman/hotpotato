@@ -7,30 +7,40 @@
 package hotpotato.model;
 
 import hotpotato.HotpotatoServer;
+import hotpotato.util.Clock;
+import hotpotato.util.RealClock;
 
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Hotpotatod implements HotpotatoServer {
-    private int nextOrderNumber;
-    private int ordersDelivered;
+    private AtomicInteger nextOrderNumber;
+    private AtomicInteger ordersDelivered;
     TicketQueue ticketWheel;
     Map<String, Serializable> counterTop;
+    Clock clock;
 
     public Hotpotatod() {
-        nextOrderNumber = 0;
-        ordersDelivered = 0;
+        nextOrderNumber = new AtomicInteger(0);
+        ordersDelivered = new AtomicInteger(0);
         ticketWheel = new TicketQueue();
         counterTop = new HashMap<String, Serializable>();
+        clock = new RealClock();
+    }
+
+    public void setClock(Clock clock) {
+        this.clock = clock;
     }
 
     public String takeOrder(String prefix, Callable<Serializable> order) {
-        String orderNumberStr = Integer.toString(nextOrderNumber++);
-        Ticket ticket = new Ticket(prefix + orderNumberStr, order);
+        int number = nextOrderNumber.incrementAndGet();
+        long time = clock.currentTimeMillis(); 
+        Ticket ticket = new Ticket(prefix, number, time, order);
         ticketWheel.add(ticket);
-        return ticket.getId();
+        return prefix + ticket.getNumber();
     }
 
     public Ticket getNextTicket() {
@@ -53,8 +63,10 @@ public class Hotpotatod implements HotpotatoServer {
         return item;
     }
 
-    public void returnResult(String ticketId, Serializable orderResult) {
-        counterTop.put(ticketId, orderResult);
+    public void returnResult(Ticket ticket, Serializable orderResult) {
+        if (ticket.getId() != null) {
+            counterTop.put(ticket.getId(), orderResult);
+        }
     }
 
     public Serializable pickUpOrder(String id) {
@@ -63,13 +75,13 @@ public class Hotpotatod implements HotpotatoServer {
             if (counterTop.get(id) != null) {
                 out = counterTop.get(id);
                 counterTop.remove(id);
-                ordersDelivered++;
+                ordersDelivered.incrementAndGet();
             }
         }
         return out;
     }
 
     public int ordersDelivered() {
-        return ordersDelivered;
+        return ordersDelivered.intValue();
     }
 }

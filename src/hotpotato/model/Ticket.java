@@ -12,16 +12,32 @@ import java.util.concurrent.Callable;
 public class Ticket implements Serializable {
     private static final long serialVersionUID = 1L;
 
-    private String id;
+    private String prefix;
+    private int number;
     private Callable<Serializable> order;
+    private long time;
 
-    public Ticket(String id, Callable<Serializable> order) {
-        this.id = id;
+    public Ticket(String prefix, int number, long time, Callable<Serializable> order) {
+        this.prefix = prefix;
+        this.number = number;
+        this.time = time;
         this.order = order;
     }
 
     public String getId() {
-        return id;
+        return prefix + number;
+    }
+
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public int getNumber() {
+        return number;
+    }
+
+    public long getTime() {
+        return time;
     }
 
     public Callable<Serializable> getOrder() {

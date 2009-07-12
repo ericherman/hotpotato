@@ -60,7 +60,7 @@ public class Worker implements Runnable {
                 continue;
             }
             try {
-                returnResult(work.getId(), result);
+                returnResult(work, result);
                 ordersFilled++;
             } catch (IOException e) {
                 e.printStackTrace();
@@ -72,8 +72,8 @@ public class Worker implements Runnable {
         return (Ticket) client.send(new GetNextOrderRequest());
     }
 
-    void returnResult(String id, Serializable result) throws IOException {
-        client.send(new ReturnOrderRequest(id, result));
+    void returnResult(Ticket ticket, Serializable result) throws IOException {
+        client.send(new ReturnOrderRequest(ticket, result));
     }
 
     public void shutdown() {
@@ -94,16 +94,16 @@ public class Worker implements Runnable {
 
     private static class ReturnOrderRequest implements Request {
         private static final long serialVersionUID = 1L;
-        String id;
+        Ticket ticket;
         Serializable result;
 
-        public ReturnOrderRequest(String id, Serializable result) {
-            this.id = id;
+        public ReturnOrderRequest(Ticket ticket, Serializable result) {
+            this.ticket = ticket;
             this.result = result;
         }
 
         public Serializable exec(HotpotatoServer restaurant) {
-            restaurant.returnResult(id, result);
+            restaurant.returnResult(ticket, result);
             return null;
         }
     }

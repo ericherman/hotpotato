@@ -63,7 +63,7 @@ public class CustomerTest extends TestCase {
             }
         }
         FauxHotpotatoServer alices = new FauxHotpotatoServer();
-        Ticket foo = new Ticket("123", null);
+        Ticket foo = new Ticket("123", 7, 0, null);
         alices.map.put("123", foo);
 
         Customer bob = new Customer(new LocalHotpotatoClient(alices));

@@ -22,14 +22,14 @@ public class WorkerTest extends TestCase {
         class FauxHotpotatoServer extends HotpotatoServer.Stub {
             Serializable result = null;
 
-            public void returnResult(String id, Serializable in) {
+            public void returnResult(Ticket ticket, Serializable in) {
                 this.result = in;
             }
         }
         FauxHotpotatoServer alices = new FauxHotpotatoServer();
         Worker mel = new Worker(new LocalHotpotatoClient(alices));
 
-        mel.returnResult("1", "foo");
+        mel.returnResult(new Ticket("", 1, 0, null), "foo");
         assertEquals("foo", alices.result);
     }
 
@@ -44,7 +44,7 @@ public class WorkerTest extends TestCase {
 
         FauxHotpotatoServer alices = new FauxHotpotatoServer();
         Worker mel = new Worker(new LocalHotpotatoClient(alices));
-        alices.ticket = new Ticket("1", null);
+        alices.ticket = new Ticket("", 1, 0, null);
 
         Ticket ticket = mel.getNextOrder();
         assertEquals(alices.ticket, ticket);
@@ -72,7 +72,7 @@ public class WorkerTest extends TestCase {
             Ticket toDo = null;
             Serializable done = null;
 
-            public void returnResult(String id, Serializable in) {
+            public void returnResult(Ticket ticket, Serializable in) {
                 this.done = in;
             }
 
@@ -90,7 +90,7 @@ public class WorkerTest extends TestCase {
         Thread.sleep(ConnectionServer.SLEEP_DELAY);
 
         Callable<Serializable> order = new ReturnStringOrder("foo");
-        alices.toDo = new Ticket("123", order);
+        alices.toDo = new Ticket("", 123, 0, order);
 
         for (int i = 0; i < 200 && alices.done == null; i++) {
             Thread.sleep(5);

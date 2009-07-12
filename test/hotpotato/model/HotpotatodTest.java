@@ -20,14 +20,14 @@ public class HotpotatodTest extends TestCase {
         Callable<Serializable> foo = new ReturnStringOrder("foo");
         String orderNumber = alices.takeOrder("bob", foo);
 
-        assertEquals("bob0", orderNumber);
+        assertEquals("bob1", orderNumber);
         assertEquals(foo, alices.ticketWheel.get().getOrder());
     }
 
     public void testGetNextOrder() {
         Hotpotatod alices = new Hotpotatod();
         assertNull(alices.getNextTicket());
-        Ticket foo = new Ticket("1", null);
+        Ticket foo = new Ticket("", 1, 0, null);
         alices.ticketWheel.add(foo);
 
         assertEquals(foo, alices.getNextTicket());
@@ -36,7 +36,8 @@ public class HotpotatodTest extends TestCase {
 
     public void testReturnCompletedOrder() throws Exception {
         Hotpotatod alices = new Hotpotatod();
-        alices.returnResult("1", "foo");
+        Ticket foo = new Ticket("", 1, 0, null);
+        alices.returnResult(foo, "foo");
         assertEquals(1, alices.counterTop.size());
     }
 
@@ -52,12 +53,12 @@ public class HotpotatodTest extends TestCase {
     public void testGetTicket() {
         Hotpotatod alices = new Hotpotatod();
         assertNull(alices.getNextTicket());
-        Ticket foo = new Ticket("100", null);
+        Ticket foo = new Ticket("x", 100, 0, null);
         alices.ticketWheel.add(foo);
-        Ticket bar = new Ticket("200", null);
+        Ticket bar = new Ticket("x", 200, 0, null);
         alices.ticketWheel.add(bar);
 
-        assertEquals(bar, alices.getTicket("200"));
+        assertEquals(bar, alices.getTicket("x200"));
         assertEquals(foo, alices.getNextTicket());
         assertNull(alices.getNextTicket());
     }

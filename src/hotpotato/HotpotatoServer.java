@@ -19,7 +19,7 @@ public interface HotpotatoServer {
 
     Ticket getTicket(String id);
 
-    void returnResult(String ticketId, Serializable orderResult);
+    void returnResult(Ticket ticket, Serializable orderResult);
 
     Serializable pickUpOrder(String id);
 
@@ -42,7 +42,7 @@ public interface HotpotatoServer {
             throw new UnsupportedOperationException();
         }
 
-        public void returnResult(String ticketId, Serializable orderResult) {
+        public void returnResult(Ticket ticket, Serializable orderResult) {
             throw new UnsupportedOperationException();
         }
 
