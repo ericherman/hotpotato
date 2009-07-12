@@ -6,8 +6,6 @@
  */
 package hotpotato.io;
 
-import hotpotato.testsupport.LoopbackServer;
-
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;

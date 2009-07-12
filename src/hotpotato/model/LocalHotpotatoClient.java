@@ -4,7 +4,7 @@
  *  or http://www.gnu.org/licenses/lgpl-2.1.txt 
  *  or for alternative licensing, email Eric Herman: eric AT freesa DOT org 
  */
-package hotpotato.testsupport;
+package hotpotato.model;
 
 import hotpotato.HotpotatoClient;
 import hotpotato.HotpotatoServer;

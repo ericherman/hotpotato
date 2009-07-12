@@ -7,8 +7,6 @@
 package hotpotato.model;
 
 import hotpotato.HotpotatoServer;
-import hotpotato.testsupport.LocalHotpotatoClient;
-import hotpotato.testsupport.ReturnStringOrder;
 
 import java.io.Serializable;
 import java.util.HashMap;

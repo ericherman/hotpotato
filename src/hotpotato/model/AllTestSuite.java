@@ -17,6 +17,7 @@ public class AllTestSuite {
 
     public static Test suite() {
         TestSuite suite = new TestSuite("Hotpotato Model Tests");
+        suite.addTestSuite(ReturnStringOrderTest.class);
         suite.addTestSuite(TicketQueueTest.class);
         suite.addTestSuite(HotpotatodTest.class);
         suite.addTestSuite(WorkerTest.class);

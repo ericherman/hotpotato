@@ -8,7 +8,7 @@ package hotpotato.acceptance;
 
 import hotpotato.io.ConnectionServer;
 import hotpotato.model.Customer;
-import hotpotato.testsupport.ReturnStringOrder;
+import hotpotato.model.ReturnStringOrder;
 import hotpotato.util.NullPrintStream;
 import hotpotato.util.Shell;
 

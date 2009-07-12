@@ -6,8 +6,6 @@
  */
 package hotpotato.model;
 
-import hotpotato.testsupport.ReturnStringOrder;
-
 import java.io.Serializable;
 import java.util.concurrent.Callable;
 

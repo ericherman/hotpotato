@@ -8,9 +8,9 @@ package hotpotato.acceptance;
 
 import hotpotato.io.ConnectionServer;
 import hotpotato.model.Customer;
+import hotpotato.model.ReturnStringOrder;
 import hotpotato.model.Worker;
 import hotpotato.net.SocketHotpotatoServer;
-import hotpotato.testsupport.ReturnStringOrder;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;

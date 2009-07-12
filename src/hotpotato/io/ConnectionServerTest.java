@@ -6,8 +6,6 @@
  */
 package hotpotato.io;
 
-import hotpotato.testsupport.LoopbackServer;
-
 import java.net.Socket;
 
 import junit.framework.TestCase;

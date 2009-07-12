@@ -8,7 +8,7 @@ package hotpotato.net;
 
 import hotpotato.HotpotatoServer;
 import hotpotato.Request;
-import hotpotato.testsupport.LoopbackServer;
+import hotpotato.io.LoopbackServer;
 
 import java.io.Serializable;
 

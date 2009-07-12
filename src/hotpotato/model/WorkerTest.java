@@ -10,8 +10,6 @@ import hotpotato.HotpotatoClient;
 import hotpotato.HotpotatoServer;
 import hotpotato.Request;
 import hotpotato.io.ConnectionServer;
-import hotpotato.testsupport.LocalHotpotatoClient;
-import hotpotato.testsupport.ReturnStringOrder;
 
 import java.io.Serializable;
 import java.util.concurrent.Callable;

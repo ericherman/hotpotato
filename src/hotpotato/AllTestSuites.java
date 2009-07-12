@@ -18,7 +18,6 @@ public class AllTestSuites {
     public static Test suite() {
         TestSuite suite = new TestSuite("All Hotpotato Tests");
 
-        suite.addTest(hotpotato.testsupport.AllTestSuite.suite());
         suite.addTest(hotpotato.util.AllTestSuite.suite());
         suite.addTest(hotpotato.io.AllTestSuite.suite());
         suite.addTest(hotpotato.model.AllTestSuite.suite());
