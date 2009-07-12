@@ -11,15 +11,24 @@ import java.util.Arrays;
 import junit.framework.TestCase;
 
 public class StandardClassUtilTest extends TestCase {
+
+    private StandardClassUtil classUtil;
+
+    protected void setUp() {
+        classUtil = new StandardClassUtil();
+    }
+    
+    protected void tearDown() {
+        classUtil = null;
+    }
+    
     public void testResourceName() {
         String className = getClass().getName();
         assertEquals("hotpotato.util.StandardClassUtilTest", className);
 
         String expected = "hotpotato/util/StandardClassUtilTest.class";
-        assertEquals(expected, new StandardClassUtil()
-                .toResourceName(className));
-        assertEquals(expected, new StandardClassUtil()
-                .toResourceName(getClass()));
+        assertEquals(expected, classUtil.toResourceName(className));
+        assertEquals(expected, classUtil.toResourceName(getClass()));
     }
 
     public void testToClassName() {
@@ -34,8 +43,7 @@ public class StandardClassUtilTest extends TestCase {
 
         String fileName = "hotpotato/util/simplefile.txt";
         ClassLoader system = ClassLoader.getSystemClassLoader();
-        byte[] result = new StandardClassUtil().loadResourceBytes(fileName,
-                system);
+        byte[] result = classUtil.loadResourceBytes(fileName, system);
         assertTrue(Arrays.equals(result, simpleFileBytes));
     }
 }
