@@ -21,7 +21,7 @@ public class StandardClassUtilTest extends TestCase {
     protected void tearDown() {
         classUtil = null;
     }
-    
+
     public void testResourceName() {
         String className = getClass().getName();
         assertEquals("hotpotato.util.StandardClassUtilTest", className);
@@ -32,8 +32,7 @@ public class StandardClassUtilTest extends TestCase {
     }
 
     public void testToClassName() {
-        String className = new StandardClassUtil()
-                .toClassName("aliens/Alien.class");
+        String className = classUtil.toClassName("aliens/Alien.class");
         assertEquals("aliens.Alien", className);
     }
 
