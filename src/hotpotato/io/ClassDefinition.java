@@ -7,7 +7,6 @@
 package hotpotato.io;
 
 import hotpotato.util.ClassUtil;
-import hotpotato.util.Equals;
 import hotpotato.util.StandardClassUtil;
 
 import java.io.IOException;
@@ -21,26 +20,21 @@ class ClassDefinition implements Serializable {
 
     private final byte[] classBytes;
 
-    private Equals equals;
-
     public ClassDefinition(Class<?> aClass) throws IOException {
         this(new StandardClassUtil(), aClass);
     }
 
-    ClassDefinition(ClassUtil classUtil, Class<?> aClass) throws IOException {
-        this.className = aClass.getName();
-        this.classBytes = classUtil.getResourceBytes(aClass);
+    public ClassDefinition(ClassUtil classUtil, Class<?> aClass)
+            throws IOException {
+        this(aClass.getName(), classUtil.getResourceBytes(aClass));
+    }
 
-        this.equals = new Equals(this) {
-            private static final long serialVersionUID = 1L;
-
-            protected boolean equalsInner(Object obj) {
-                ClassDefinition other = (ClassDefinition) obj;
-                if (!className().equals(other.className()))
-                    return false;
-                return Arrays.equals(classBytes(), other.classBytes());
-            }
-        };
+    public ClassDefinition(String className, byte[] classBytes) {
+        if (className == null || classBytes == null) {
+            throw new IllegalArgumentException();
+        }
+        this.className = className;
+        this.classBytes = classBytes;
     }
 
     public String className() {
@@ -55,11 +49,28 @@ class ClassDefinition implements Serializable {
         return className() + ", size: " + classBytes().length;
     }
 
-    public boolean equals(Object obj) {
-        return equals.check(obj);
+    public boolean equals(Object other) {
+        if (this == other) {
+            return true;
+        }
+        if (other == null) {
+            return false;
+        }
+        if (this.hashCode() != other.hashCode()) {
+            return false;
+        }
+        if (!this.getClass().equals(other.getClass())) {
+            return false;
+        }
+        ClassDefinition that = (ClassDefinition) other;
+        if (!className().equals(that.className())) {
+            return false;
+        }
+        return Arrays.equals(classBytes(), that.classBytes());
+
     }
 
     public int hashCode() {
-        return classBytes().length;
+        return className().hashCode();
     }
 }
