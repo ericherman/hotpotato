@@ -5,9 +5,10 @@ JUNIT_JAR = $(LIBDIR)/junit.jar
 BCEL_JAR = $(LIBDIR)/bcel-5.2.jar
 CLASSPATH = $(BCEL_JAR):$(JUNIT_JAR)
 SOURCE_DIR = src
+TEST_DIR = test
 BUILD_DIR = bin
 # Absolutely all classes should be referenced by the top level test suite
-JAVAC_TARGET = $(SOURCE_DIR)/hotpotato/AllTestSuites.java
+JAVAC_TARGET = $(TEST_DIR)/hotpotato/AllTestSuites.java
 VERSION = R-1-5
 HOTPOTATO_JAR = hotpotato.jar
 DIST_TAR = ../hotpotato-$(VERSION).tar.gz
@@ -19,8 +20,8 @@ clean:
 	mkdir -p $(BUILD_DIR)
 
 compile:
-	$(JAVAC) -classpath $(CLASSPATH) -sourcepath $(SOURCE_DIR) -d $(BUILD_DIR) $(JAVAC_TARGET)
-	cp $(SOURCE_DIR)/hotpotato/util/simplefile.txt $(BUILD_DIR)/hotpotato/util/simplefile.txt
+	$(JAVAC) -classpath $(CLASSPATH) -sourcepath $(SOURCE_DIR):$(TEST_DIR) -d $(BUILD_DIR) $(JAVAC_TARGET)
+	cp $(TEST_DIR)/hotpotato/util/simplefile.txt $(BUILD_DIR)/hotpotato/util/simplefile.txt
 
 test: clean compile check
 
