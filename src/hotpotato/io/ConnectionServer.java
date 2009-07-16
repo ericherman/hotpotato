@@ -20,7 +20,7 @@ public class ConnectionServer implements ConnectionAcceptor, NamedExecutor {
     private final String name;
     private AtomicInteger counter;
     private int port;
-    private ConnectionAcceptor acceptor = this;
+    private ConnectionAcceptor acceptor;
     private NamedExecutor executor;
 
     public ConnectionServer(int port, String name) {
@@ -29,6 +29,7 @@ public class ConnectionServer implements ConnectionAcceptor, NamedExecutor {
         this.port = port;
         this.listener = new Thread(new SocketListener(), name);
         this.counter = new AtomicInteger(0);
+        this.acceptor = this;
         this.executor = this;
     }
 
@@ -166,14 +167,4 @@ public class ConnectionServer implements ConnectionAcceptor, NamedExecutor {
             return getClass().getSimpleName() + ":" + name;
         }
     }
-}
-
-interface ConnectionAcceptor {
-    void acceptConnection(Socket s) throws IOException;
-
-    void close(Socket socket, Exception thrown);
-}
-
-interface NamedExecutor {
-    void execute(Runnable target, String nextName);
 }
