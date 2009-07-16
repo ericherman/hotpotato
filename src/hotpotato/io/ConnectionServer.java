@@ -12,7 +12,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class ConnectionServer implements ConnectionAcceptor {
+public class ConnectionServer implements ConnectionAcceptor, NamedExecutor {
     public static final int SLEEP_DELAY = 25;
     private ServerSocket serverSocket;
     private Thread listener;
@@ -21,6 +21,7 @@ public class ConnectionServer implements ConnectionAcceptor {
     private AtomicInteger counter;
     private int port;
     private ConnectionAcceptor acceptor = this;
+    private NamedExecutor executor;
 
     public ConnectionServer(int port, String name) {
         this.isRunning = true;
@@ -28,6 +29,7 @@ public class ConnectionServer implements ConnectionAcceptor {
         this.port = port;
         this.listener = new Thread(new SocketListener(), name);
         this.counter = new AtomicInteger(0);
+        this.executor = this;
     }
 
     public void start() throws IOException {
@@ -96,11 +98,18 @@ public class ConnectionServer implements ConnectionAcceptor {
         String nextName = name + "[" + count + "]";
         Socket socket = serverSocket.accept();
         Runnable target = new AcceptorRunnable(nextName, acceptor, socket);
-        execute(target, nextName);
+        executor.execute(target, nextName);
+    }
+
+    public void setNamedExecutor(NamedExecutor executor) {
+        if (executor == null) {
+            throw new IllegalArgumentException();
+        }
+        this.executor  = executor;
     }
 
     /* override with a threadpool if needed */
-    protected void execute(Runnable target, String nextName) {
+    public void execute(Runnable target, String nextName) {
         new Thread(target, nextName).start();
     }
 
@@ -163,4 +172,8 @@ interface ConnectionAcceptor {
     void acceptConnection(Socket s) throws IOException;
 
     void close(Socket socket, Exception thrown);
+}
+
+interface NamedExecutor {
+    void execute(Runnable target, String nextName);
 }
