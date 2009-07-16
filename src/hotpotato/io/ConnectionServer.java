@@ -10,57 +10,71 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class ConnectionServer implements SocketAcceptor {
+public class ConnectionServer implements ConnectionAcceptor {
     public static final int SLEEP_DELAY = 25;
-    private ServerSocket server;
+    private ServerSocket serverSocket;
     private Thread listener;
     private volatile boolean isRunning;
     private final String name;
-    private int count = 0;
+    private AtomicInteger counter;
     private int port;
-    private SocketAcceptor acceptor = this;
+    private ConnectionAcceptor acceptor = this;
 
     public ConnectionServer(int port, String name) {
-        isRunning = true;
+        this.isRunning = true;
         this.name = name;
         this.port = port;
-        listener = new Thread(new SocketListener(), name);
+        this.listener = new Thread(new SocketListener(), name);
+        this.counter = new AtomicInteger(0);
     }
 
     public void start() throws IOException {
-        server = new ServerSocket(port);
+        serverSocket = newServerSocket(port);
         listener.start();
         pause();
+    }
+
+    /* consider making this an interface method */
+    public ServerSocket newServerSocket(int serverPort) throws IOException {
+        return new ServerSocket(serverPort);
     }
 
     public void acceptConnection(Socket s) throws IOException {
         throw new UnsupportedOperationException();
     }
 
-    public void setSocketAcceptor(SocketAcceptor acceptor) {
+    public void setSocketAcceptor(ConnectionAcceptor acceptor) {
         if (acceptor == null) {
             throw new IllegalArgumentException();
         }
         this.acceptor = acceptor;
     }
 
+    public void close(Socket socket, Exception thrown) {
+        try {
+            socket.close();
+        } catch (IOException e1) { //
+        }
+    }
+
     public int getPort() {
-        if (server == null) {
+        if (serverSocket == null) {
             return port;
         }
-        return server.getLocalPort();
+        return serverSocket.getLocalPort();
     }
 
     public InetAddress getInetAddress() {
-        return server.getInetAddress();
+        return serverSocket.getInetAddress();
     }
 
     public void shutdown() throws IOException {
         isRunning = false;
         listener.interrupt();
-        if (server != null) {
-            server.close();
+        if (serverSocket != null) {
+            serverSocket.close();
         }
         pause();
     }
@@ -77,64 +91,76 @@ public class ConnectionServer implements SocketAcceptor {
         return isRunning;
     }
 
-    private class SocketListener implements Runnable {
-        public IOException caught = null;
+    public void listenerLoop() throws IOException {
+        int count = counter.incrementAndGet();
+        String nextName = name + "[" + count + "]";
+        Socket socket = serverSocket.accept();
+        Runnable target = new AcceptorRunnable(nextName, acceptor, socket);
+        execute(target, nextName);
+    }
 
+    /* override with a threadpool if needed */
+    protected void execute(Runnable target, String nextName) {
+        new Thread(target, nextName).start();
+    }
+
+    private class SocketListener implements Runnable {
         public void run() {
-            try {
-                runIO();
-            } catch (IOException e) {
-                caught = e;
-                if (toRuntime(e)) {
-                    throw new RuntimeException(e);
+            while (isRunning()) {
+                try {
+                    listenerLoop();
+                } catch (Exception e) {
+                    if (!socketClosed(e)) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
 
-        protected void runIO() throws IOException {
-            while (isRunning()) {
-                String nextName = name + "[" + count++ + "]";
-                Socket socket;
-                socket = server.accept();
-                ConnectionAcceptor acceptor = new ConnectionAcceptor(socket);
-                execute(acceptor, nextName);
-            }
-        }
-
-        /* override with a threadpool if needed */
-        protected void execute(Runnable target, String nextName) {
-            new Thread(target, nextName).start();
-        }
-
-        protected boolean toRuntime(IOException e) {
+        protected boolean socketClosed(Exception e) {
             String msg = e.getMessage();
-            return !("Socket closed".equals(msg) //
-            || "Socket is closed".equals(msg));
+            return "Socket closed".equals(msg)
+                    || "Socket is closed".equals(msg);
         }
+
+        public String toString() {
+            return getClass().getSimpleName() + ":" + name;
+        }
+
     }
 
-    private class ConnectionAcceptor implements Runnable {
+    public static class AcceptorRunnable implements Runnable {
         private Socket socket;
+        private ConnectionAcceptor acceptor;
+        private String name;
 
-        public ConnectionAcceptor(Socket socket) {
+        public AcceptorRunnable(String name, ConnectionAcceptor acceptor,
+                Socket socket) {
+            this.name = name;
             this.socket = socket;
+            this.acceptor = acceptor;
         }
 
         public void run() {
+            Exception caught = null;
             try {
                 acceptor.acceptConnection(socket);
             } catch (IOException e) {
+                caught = e;
                 throw new RuntimeException(e);
             } finally {
-                try {
-                    socket.close();
-                } catch (IOException e1) { //
-                }
+                acceptor.close(socket, caught);
             }
+        }
+
+        public String toString() {
+            return getClass().getSimpleName() + ":" + name;
         }
     }
 }
 
-interface SocketAcceptor {
+interface ConnectionAcceptor {
     void acceptConnection(Socket s) throws IOException;
+
+    void close(Socket socket, Exception thrown);
 }
