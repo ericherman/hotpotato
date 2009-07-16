@@ -37,7 +37,7 @@ public class Hotpotatod implements HotpotatoServer {
 
     public String takeOrder(String prefix, Callable<Serializable> order) {
         int number = nextOrderNumber.incrementAndGet();
-        long time = clock.currentTimeMillis(); 
+        long time = clock.currentTimeMillis();
         Ticket ticket = new Ticket(prefix, number, time, order);
         ticketWheel.add(ticket);
         return prefix + ticket.getNumber();

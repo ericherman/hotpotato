@@ -16,7 +16,8 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
 
-public class NetworkHotpotatoClient implements HotpotatoClient {
+public class NetworkHotpotatoClient implements HotpotatoClient, Serializable {
+    private static final long serialVersionUID = 1L;
     private InetAddress serverAddress;
     private int port;
     private boolean sandbox;

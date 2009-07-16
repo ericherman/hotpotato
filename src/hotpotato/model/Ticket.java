@@ -7,6 +7,7 @@
 package hotpotato.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.concurrent.Callable;
 
 public class Ticket implements Serializable {
@@ -17,7 +18,8 @@ public class Ticket implements Serializable {
     private Callable<Serializable> order;
     private long time;
 
-    public Ticket(String prefix, int number, long time, Callable<Serializable> order) {
+    public Ticket(String prefix, int number, long time,
+            Callable<Serializable> order) {
         this.prefix = prefix;
         this.number = number;
         this.time = time;
@@ -44,4 +46,7 @@ public class Ticket implements Serializable {
         return order;
     }
 
+    public String toStirng() {
+        return prefix + number + " " + new Date(time) + " " + order;
+    }
 }

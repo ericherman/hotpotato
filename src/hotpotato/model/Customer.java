@@ -30,7 +30,8 @@ public class Customer implements Executor {
 
     public void execute(Runnable command) {
         try {
-            placeOrder(null, new SerializableCallable(command));
+            SerializableCallable order = new SerializableCallable(command);
+            placeOrder(null, order);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

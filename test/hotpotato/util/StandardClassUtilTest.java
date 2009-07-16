@@ -17,7 +17,7 @@ public class StandardClassUtilTest extends TestCase {
     protected void setUp() {
         classUtil = new StandardClassUtil();
     }
-    
+
     protected void tearDown() {
         classUtil = null;
     }

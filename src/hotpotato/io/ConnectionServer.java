@@ -106,7 +106,7 @@ public class ConnectionServer implements ConnectionAcceptor, NamedExecutor {
         if (executor == null) {
             throw new IllegalArgumentException();
         }
-        this.executor  = executor;
+        this.executor = executor;
     }
 
     /* override with a threadpool if needed */

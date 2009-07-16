@@ -12,8 +12,10 @@ import java.io.Serializable;
 import java.util.concurrent.Callable;
 
 public interface HotpotatoServer {
-    String takeOrder(String prefix, Callable<Serializable> obj); // return value
-                                                                 // is Ticket ID
+    /**
+     * @return Ticket ID
+     */
+    String takeOrder(String prefix, Callable<Serializable> obj);
 
     Ticket getNextTicket();
 
