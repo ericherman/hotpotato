@@ -29,7 +29,7 @@ public class SocketHotpotatoServer extends ConnectionServer {
         this.restaurant = restaurant;
     }
 
-    protected void acceptConnection(Socket s) throws IOException {
+    public void acceptConnection(Socket s) throws IOException {
         ObjectReceiver receiver = new ObjectReceiver(s);
         Serializable request = receiver.receive();
         Serializable reply;

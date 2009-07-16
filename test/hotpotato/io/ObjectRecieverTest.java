@@ -37,7 +37,7 @@ public class ObjectRecieverTest extends TestCase {
                 super(0, "testWriteObject");
             }
 
-            protected void acceptConnection(Socket s) throws IOException {
+            public void acceptConnection(Socket s) throws IOException {
                 obj = new ObjectReceiver(s).receive();
             }
         }

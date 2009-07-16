@@ -48,7 +48,7 @@ public class ObjectSenderTest extends TestCase {
                 super(0, "testWriteObject");
             }
 
-            protected void acceptConnection(Socket sock) throws IOException {
+            public void acceptConnection(Socket sock) throws IOException {
                 try {
                     ObjectInputStream ois = objectInputStream(sock);
                     do {

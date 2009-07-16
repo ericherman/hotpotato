@@ -16,7 +16,7 @@ public class ReverseStringServer extends ConnectionServer {
         super(port, "ReverseStringServer_" + port);
     }
 
-    protected void acceptConnection(Socket s) throws IOException {
+    public void acceptConnection(Socket s) throws IOException {
         ObjectReceiver receiver = new ObjectReceiver(s);
         Serializable request = receiver.receive();
         StringBuffer buf = new StringBuffer();

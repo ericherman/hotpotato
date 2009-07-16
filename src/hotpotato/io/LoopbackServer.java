@@ -21,7 +21,7 @@ public class LoopbackServer extends ConnectionServer {
         super(port, "LoopBack");
     }
 
-    protected void acceptConnection(Socket s) {
+    public void acceptConnection(Socket s) {
         try {
             ObjectSender sender = new ObjectSender(s);
             ObjectReceiver reciever = new ObjectReceiver(s);

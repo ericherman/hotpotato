@@ -11,7 +11,7 @@ import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public abstract class ConnectionServer {
+public class ConnectionServer implements SocketAcceptor {
     public static final int SLEEP_DELAY = 25;
     private ServerSocket server;
     private Thread listener;
@@ -19,6 +19,7 @@ public abstract class ConnectionServer {
     private final String name;
     private int count = 0;
     private int port;
+    private SocketAcceptor acceptor = this;
 
     public ConnectionServer(int port, String name) {
         isRunning = true;
@@ -33,7 +34,16 @@ public abstract class ConnectionServer {
         pause();
     }
 
-    abstract protected void acceptConnection(Socket s) throws IOException;
+    public void acceptConnection(Socket s) throws IOException {
+        throw new UnsupportedOperationException();
+    }
+
+    public void setSocketAcceptor(SocketAcceptor acceptor) {
+        if (acceptor == null) {
+            throw new IllegalArgumentException();
+        }
+        this.acceptor = acceptor;
+    }
 
     public int getPort() {
         if (server == null) {
@@ -112,7 +122,7 @@ public abstract class ConnectionServer {
 
         public void run() {
             try {
-                acceptConnection(socket);
+                acceptor.acceptConnection(socket);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             } finally {
@@ -123,4 +133,8 @@ public abstract class ConnectionServer {
             }
         }
     }
+}
+
+interface SocketAcceptor {
+    void acceptConnection(Socket s) throws IOException;
 }
