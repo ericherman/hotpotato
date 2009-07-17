@@ -27,7 +27,7 @@ import org.apache.bcel.classfile.JavaClass;
 
 final class ReferencedClassFinder {
     private ClassUtil classes;
-    boolean ignoreHotpotatoClasses;
+    boolean ignorePackageClasses;
 
     ReferencedClassFinder() {
         this(true, new StandardClassUtil());
@@ -35,7 +35,7 @@ final class ReferencedClassFinder {
 
     ReferencedClassFinder(boolean ignoreHotpotatoClasses, ClassUtil classes) {
         this.classes = classes;
-        this.ignoreHotpotatoClasses = ignoreHotpotatoClasses;
+        this.ignorePackageClasses = ignoreHotpotatoClasses;
     }
 
     public Collection<Class<?>> find(Object obj) {
@@ -114,10 +114,10 @@ final class ReferencedClassFinder {
 
     private boolean shouldIgnore(String className) {
         return className.startsWith("java/") || isArrayClass(className)
-                || (ignoreHotpotatoClasses && isHotpotatoClass(className));
+                || (ignorePackageClasses && isPackageClass(className));
     }
 
-    private boolean isHotpotatoClass(String name) {
+    private boolean isPackageClass(String name) {
         return name.startsWith("hotpotato/");
     }
 
