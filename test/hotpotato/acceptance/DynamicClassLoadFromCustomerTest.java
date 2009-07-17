@@ -39,7 +39,6 @@ public class DynamicClassLoadFromCustomerTest extends
                 "package aliens;", //
                 "import java.io.*;", //
                 "import java.util.concurrent.Callable;", //
-                "import hotpotato.*;", //
                 "public class Alien implements Callable<Serializable>, Serializable {", //
                 "    public Serializable call() {", //
                 "        return \"Alien\";", //
@@ -63,7 +62,6 @@ public class DynamicClassLoadFromCustomerTest extends
 
         String[] source2 = {
                 "package aliens;", //
-                "import hotpotato.*;", //
                 "import java.io.*;", //
                 "import java.util.concurrent.Callable;", //
                 "public class ComplexAlien implements Callable<Serializable>, Serializable {", //
