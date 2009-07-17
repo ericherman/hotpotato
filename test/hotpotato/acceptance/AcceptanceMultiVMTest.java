@@ -59,6 +59,7 @@ public class AcceptanceMultiVMTest extends TestCase {
         String classpath = System.getProperty("java.class.path");
         String maxSeconds = "5";
         String workUnits = "1";
+        String sandbox = Boolean.TRUE.toString();
 
         String[] restaurantArgs = new String[] { "java", "-cp", classpath,
                 hotpotato.acceptance.ServerRunner.class.getName(), "" + port,
@@ -67,7 +68,7 @@ public class AcceptanceMultiVMTest extends TestCase {
         String[] cookArgs = new String[] { "java", "-cp", classpath,
                 hotpotato.acceptance.WorkerRunner.class.getName(),
                 InetAddress.getLocalHost().getHostName(), "" + port,
-                maxSeconds, workUnits, };
+                maxSeconds, workUnits, sandbox, };
 
         new Shell(restaurantArgs, envp, "Restaraunt", out, err).start();
         Thread.sleep(3 * ConnectionServer.SLEEP_DELAY);
@@ -101,6 +102,7 @@ public class AcceptanceMultiVMTest extends TestCase {
         String classpath = System.getProperty("java.class.path");
         String maxSeconds = "5";
         String workUnits = "0";
+        String sandbox = Boolean.FALSE.toString();
 
         String[] hotpotatodArgs = new String[] { "java", "-cp", classpath,
                 hotpotato.acceptance.ServerRunner.class.getName(), "" + port,
@@ -109,7 +111,7 @@ public class AcceptanceMultiVMTest extends TestCase {
         String[] workerArgs = new String[] { "java", "-cp", classpath,
                 hotpotato.acceptance.WorkerRunner.class.getName(),
                 InetAddress.getLocalHost().getHostName(), "" + port,
-                maxSeconds, workUnits, };
+                maxSeconds, workUnits, sandbox };
 
         String[] resenderArgs = new String[] { "java", "-cp", classpath,
                 hotpotato.acceptance.ResendRunner.class.getName(), "" + port2,
