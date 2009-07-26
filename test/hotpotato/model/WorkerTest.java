@@ -89,7 +89,7 @@ public class WorkerTest extends TestCase {
         new Thread(cook).start();
         Thread.sleep(ConnectionServer.SLEEP_DELAY);
 
-        Callable<Serializable> order = new ReturnStringOrder("foo");
+        Callable<String> order = new ReturnStringOrder("foo");
         alices.toDo = new Ticket("", 123, 0, order);
 
         for (int i = 0; i < 200 && alices.done == null; i++) {

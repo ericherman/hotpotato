@@ -15,11 +15,11 @@ public class Ticket implements Serializable {
 
     private String prefix;
     private int number;
-    private Callable<Serializable> order;
+    private Callable<? extends Serializable> order;
     private long time;
 
     public Ticket(String prefix, int number, long time,
-            Callable<Serializable> order) {
+            Callable<? extends Serializable> order) {
         this.prefix = prefix;
         this.number = number;
         this.time = time;
@@ -42,7 +42,7 @@ public class Ticket implements Serializable {
         return time;
     }
 
-    public Callable<Serializable> getOrder() {
+    public Callable<? extends Serializable> getOrder() {
         return order;
     }
 

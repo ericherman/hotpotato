@@ -15,7 +15,7 @@ public interface HotpotatoServer {
     /**
      * @return Ticket ID
      */
-    String takeOrder(String prefix, Callable<Serializable> obj);
+    String takeOrder(String prefix, Callable<? extends Serializable> obj);
 
     Ticket getNextTicket();
 
@@ -48,7 +48,8 @@ public interface HotpotatoServer {
             throw new UnsupportedOperationException();
         }
 
-        public String takeOrder(String prefix, Callable<Serializable> obj) {
+        public String takeOrder(String prefix,
+                Callable<? extends Serializable> obj) {
             throw new UnsupportedOperationException();
         }
     }

@@ -16,8 +16,9 @@ public class SerializableCallable implements Serializable,
 
     private Runnable command;
 
+    /** no arg constructor for over-riding call() */
     public SerializableCallable() {
-        // no arg constructor for over-riding
+        this.command = null;
     }
 
     public SerializableCallable(Runnable command) {

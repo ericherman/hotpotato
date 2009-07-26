@@ -11,7 +11,6 @@ import hotpotato.io.DynamicClassLoadTestFixture;
 import hotpotato.io.ObjectReceiver;
 import hotpotato.model.Hotpotatod;
 import hotpotato.net.SocketHotpotatoServer;
-import hotpotato.util.NullPrintStream;
 import hotpotato.util.Shell;
 
 import java.io.ByteArrayOutputStream;

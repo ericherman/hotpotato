@@ -6,7 +6,6 @@
  */
 package hotpotato.model;
 
-import java.io.Serializable;
 import java.util.concurrent.Callable;
 
 import junit.framework.TestCase;
@@ -17,7 +16,7 @@ public class HotpotatodTest extends TestCase {
         Hotpotatod alices = new Hotpotatod();
         assertEquals(0, alices.ticketWheel.size());
 
-        Callable<Serializable> foo = new ReturnStringOrder("foo");
+        Callable<String> foo = new ReturnStringOrder("foo");
         String orderNumber = alices.takeOrder("bob", foo);
 
         assertEquals("bob1", orderNumber);

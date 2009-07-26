@@ -13,7 +13,7 @@ import junit.framework.TestCase;
 
 public class ReturnStringOrderTest extends TestCase {
     public void testExec() throws Exception {
-        Callable<Serializable> order = new ReturnStringOrder("foo");
+        Callable<String> order = new ReturnStringOrder("foo");
         Serializable result = order.call();
         assertEquals("foo", result);
     }

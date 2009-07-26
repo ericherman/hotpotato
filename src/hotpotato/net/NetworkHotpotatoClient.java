@@ -33,7 +33,7 @@ public class NetworkHotpotatoClient implements HotpotatoClient, Serializable {
         this.sandbox = sandbox;
     }
 
-    public Serializable send(Request request) throws IOException {
+    public synchronized Serializable send(Request request) throws IOException {
         Socket s = new Socket(serverAddress, port);
 
         new ObjectSender(s).send(request);

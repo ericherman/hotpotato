@@ -21,7 +21,7 @@ public class Hotpotatod implements HotpotatoServer {
     private AtomicInteger ordersDelivered;
     TicketQueue ticketWheel;
     Map<String, Serializable> counterTop;
-    Clock clock;
+    private Clock clock;
 
     public Hotpotatod() {
         nextOrderNumber = new AtomicInteger(0);
@@ -35,7 +35,8 @@ public class Hotpotatod implements HotpotatoServer {
         this.clock = clock;
     }
 
-    public String takeOrder(String prefix, Callable<Serializable> order) {
+    public String takeOrder(String prefix,
+            Callable<? extends Serializable> order) {
         int number = nextOrderNumber.incrementAndGet();
         long time = clock.currentTimeMillis();
         Ticket ticket = new Ticket(prefix, number, time, order);

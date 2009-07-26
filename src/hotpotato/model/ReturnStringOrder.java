@@ -9,7 +9,7 @@ package hotpotato.model;
 import java.io.Serializable;
 import java.util.concurrent.Callable;
 
-public class ReturnStringOrder implements Callable<Serializable>, Serializable {
+public class ReturnStringOrder implements Callable<String>, Serializable {
     private static final long serialVersionUID = 1L;
 
     private String val;
@@ -18,7 +18,7 @@ public class ReturnStringOrder implements Callable<Serializable>, Serializable {
         this.val = val;
     }
 
-    public Serializable call() {
+    public String call() {
         return val;
     }
 }

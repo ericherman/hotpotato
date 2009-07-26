@@ -19,7 +19,7 @@ public class LocalHotpotatoClient implements HotpotatoClient {
         this.restaurant = alices;
     }
 
-    public Serializable send(Request request) {
+    public synchronized Serializable send(Request request) {
         return request.exec(restaurant);
     }
 }

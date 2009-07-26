@@ -29,10 +29,13 @@ public class Worker implements Runnable {
         this(new NetworkHotpotatoClient(restaurantAddress, port, sandbox));
     }
 
+    /*
+     * Since HotpotatoClient are thread-safe, many Workers may share a client
+     */
     public Worker(HotpotatoClient client) {
         this.client = client;
-        ordersFilled = 0;
-        running = false;
+        this.ordersFilled = 0;
+        this.running = false;
     }
 
     public void run() {
@@ -48,7 +51,7 @@ public class Worker implements Runnable {
             if (work == null) {
                 continue;
             }
-            Callable<Serializable> order = work.getOrder();
+            Callable<? extends Serializable> order = work.getOrder();
             if (order == null) {
                 continue;
             }
@@ -94,8 +97,8 @@ public class Worker implements Runnable {
 
     private static class ReturnOrderRequest implements Request {
         private static final long serialVersionUID = 1L;
-        Ticket ticket;
-        Serializable result;
+        private Ticket ticket;
+        private Serializable result;
 
         public ReturnOrderRequest(Ticket ticket, Serializable result) {
             this.ticket = ticket;

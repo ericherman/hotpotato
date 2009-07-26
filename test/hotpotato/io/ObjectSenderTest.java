@@ -6,8 +6,6 @@
  */
 package hotpotato.io;
 
-import hotpotato.util.NullPrintStream;
-
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;

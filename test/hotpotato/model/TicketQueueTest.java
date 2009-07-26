@@ -42,7 +42,7 @@ public class TicketQueueTest extends TestCase {
         theQueue.add(new Ticket("three", 3, 0, null));
 
         assertEquals("2", theQueue.get("2").getId());
-
+        assertNull("2", theQueue.get("2"));
     }
 
     public void testHasItem() {

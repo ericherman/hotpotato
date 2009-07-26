@@ -84,7 +84,7 @@ public class AcceptanceMultiVMTest extends TestCase {
 
         Thread.sleep(15 * ConnectionServer.SLEEP_DELAY);
 
-        Callable<Serializable> order = new ReturnStringOrder("fries");
+        Callable<String> order = new ReturnStringOrder("fries");
         String orderNumber = bob.placeOrder("bob", order);
 
         Thread.sleep(3 * ConnectionServer.SLEEP_DELAY);

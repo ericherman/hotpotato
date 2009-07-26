@@ -13,7 +13,6 @@ import hotpotato.io.LoopbackServer;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
-import java.net.InetAddress;
 
 import junit.framework.TestCase;
 

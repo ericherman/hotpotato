@@ -16,7 +16,13 @@ import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
 import java.net.InetAddress;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 import junit.framework.TestCase;
 
@@ -72,7 +78,7 @@ public class AcceptanceTest extends TestCase {
         mel = newCook();
 
         Customer bob = newCustomer();
-        Callable<Serializable> order = new ReturnStringOrder("fries");
+        Callable<String> order = new ReturnStringOrder("fries");
         String orderNumber = bob.placeOrder("bob", order);
 
         Thread.sleep(ConnectionServer.SLEEP_DELAY);
@@ -94,7 +100,7 @@ public class AcceptanceTest extends TestCase {
         peter = newCook();
 
         Customer bob = newCustomer();
-        Callable<Serializable> order = new ReturnStringOrder("fries");
+        Callable<String> order = new ReturnStringOrder("fries");
         String orderNumber = bob.placeOrder("bob", order);
 
         Thread.sleep(ConnectionServer.SLEEP_DELAY);
@@ -114,15 +120,15 @@ public class AcceptanceTest extends TestCase {
         mel = newCook();
 
         Customer bob = newCustomer();
-        Callable<Serializable> bOrder = new ReturnStringOrder("Bob's fries");
+        Callable<String> bOrder = new ReturnStringOrder("Bob's fries");
         String bNum = bob.placeOrder("bob", bOrder);
 
         Customer chris = newCustomer();
-        Callable<Serializable> cOrder = new ReturnStringOrder("Chris' Fries");
+        Callable<String> cOrder = new ReturnStringOrder("Chris' Fries");
         String cNum = chris.placeOrder("bob", cOrder);
 
         Customer david = newCustomer();
-        Callable<Serializable> dOrder = new ReturnStringOrder("David's Fries");
+        Callable<String> dOrder = new ReturnStringOrder("David's Fries");
         String dNum = david.placeOrder("bob", dOrder);
 
         Thread.sleep(ConnectionServer.SLEEP_DELAY);
@@ -166,16 +172,16 @@ public class AcceptanceTest extends TestCase {
         Customer david = newCustomer();
         Customer eve = newCustomer();
 
-        Callable<Serializable> bOrder = new ReturnStringOrder("bob's fries");
+        Callable<String> bOrder = new ReturnStringOrder("bob's fries");
         String bNum = bob.placeOrder("bob", bOrder);
 
-        Callable<Serializable> cOrder = new ReturnStringOrder("chris' fries");
+        Callable<String> cOrder = new ReturnStringOrder("chris' fries");
         String cNum = chris.placeOrder("chris", cOrder);
 
-        Callable<Serializable> dOrder = new ReturnStringOrder("david's fries");
+        Callable<String> dOrder = new ReturnStringOrder("david's fries");
         String dNum = david.placeOrder("david", dOrder);
 
-        Callable<Serializable> eOrder = new ReturnStringOrder("eve's fries");
+        Callable<String> eOrder = new ReturnStringOrder("eve's fries");
         String eNum = eve.placeOrder("eve", eOrder);
 
         Thread.sleep(ConnectionServer.SLEEP_DELAY);
@@ -213,8 +219,8 @@ public class AcceptanceTest extends TestCase {
     public void testReverseExample() throws Exception {
         mel = newCook();
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintStream out = new PrintStream(baos);
+        ByteArrayOutputStream baos1 = new ByteArrayOutputStream();
+        PrintStream out = new PrintStream(baos1);
 
         Thread.sleep(ConnectionServer.SLEEP_DELAY);
 
@@ -228,7 +234,47 @@ public class AcceptanceTest extends TestCase {
 
         String EOL = System.getProperty("line.separator");
         String oof = "oof" + EOL;
-        assertEquals(oof, new String(baos.toByteArray()));
+        assertEquals(oof, new String(baos1.toByteArray()));
+    }
+
+    public void test1Customer2CooksLotsOfJobs() throws Exception {
+        mel = newCook();
+        ophilia = newCook();
+
+        Customer bob = newCustomer();
+
+        List<Future<String>> futures = new ArrayList<Future<String>>();
+        for (int i = 0; i < 100; i++) {
+            Callable<String> job = new ReturnStringOrder("foo" + i);
+            futures.add(bob.submit(job));
+        }
+
+        Thread.sleep(ConnectionServer.SLEEP_DELAY);
+
+        int numDone = 0;
+        for (int i = 0; numDone < futures.size(); i++) {
+            assertTrue("loop limit reached", i < LOOP_LIMIT);
+            numDone = 0;
+            for (Future<?> future : futures) {
+                if (future.isDone()) {
+                    numDone++;
+                } else {
+                    getNoThrow(future, ConnectionServer.SLEEP_DELAY);
+                }
+            }
+
+            Thread.sleep(ConnectionServer.SLEEP_DELAY);
+        }
+        assertEquals(futures.size(), numDone);
+    }
+
+    private void getNoThrow(Future<?> future, long sleepDelay)
+            throws InterruptedException, ExecutionException {
+        try {
+            future.get(sleepDelay, TimeUnit.MILLISECONDS);
+        } catch (TimeoutException ignore) {
+            // that's okay
+        }
     }
 
     public static void main(String[] args) {

@@ -70,7 +70,7 @@ public final class TicketQueue {
     }
 
     synchronized public Ticket get(String id) {
-        Ticket ticket = map.get(id);
+        Ticket ticket = map.remove(id);
         queue.remove(ticket);
         return ticket;
     }

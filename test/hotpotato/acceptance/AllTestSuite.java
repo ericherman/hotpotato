@@ -16,6 +16,7 @@ public class AllTestSuite {
         suite.addTestSuite(AcceptanceTest.class);
         suite.addTestSuite(AcceptanceMultiVMTest.class);
         suite.addTestSuite(DynamicClassLoadFromCustomerTest.class);
+        suite.addTestSuite(FactorTest.class);
         return suite;
     }
 
