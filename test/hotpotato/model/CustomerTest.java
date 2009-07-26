@@ -139,9 +139,9 @@ public class CustomerTest extends TestCase {
         FauxHotpotatoServer alices = new FauxHotpotatoServer();
         Customer bob = new Customer(new LocalHotpotatoClient(alices));
 
-        Callable<List<Long>> job = new Factor(2l * 3l * 3l);
+        Callable<Factor> job = new Factor(2l * 3l * 3l);
 
-        Future<List<Long>> future = bob.submit(job);
+        Future<Factor> future = bob.submit(job);
         assertEquals(false, future.isCancelled());
         assertEquals(false, future.isDone());
 
@@ -151,10 +151,10 @@ public class CustomerTest extends TestCase {
         expected.add(2l);
         expected.add(3l);
         expected.add(3l);
-        List<Long> result = future.get();
+        Factor result = future.get();
         assertEquals(false, future.isCancelled());
         assertEquals(true, future.isDone());
-        assertEquals(expected, result);
+        assertEquals(expected, result.getFactors());
 
         alices.job = null;
         alices.result = null;

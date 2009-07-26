@@ -16,12 +16,22 @@ public class FactorTest extends TestCase {
 
     public void testExampleUsage() {
         long numberToFactor = 40;
-
-        Factor f = new Factor(numberToFactor);
-        List<Long> factors = f.call();
-
         List<Long> expected = Arrays.asList(new Long[] { 2l, 2l, 2l, 5l });
+
+        Factor f1 = new Factor(numberToFactor);
+        List<Long> factors = f1.factor();
+        assertEquals(numberToFactor, f1.getNumber());
         assertEquals(expected, factors);
+
+        Factor f2 = new Factor(numberToFactor);
+        f2.run();
+        assertEquals(numberToFactor, f2.getNumber());
+        assertEquals(expected, f2.getFactors());
+
+        Factor f3 = new Factor(numberToFactor);
+        Factor result = f3.call();
+        assertEquals(numberToFactor, result.getNumber());
+        assertEquals(expected, result.getFactors());
     }
 
     public void testFactors() throws Exception {
@@ -132,7 +142,7 @@ public class FactorTest extends TestCase {
             assertValueEqualsFactors(value, expectedFactors);
         }
 
-        List<Long> actualFactors = new Factor(value).call();
+        List<Long> actualFactors = new Factor(value).factor();
         assertValueEqualsFactors(value, actualFactors);
 
         if (!expectedFactors.isEmpty()) {

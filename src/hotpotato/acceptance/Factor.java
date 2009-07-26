@@ -12,48 +12,75 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Callable;
 
-public class Factor implements Serializable, Callable<List<Long>> {
+public class Factor implements Serializable, Runnable, Callable<Factor> {
     private static final long serialVersionUID = 1L;
 
-    long x;
+    private long number;
+    private List<Long> factors;
+    private long x;
 
-    public Factor(long x) {
-        if (x == Long.MIN_VALUE) {
+    public Factor(long number) {
+        if (number == Long.MIN_VALUE) {
             throw new IllegalArgumentException("Long.MIN_VALUE");
         }
-        this.x = x;
+        this.number = number;
     }
 
-    public List<Long> call() {
-        if (x == 0) {
+    public long getNumber() {
+        return number;
+    }
+
+    public List<Long> getFactors() {
+        if (factors == null) {
+            throw new IllegalStateException();
+        }
+        return factors;
+    }
+
+    public void run() {
+        this.factors = internalFactor();
+    }
+
+    public Factor call() {
+        run();
+        return this;
+    }
+
+    public List<Long> factor() {
+        return call().getFactors();
+    }
+
+    private List<Long> internalFactor() {
+        if (number == 0) {
             return Collections.singletonList(0l);
         }
 
-        List<Long> factors = new ArrayList<Long>();
+        x = number;
+        List<Long> factors1 = new ArrayList<Long>();
 
         if (x < 0) {
-            factors.add(-1l);
+            factors1.add(-1l);
             x = -x;
         }
 
         // perhaps only check primes? (rather than 2 and Odds)
         long limit = (long) (Math.sqrt(x) + 1);
-        factorOut(2, factors);
+        factorOut(2, factors1);
         for (long i = 3; i <= limit && x != 1; i += 2) {
-            factorOut(i, factors);
+            factorOut(i, factors1);
         }
 
         // PRIME!
-        if (factors.isEmpty() || (factors.size() == 1 && factors.contains(-1l))) {
-            factors.add(x);
+        if (factors1.isEmpty()
+                || (factors1.size() == 1 && factors1.contains(-1l))) {
+            factors1.add(x);
         }
-
-        return factors;
+        return factors1;
     }
 
-    void factorOut(long i, List<Long> factors) {
+    void factorOut(long i, List<Long> factors1) {
         while (x % i == 0) {
-            factors.add(i);
+            factors1.add(i);
             x = x / i;
         }
     }
