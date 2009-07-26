@@ -6,9 +6,9 @@
  */
 package hotpotato.io;
 
-import hotpotato.util.NullPrintStream;
 import hotpotato.util.Shell;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -29,7 +29,9 @@ public abstract class DynamicClassLoadTestFixture extends TestCase {
     protected String alienClasspath;
     protected Thread launched;
     protected File testDir;
+    protected ByteArrayOutputStream baos;
     protected PrintStream out;
+    protected ByteArrayOutputStream baes;
     protected PrintStream err;
 
     private File tmpDir;
@@ -40,10 +42,11 @@ public abstract class DynamicClassLoadTestFixture extends TestCase {
         testDir = new File(tmpDir, "test" + System.currentTimeMillis());
         aliensDir = new File(testDir, "aliens");
         aliensDir.mkdirs();
-        out = new NullPrintStream();
-        err = out;
-        // out = System.out;
-        // err = System.err;
+        baos = new ByteArrayOutputStream();
+        out = new PrintStream(baos);
+        baes = new ByteArrayOutputStream();
+        err = new PrintStream(baes);
+
     }
 
     protected void tearDown() throws Exception {
@@ -71,6 +74,8 @@ public abstract class DynamicClassLoadTestFixture extends TestCase {
         err = null;
         tmpDir = null;
         aliensDir = null;
+        baos = null;
+        baes = null;
     }
 
     protected void compileAlienClass(String shortClassName, String[] alienSrc)
@@ -87,8 +92,15 @@ public abstract class DynamicClassLoadTestFixture extends TestCase {
         Thread t = new Shell(args, ENVP, "javac Alien", out, err);
         t.start();
         t.join();
-        assertTrue("java file exists", alienJava.exists());
-        assertTrue("class file exists", alienClass.exists());
+        out.flush();
+        err.flush();
+        String msg = "";
+        if (!alienJava.exists() || !alienClass.exists()) {
+            msg = msg + "\n" + baos.toString();
+            msg = msg + "\n" + baes.toString();
+        }
+        assertTrue("java file exists" + msg, alienJava.exists());
+        assertTrue("class file exists" + msg, alienClass.exists());
     }
 
     protected void launchDynamicClassSender(String className, int port)

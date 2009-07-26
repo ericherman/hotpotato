@@ -25,6 +25,8 @@ public class AcceptanceTest extends TestCase {
     private Worker mel;
     private Worker ophilia;
     private Worker peter;
+    private ByteArrayOutputStream baos;
+    private PrintStream ps;
     private static int LOOP_LIMIT = 10;
 
     private Worker newCook() {
@@ -39,7 +41,9 @@ public class AcceptanceTest extends TestCase {
     }
 
     protected void setUp() throws Exception {
-        server = new SocketHotpotatoServer(0);
+        baos = new ByteArrayOutputStream();
+        ps = new PrintStream(baos);
+        server = new SocketHotpotatoServer(0, ps);
         server.start();
     }
 
@@ -59,6 +63,9 @@ public class AcceptanceTest extends TestCase {
         ophilia = null;
         peter = null;
         server = null;
+        ps.close();
+        ps = null;
+        baos = null;
     }
 
     public void test1Customer1Cook() throws Exception {

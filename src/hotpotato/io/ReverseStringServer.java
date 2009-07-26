@@ -7,6 +7,7 @@
 package hotpotato.io;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.Serializable;
 import java.net.Socket;
 
@@ -14,6 +15,10 @@ public class ReverseStringServer extends ConnectionServer {
 
     public ReverseStringServer(int port) {
         super(port, "ReverseStringServer_" + port);
+    }
+
+    public ReverseStringServer(int port, PrintStream out) {
+        super(port, "ReverseStringServer_" + port, out);
     }
 
     public void acceptConnection(Socket s) throws IOException {

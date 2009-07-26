@@ -133,6 +133,9 @@ final class ReferencedClassFinder {
         String classResourceName = classes.toResourceName(aClass);
         ClassLoader cl = classes.classLoaderFor(aClass);
         InputStream is = cl.getResourceAsStream(classResourceName);
+        if (is == null) {
+            is = aClass.getResourceAsStream(classResourceName);
+        }
         ClassParser parser = new ClassParser(is, classResourceName);
         return parser.parse();
     }

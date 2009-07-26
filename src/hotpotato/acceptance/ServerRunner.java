@@ -23,7 +23,8 @@ public class ServerRunner {
         }
 
         HotpotatoServer alices = new Hotpotatod();
-        SocketHotpotatoServer server = new SocketHotpotatoServer(port, alices);
+        SocketHotpotatoServer server;
+        server = new SocketHotpotatoServer(port, alices, System.out);
         server.start();
 
         long start = System.currentTimeMillis();

@@ -10,7 +10,9 @@ import hotpotato.HotpotatoServer;
 import hotpotato.Request;
 import hotpotato.io.ObjectReceiver;
 import hotpotato.io.ObjectSender;
+import hotpotato.util.NullPrintStream;
 
+import java.io.PrintStream;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -37,7 +39,8 @@ public class SocketHotpotatoServerTest extends TestCase {
     }
 
     public void testAcceptConnection() throws Exception {
-        server = new SocketHotpotatoServer(0);
+        PrintStream devNull = new NullPrintStream();
+        server = new SocketHotpotatoServer(0, devNull);
         server.start();
 
         Socket s = new Socket(InetAddress.getLocalHost(), server.getPort());
@@ -47,6 +50,7 @@ public class SocketHotpotatoServerTest extends TestCase {
 
         String reply = "" + new ObjectReceiver(s).receive();
         s.close();
+        devNull.close();
 
         assertEquals("foo", reply);
     }

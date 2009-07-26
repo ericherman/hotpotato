@@ -14,19 +14,25 @@ import hotpotato.io.ObjectSender;
 import hotpotato.model.Hotpotatod;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.io.Serializable;
 import java.net.Socket;
 
 public class SocketHotpotatoServer extends ConnectionServer {
-    private HotpotatoServer restaurant;
+    private HotpotatoServer hotpotato;
 
     public SocketHotpotatoServer(int port) {
-        this(port, new Hotpotatod());
+        this(port, System.out);
     }
 
-    public SocketHotpotatoServer(int port, HotpotatoServer restaurant) {
-        super(port, "Restaurant");
-        this.restaurant = restaurant;
+    public SocketHotpotatoServer(int port, PrintStream out) {
+        this(port, new Hotpotatod(), out);
+    }
+
+    public SocketHotpotatoServer(int port, HotpotatoServer hotpotato,
+            PrintStream out) {
+        super(port, "hotpotatod", out);
+        this.hotpotato = hotpotato;
     }
 
     public void acceptConnection(Socket s) throws IOException {
@@ -34,7 +40,7 @@ public class SocketHotpotatoServer extends ConnectionServer {
         Serializable request = receiver.receive();
         Serializable reply;
         try {
-            reply = ((Request) request).exec(restaurant);
+            reply = ((Request) request).exec(hotpotato);
         } catch (Exception e) {
             reply = e.toString();
         }

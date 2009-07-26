@@ -7,6 +7,7 @@
 package hotpotato.io;
 
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -22,8 +23,13 @@ public class ConnectionServer implements ConnectionAcceptor, NamedExecutor {
     private int port;
     private ConnectionAcceptor acceptor;
     private NamedExecutor executor;
+    private PrintStream out;
 
     public ConnectionServer(int port, String name) {
+        this(port, name, System.out);
+    }
+
+    public ConnectionServer(int port, String name, PrintStream out) {
         this.isRunning = true;
         this.name = name;
         this.port = port;
@@ -31,12 +37,14 @@ public class ConnectionServer implements ConnectionAcceptor, NamedExecutor {
         this.counter = new AtomicInteger(0);
         this.acceptor = this;
         this.executor = this;
+        this.out = out;
     }
 
     public void start() throws IOException {
         serverSocket = newServerSocket(port);
         listener.start();
         pause();
+        out.println(name + " accepting connections on port: " + getPort());
     }
 
     /* consider making this an interface method */

@@ -11,8 +11,11 @@ import hotpotato.io.DynamicClassLoadTestFixture;
 import hotpotato.io.ObjectReceiver;
 import hotpotato.model.Hotpotatod;
 import hotpotato.net.SocketHotpotatoServer;
+import hotpotato.util.NullPrintStream;
 import hotpotato.util.Shell;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.ServerSocket;
@@ -22,9 +25,21 @@ public class DynamicClassLoadFromCustomerTest extends
         DynamicClassLoadTestFixture {
 
     private SocketHotpotatoServer server;
+    
+    private ByteArrayOutputStream baos1;
+    private PrintStream ps1;
+
+    protected void setUp() throws Exception {
+        super.setUp();
+        baos1 = new ByteArrayOutputStream();
+        ps1 = new PrintStream(baos1);
+    }
 
     protected void tearDown() throws Exception {
         try {
+            ps1.close();
+            ps1 = null;
+            baos1 = null;
             if (server != null) {
                 server.shutdown();
                 server = null;
@@ -34,7 +49,8 @@ public class DynamicClassLoadFromCustomerTest extends
         }
     }
 
-    public void testRoundTripAlienOrder() throws Exception {
+    
+    public void x_testRoundTripAlienOrder() throws Exception {
         String[] source = {
                 "package aliens;", //
                 "import java.io.*;", //
@@ -88,7 +104,7 @@ public class DynamicClassLoadFromCustomerTest extends
         String className = "aliens." + shortClassName;
 
         HotpotatoServer alices = new Hotpotatod();
-        server = new SocketHotpotatoServer(0, alices);
+        server = new SocketHotpotatoServer(0, alices, ps1);
         server.start();
 
         String maxSeconds = "10";

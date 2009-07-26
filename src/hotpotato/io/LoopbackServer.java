@@ -6,15 +6,16 @@
  */
 package hotpotato.io;
 
+import java.io.PrintStream;
 import java.net.Socket;
 
 public class LoopbackServer extends ConnectionServer {
     public LoopbackServer() {
-        this(0);
+        this(0, System.out);
     }
 
-    public LoopbackServer(int port) {
-        super(port, "LoopBack");
+    public LoopbackServer(int port, PrintStream ps) {
+        super(port, "LoopBack", ps);
     }
 
     public void acceptConnection(Socket s) {

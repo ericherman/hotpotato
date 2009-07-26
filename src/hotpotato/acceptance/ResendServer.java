@@ -31,7 +31,7 @@ public class ResendServer extends ConnectionServer {
     }
 
     public ResendServer(int port, PrintStream out, Sender sender) {
-        super(port, ResendServer.class.getSimpleName());
+        super(port, ResendServer.class.getSimpleName(), out);
         this.out = out;
         this.sender = sender;
         this.counter = new AtomicInteger(0);
@@ -58,8 +58,4 @@ public class ResendServer extends ConnectionServer {
         return counter.intValue();
     }
 
-    public void start() throws IOException {
-        super.start();
-        out.println("Accepting connections on port " + getPort());
-    }
 }

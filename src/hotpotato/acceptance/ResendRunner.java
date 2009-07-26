@@ -14,10 +14,10 @@ import java.net.InetAddress;
 public class ResendRunner {
 
     public static class CustomerBisector implements ResendServer.Sender {
-        private final InetAddress host;
-        private final int port;
-        private final InetAddress resendHost;
-        private final int resendPort;
+        private InetAddress host;
+        private int port;
+        private InetAddress resendHost;
+        private int resendPort;
         private String lastLine;
 
         public CustomerBisector(InetAddress host, int port,
@@ -42,13 +42,17 @@ public class ResendRunner {
         public String toString() {
             return CustomerBisector.class.getSimpleName() + " " + lastLine;
         }
+
+        public void setResendPort(int resendPort) {
+            this.resendPort = resendPort;
+        }
     }
 
     public static void main(String[] args) throws Exception {
-        final InetAddress resendHost = InetAddress.getLocalHost();
-        final int resendPort = parseIntArg(args, 0);
-        final InetAddress hpHost = parseInetAddressArg(args, 1);
-        final int hpPort = parseIntArg(args, 2);
+        InetAddress resendHost = InetAddress.getLocalHost();
+        int resendPort = parseIntArg(args, 0);
+        InetAddress hpHost = parseInetAddressArg(args, 1);
+        int hpPort = parseIntArg(args, 2);
         int maxRunTimeSeconds = parseIntArg(args, 3);
         int quota = parseIntArg(args, 4);
 
@@ -58,6 +62,13 @@ public class ResendRunner {
         ResendServer server = new ResendServer(resendPort, sender);
 
         server.start();
+        while (resendPort == 0) {
+            resendPort = server.getPort();
+            if (resendPort != 0) {
+                ((CustomerBisector) sender).setResendPort(resendPort);
+            }
+
+        }
 
         long start = System.currentTimeMillis();
         while (!done(server, start, maxRunTimeSeconds, quota)) {

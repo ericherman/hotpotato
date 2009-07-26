@@ -40,6 +40,13 @@ public class Shell extends Thread {
             throw e;
         } catch (Exception e) {
             throw new RuntimeException(e);
+        } finally {
+            if (out instanceof NullPrintStream) {
+                out.close();
+            }
+            if (err instanceof NullPrintStream) {
+                err.close();
+            }
         }
     }
 

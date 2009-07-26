@@ -6,8 +6,12 @@
  */
 package hotpotato.io;
 
+import hotpotato.util.NullPrintStream;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -16,9 +20,13 @@ import junit.framework.TestCase;
 public class ObjectRecieverTest extends TestCase {
     private ConnectionServer loopback;
     private InetAddress localhost;
+    private ByteArrayOutputStream baos;
+    private PrintStream ps;
 
     protected void setUp() throws Exception {
         localhost = InetAddress.getLocalHost();
+        baos = new ByteArrayOutputStream();
+        ps = new PrintStream(baos);
     }
 
     protected void tearDown() throws Exception {
@@ -27,14 +35,17 @@ public class ObjectRecieverTest extends TestCase {
         }
         localhost = null;
         loopback = null;
+        ps.close();
+        ps = null;
+        baos = null;
     }
 
     public void testWriteObject() throws Exception {
         class Server extends ConnectionServer {
             Object obj;
 
-            public Server() {
-                super(0, "testWriteObject");
+            public Server(PrintStream ps) {
+                super(0, "testWriteObject", ps);
             }
 
             public void acceptConnection(Socket s) throws IOException {
@@ -42,7 +53,7 @@ public class ObjectRecieverTest extends TestCase {
             }
         }
 
-        Server server = new Server();
+        Server server = new Server(ps);
         server.start();
         loopback = server;
 
@@ -60,7 +71,7 @@ public class ObjectRecieverTest extends TestCase {
     }
 
     public void testWriteAndRead() throws Exception {
-        loopback = new LoopbackServer();
+        loopback = new LoopbackServer(0, ps);
         loopback.start();
         Object obj1 = "";
         Object obj2 = "";

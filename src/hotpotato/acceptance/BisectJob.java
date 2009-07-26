@@ -35,7 +35,8 @@ public class BisectJob implements Runnable, Serializable {
                 out.write(half.getBytes("UTF-8"));
                 out.write("\n".getBytes());
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                String info = host + ":" + port + " line: " + line + " ";
+                throw new RuntimeException(info + e.getMessage(), e);
             } finally {
                 if (socket != null) {
                     try {

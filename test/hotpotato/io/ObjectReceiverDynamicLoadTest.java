@@ -6,7 +6,10 @@
  */
 package hotpotato.io;
 
+import hotpotato.util.NullPrintStream;
+
 import java.io.File;
+import java.io.PrintStream;
 import java.io.Serializable;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -185,10 +188,12 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadTestFixture {
                 "import hotpotato.*;", //
                 "import hotpotato.io.*;", //
                 "import hotpotato.net.*;", //
+                "import hotpotato.util.*;", //
                 "public class " + shortName
                         + " implements Callable<Serializable>, Serializable {", //
                 "    public Serializable call() {", //
-                "        ReverseStringServer res = new ReverseStringServer(0);", //
+                "        PrintStream p = new NullPrintStream();", //
+                "        ReverseStringServer res = new ReverseStringServer(0, p);", //
                 "        try {", //
                 "            res.start();", //
                 "        } catch (IOException e) {", //
@@ -200,10 +205,12 @@ public class ObjectReceiverDynamicLoadTest extends DynamicClassLoadTestFixture {
                 "}", //
         };
 
-        ensureClassLoaded = new ReverseStringServer(0);
+        PrintStream devNull = new NullPrintStream();
+        ensureClassLoaded = new ReverseStringServer(0, devNull);
         ensureClassLoaded.start();
 
         recieveOrderWithSecurityViolation(shortName, alien_java_src);
+        devNull.close();
     }
 
     public void testSecurityViolationPropertyRead() throws Exception {

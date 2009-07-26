@@ -6,6 +6,8 @@
  */
 package hotpotato.io;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.net.Socket;
 
 import junit.framework.TestCase;
@@ -15,13 +17,16 @@ public class ConnectionServerTest extends TestCase {
     private ConnectionServer server;
     private Socket s1;
     private Socket s2;
+    private ByteArrayOutputStream baos;
+    private PrintStream ps;
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(ConnectionServerTest.class);
     }
 
     protected void setUp() throws Exception {
-        server = new LoopbackServer();
+        setUpInner();
+        server = new LoopbackServer(0, ps);
         server.start();
     }
 
@@ -34,6 +39,9 @@ public class ConnectionServerTest extends TestCase {
         }
         server.shutdown();
 
+        ps.close();
+        ps = null;
+        baos = null;
         s1 = null;
         s2 = null;
         server = null;
@@ -65,15 +73,22 @@ public class ConnectionServerTest extends TestCase {
 
     public void testPort() throws Exception {
         tearDown();
-        server = new LoopbackServer(9973);
+        setUpInner();
+        server = new LoopbackServer(9973, ps);
         server.start();
         assertEquals("getPort", 9973, server.getPort());
     }
 
     public void testRandomPort() throws Exception {
         tearDown();
-        server = new LoopbackServer(0);
+        setUpInner();
+        server = new LoopbackServer(0, ps);
         server.start();
         assertTrue("getPort", server.getPort() > 1024);
+    }
+
+    private void setUpInner() {
+        baos = new ByteArrayOutputStream();
+        ps = new PrintStream(baos);
     }
 }

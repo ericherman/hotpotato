@@ -9,13 +9,15 @@ package hotpotato.acceptance;
 import hotpotato.io.ConnectionServer;
 import hotpotato.model.Customer;
 import hotpotato.model.ReturnStringOrder;
-import hotpotato.util.NullPrintStream;
 import hotpotato.util.Shell;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.Serializable;
+import java.io.StringReader;
 import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -30,27 +32,29 @@ public class AcceptanceMultiVMTest extends TestCase {
     // netstat -anpt | grep 16
     private int port;
     private int port2;
-    private PrintStream out;
-    private PrintStream err;
+    private ByteArrayOutputStream baos1;
+    private PrintStream ps1;
+    private ByteArrayOutputStream baos2;
+    private PrintStream ps2;
 
     public static void main(String[] args) {
         junit.textui.TestRunner.run(AcceptanceMultiVMTest.class);
     }
 
     protected void setUp() throws Exception {
-        port = tryForRandomPort();
-        port2 = tryForRandomPort();
-        out = new NullPrintStream();
-        err = out;
-    }
-
-    private int tryForRandomPort() {
-        return 16000 + (int) (1000 * Math.random());
+        baos1 = new ByteArrayOutputStream();
+        ps1 = new PrintStream(baos1);
+        baos2 = new ByteArrayOutputStream();
+        ps2 = new PrintStream(baos2);
     }
 
     protected void tearDown() {
-        out = null;
-        err = null;
+        ps1.close();
+        ps1 = null;
+        ps2.close();
+        ps2 = null;
+        baos1 = null;
+        baos2 = null;
     }
 
     public void test1Customer1Cook() throws Exception {
@@ -62,17 +66,19 @@ public class AcceptanceMultiVMTest extends TestCase {
         String sandbox = Boolean.TRUE.toString();
 
         String[] restaurantArgs = new String[] { "java", "-cp", classpath,
-                hotpotato.acceptance.ServerRunner.class.getName(), "" + port,
+                hotpotato.acceptance.ServerRunner.class.getName(), "" + 0,
                 maxSeconds, workUnits, };
+
+        new Shell(restaurantArgs, envp, "Restaraunt", ps1, ps1).start();
+        Thread.sleep(3 * ConnectionServer.SLEEP_DELAY);
+        port = parseInt(ps1, baos1, 10);
 
         String[] cookArgs = new String[] { "java", "-cp", classpath,
                 hotpotato.acceptance.WorkerRunner.class.getName(),
                 InetAddress.getLocalHost().getHostName(), "" + port,
                 maxSeconds, workUnits, sandbox, };
 
-        new Shell(restaurantArgs, envp, "Restaraunt", out, err).start();
-        Thread.sleep(3 * ConnectionServer.SLEEP_DELAY);
-        new Shell(cookArgs, envp, "cook", out, err).start();
+        new Shell(cookArgs, envp, "cook", ps2, ps2).start();
 
         Customer bob = new Customer(InetAddress.getLocalHost(), port);
 
@@ -85,7 +91,15 @@ public class AcceptanceMultiVMTest extends TestCase {
 
         Serializable fries = null;
         for (int i = 0; fries == null; i++) {
-            assertTrue("infinite loop", i < 20);
+            String msg = "";
+            if (i >= 20) {
+                ps1.flush();
+                ps2.flush();
+                msg = msg + "\n parsed port = " + port;
+                msg = msg + "\n" + baos1.toString();
+                msg = msg + "\n" + baos2.toString();
+            }
+            assertTrue("infinite loop" + msg, i < 20);
             fries = bob.pickupOrder(orderNumber);
             Thread.sleep(ConnectionServer.SLEEP_DELAY);
         }
@@ -93,9 +107,40 @@ public class AcceptanceMultiVMTest extends TestCase {
         assertEquals("fries", fries);
     }
 
+    private int parseInt(PrintStream ps, ByteArrayOutputStream baos, int tries)
+            throws IOException, InterruptedException {
+        String received = null;
+        for (int i = 0; i < tries; i++) {
+            ps.flush();
+            received = baos.toString();
+            int p = parseInt(received);
+            if (p > 0) {
+                return p;
+            }
+            Thread.sleep(ConnectionServer.SLEEP_DELAY * (i + 1));
+        }
+        throw new RuntimeException("Could not parse port from:\n" + received);
+    }
+
+    private int parseInt(String received) throws IOException {
+        StringReader in = new StringReader(received);
+        BufferedReader reader = new BufferedReader(in);
+        while (true) {
+            String line = reader.readLine();
+            if (line == null) {
+                break;
+            }
+            if (line.contains(": ")) {
+                int index = line.indexOf(": ");
+                return Integer.parseInt(line.substring(index + 2));
+            }
+        }
+        return 0;
+    }
+
     public void testTriangle() throws Exception {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        PrintStream capture = new PrintStream(baos);
+        ByteArrayOutputStream baos3 = new ByteArrayOutputStream();
+        PrintStream ps3 = new PrintStream(baos3);
 
         String path = System.getProperty("java.library.path");
         String[] envp = new String[] { "PATH=" + path };
@@ -105,23 +150,25 @@ public class AcceptanceMultiVMTest extends TestCase {
         String sandbox = Boolean.FALSE.toString();
 
         String[] hotpotatodArgs = new String[] { "java", "-cp", classpath,
-                hotpotato.acceptance.ServerRunner.class.getName(), "" + port,
+                hotpotato.acceptance.ServerRunner.class.getName(), "" + 0,
                 maxSeconds, workUnits, };
+
+        new Shell(hotpotatodArgs, envp, "hotpotatod", ps1, ps1).start();
+        Thread.sleep(3 * ConnectionServer.SLEEP_DELAY);
+        port = parseInt(ps1, baos1, 10);
+
+        String[] resenderArgs = new String[] { "java", "-cp", classpath,
+                hotpotato.acceptance.ResendRunner.class.getName(), "" + 0,
+                InetAddress.getLocalHost().getHostName(), "" + port,
+                maxSeconds, workUnits, };
+        new Shell(resenderArgs, envp, "resenderd", ps3, ps3).start();
+        port2 = parseInt(ps3, baos3, 10);
 
         String[] workerArgs = new String[] { "java", "-cp", classpath,
                 hotpotato.acceptance.WorkerRunner.class.getName(),
                 InetAddress.getLocalHost().getHostName(), "" + port,
                 maxSeconds, workUnits, sandbox };
-
-        String[] resenderArgs = new String[] { "java", "-cp", classpath,
-                hotpotato.acceptance.ResendRunner.class.getName(), "" + port2,
-                InetAddress.getLocalHost().getHostName(), "" + port,
-                maxSeconds, workUnits, };
-
-        new Shell(hotpotatodArgs, envp, "hotpotatod", out, err).start();
-        Thread.sleep(3 * ConnectionServer.SLEEP_DELAY);
-        new Shell(workerArgs, envp, "workerd", out, err).start();
-        new Shell(resenderArgs, envp, "resenderd", capture, capture).start();
+        new Shell(workerArgs, envp, "workerd", ps2, ps2).start();
 
         Socket s = null;
         try {
@@ -151,9 +198,20 @@ public class AcceptanceMultiVMTest extends TestCase {
 
         int found = 0;
         for (int i = 0; found < expected.size(); i++) {
-            capture.flush();
-            String captured = baos.toString();
-            assertTrue("infinite loop " + captured, i < 200);
+            ps3.flush();
+            String captured = baos3.toString();
+            String msg = "";
+            if (i >= 200) {
+                ps1.flush();
+                ps2.flush();
+                msg = msg + "\n parsed port = " + port;
+                msg = msg + "\n parsed port2 = " + port2;
+                msg = msg + "\n" + baos1.toString();
+                msg = msg + "\n" + baos2.toString();
+                msg = msg + "\n" + baos3.toString();
+            }
+
+            assertTrue("infinite loop " + msg, i < 200);
             found = 0;
             for (String single : expected) {
                 if (captured.contains(single)) {
@@ -163,8 +221,8 @@ public class AcceptanceMultiVMTest extends TestCase {
             Thread.sleep(ConnectionServer.SLEEP_DELAY);
         }
 
-        capture.flush();
-        assertEquals(baos.toString(), expected.size(), found);
+        ps3.flush();
+        assertEquals(baos3.toString(), expected.size(), found);
     }
 
     private Socket getSocket(int tries, int portNum) throws Exception {

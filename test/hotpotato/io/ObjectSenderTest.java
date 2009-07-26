@@ -6,9 +6,13 @@
  */
 package hotpotato.io;
 
+import hotpotato.util.NullPrintStream;
+
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.ObjectInputStream;
+import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -18,9 +22,13 @@ public class ObjectSenderTest extends TestCase {
     private ConnectionServer loopback;
     private InetAddress localhost;
     private Socket s;
+    private ByteArrayOutputStream baos;
+    private PrintStream ps;
 
     protected void setUp() throws Exception {
         localhost = InetAddress.getLocalHost();
+        baos = new ByteArrayOutputStream();
+        ps = new PrintStream(baos);
     }
 
     protected void tearDown() throws Exception {
@@ -33,6 +41,9 @@ public class ObjectSenderTest extends TestCase {
         localhost = null;
         loopback = null;
         s = null;
+        ps.close();
+        ps = null;
+        baos = null;
     }
 
     private ObjectInputStream objectInputStream(Socket sock) throws IOException {
@@ -44,8 +55,8 @@ public class ObjectSenderTest extends TestCase {
         class Server extends ConnectionServer {
             Object obj;
 
-            public Server() {
-                super(0, "testWriteObject");
+            public Server(PrintStream ps) {
+                super(0, "testWriteObject", ps);
             }
 
             public void acceptConnection(Socket sock) throws IOException {
@@ -60,7 +71,7 @@ public class ObjectSenderTest extends TestCase {
             }
         }
 
-        Server server = new Server();
+        Server server = new Server(ps);
         server.start();
 
         loopback = server;
@@ -72,7 +83,7 @@ public class ObjectSenderTest extends TestCase {
     }
 
     public void testWriteAndRead() throws Exception {
-        loopback = new LoopbackServer();
+        loopback = new LoopbackServer(0, ps);
         loopback.start();
         Object obj1 = "";
         Object obj2 = "";
@@ -95,7 +106,7 @@ public class ObjectSenderTest extends TestCase {
     }
 
     public void testAssumptions() throws Exception {
-        loopback = new LoopbackServer();
+        loopback = new LoopbackServer(0, ps);
         loopback.start();
 
         Object obj1 = "Foo";

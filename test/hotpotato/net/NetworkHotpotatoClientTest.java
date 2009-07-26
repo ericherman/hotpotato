@@ -10,19 +10,32 @@ import hotpotato.HotpotatoServer;
 import hotpotato.Request;
 import hotpotato.io.LoopbackServer;
 
+import java.io.ByteArrayOutputStream;
+import java.io.PrintStream;
 import java.io.Serializable;
+import java.net.InetAddress;
 
 import junit.framework.TestCase;
 
 public class NetworkHotpotatoClientTest extends TestCase {
 
     private LoopbackServer server;
+    private ByteArrayOutputStream baos;
+    private PrintStream ps;
+
+    protected void setUp() throws Exception {
+        baos = new ByteArrayOutputStream();
+        ps = new PrintStream(baos);
+    }
 
     protected void tearDown() throws Exception {
         if (server != null) {
             server.shutdown();
         }
         server = null;
+        ps.close();
+        ps = null;
+        baos = null;
     }
 
     static class FooRequest implements Request {
@@ -38,7 +51,7 @@ public class NetworkHotpotatoClientTest extends TestCase {
     }
 
     public void testSend() throws Exception {
-        server = new LoopbackServer();
+        server = new LoopbackServer(0, ps);
         server.start();
 
         NetworkHotpotatoClient client = new NetworkHotpotatoClient(server
