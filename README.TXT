@@ -22,8 +22,8 @@ You should have received a copy of the GNU General Public License
 if not, write to:
 
 the Free Software Foundation, Inc.
-59 Temple Place, Suite 330
-Boston, MA  02111-1307  USA
+51 Franklin Street, Fifth Floor
+Boston, MA  02110-1301  USA
 
 The LGPL may not suit some users. No problem, feel free to contact 
 Eric Herman by email <eric AT freesa DOT org> for alternative 
