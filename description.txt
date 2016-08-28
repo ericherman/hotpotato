@@ -10,9 +10,9 @@ process the work. Hopefully the only hard part will be in writing the
 actual work since the distribution is now easy. The class loading of the
 work to be done is dynamic. The classes are loaded with a security
 manager and are not granted any privileges. Ideally, the server will be
-able to provide some quality of service. 
+able to provide some quality of service.
 
-The programming language is java and is deployable to any java v1.4 JVM 
+The programming language is java and is deployable to any java v1.4 JVM
 
 Depends on:
 

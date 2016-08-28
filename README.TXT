@@ -1,6 +1,6 @@
 Copyright (C) 2003 by Eric Herman.
- 
-This file contains a few notes about the hotpotato codebase. 
+
+This file contains a few notes about the hotpotato codebase.
 It's current as of 2003/08/23.
 
 LICENSING
@@ -16,55 +16,55 @@ but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU Lesser General Public License for more details.
- 
+
 You should have received a copy of the GNU General Public License
-(GnuGeneralPublicLicenseVersion2.txt) along with these programs; 
+(GnuGeneralPublicLicenseVersion2.txt) along with these programs;
 if not, write to:
 
 the Free Software Foundation, Inc.
 51 Franklin Street, Fifth Floor
 Boston, MA  02110-1301  USA
 
-The LGPL may not suit some users. No problem, feel free to contact 
-Eric Herman by email <eric AT freesa DOT org> for alternative 
-licensing, I'm sure we can work something out. 
+The LGPL may not suit some users. No problem, feel free to contact
+Eric Herman by email <eric AT freesa DOT org> for alternative
+licensing, I'm sure we can work something out.
 
 SUMMARY
 
-The Hotpotato code is a framework for "grid computing" or 
+The Hotpotato code is a framework for "grid computing" or
 whatever the current buzzword is for distributed processing. The
 idea is that you set up a server, allow other users to connect
-to the server as clients, and then give the server work to do. 
+to the server as clients, and then give the server work to do.
 The server then hands work out to the clients.
 
-The goal of Hotpotato is to make all of the aspects of the 
-distribution of work easy. Hopefully the only hard part will be 
-in writing the actual work to get distributed! With an easy 
-distribution framework available, work which we might normally 
-batch in serial may make more sense in parallel. Of course, 
-not all problems lend themselves to parallel solutions. 
+The goal of Hotpotato is to make all of the aspects of the
+distribution of work easy. Hopefully the only hard part will be
+in writing the actual work to get distributed! With an easy
+distribution framework available, work which we might normally
+batch in serial may make more sense in parallel. Of course,
+not all problems lend themselves to parallel solutions.
 
 THANKS
 
-The idea was first given to me by Ian Greenhoe, so he could 
-distribute the work of a project of his. He is a huge help 
+The idea was first given to me by Ian Greenhoe, so he could
+distribute the work of a project of his. He is a huge help
 and inspiration for the project. (It always helps to know that
-someone is finding it useful.) He also gave me a hand thinking 
-through the initial designs and writing the initial test code, 
+someone is finding it useful.) He also gave me a hand thinking
+through the initial designs and writing the initial test code,
 as well as helping me debug various stuff along the way.
 
-The largest thanks goes to Brett Neumeier for everything, but 
-mostly for being The Guru. Countless times I got stuck in the 
-persnickety details of things like object stream headers or 
+The largest thanks goes to Brett Neumeier for everything, but
+mostly for being The Guru. Countless times I got stuck in the
+persnickety details of things like object stream headers or
 class loading or security management .... At least once, I was
-so badly stuck, that I think I would have given up without his 
-willingness to help me understand /why/ something was behaving 
-unexpectedly. All the Googling in the world can't beat a 
+so badly stuck, that I think I would have given up without his
+willingness to help me understand /why/ something was behaving
+unexpectedly. All the Googling in the world can't beat a
 friendly guru.
-  
-I spell very poorly and, until I get an IDE with a spell checker 
-plug in (hint, hint!), I expect I will be continually grateful 
-to the code gnomes that come around fixing my spelling errors. 
+
+I spell very poorly and, until I get an IDE with a spell checker
+plug in (hint, hint!), I expect I will be continually grateful
+to the code gnomes that come around fixing my spelling errors.
 Thanks little guys!
 
 Oh, and thank you for reading this far.
@@ -72,15 +72,15 @@ Oh, and thank you for reading this far.
 DEPENDENCIES
 
 The hotpotato code has a few external dependencies, but these
-dependencies are upon open source code.  This property of the 
+dependencies are upon open source code.  This property of the
 codebase will be maintained. Knowledge is power.
 
 At the time of this writing, Hotpotato depends on:
  * JUnit   http://junit.org/
  * BCEL    http://jakarta.apache.org/bcel/
 
-The hotpotato codebase compiles using Sun's JDK 1.4.2 on linux 
-... and probably any 1.4.x ... but I haven't done the testing. 
+The hotpotato codebase compiles using Sun's JDK 1.4.2 on linux
+... and probably any 1.4.x ... but I haven't done the testing.
 
 BUILDING
 
@@ -127,78 +127,78 @@ is a demo client which simply reverses a string.
 
 CONTRIBUTING
 
-Speaking of testing, all the code has been written test-first, 
-so there should be no untested code. If there is code that can 
-be removed without causing tests to break, it should probably 
+Speaking of testing, all the code has been written test-first,
+so there should be no untested code. If there is code that can
+be removed without causing tests to break, it should probably
 be removed.
 
-I try to make sure that any time I believe there is a bug, that 
-first I write a failing test. Twice on this code I've been 
+I try to make sure that any time I believe there is a bug, that
+first I write a failing test. Twice on this code I've been
 surprised that things haven't actually needed "fixing".
 
-Oh, and be warned: there are some potentially bad race conditions 
-in the tests. In time, I hope to address these race conditions, 
+Oh, and be warned: there are some potentially bad race conditions
+in the tests. In time, I hope to address these race conditions,
 but that has not yet been done. Besides, they never break on MY
-computer, anyway. <grin> In reality, I think I'll be motivated 
-to fix the race conditions as a way to speed up the tests. 
+computer, anyway. <grin> In reality, I think I'll be motivated
+to fix the race conditions as a way to speed up the tests.
 
-However, because the tests do things in multiple threads, I must 
-sheepishly admit to using Thread.sleep(x) in order to hopefully 
-get the threads to line up sensibly in their orders of execution. 
+However, because the tests do things in multiple threads, I must
+sheepishly admit to using Thread.sleep(x) in order to hopefully
+get the threads to line up sensibly in their orders of execution.
 
-If you have trouble with tests failing, try increasing the delay 
+If you have trouble with tests failing, try increasing the delay
 in hotpotato.io.ConnectionServer.SLEEP_DELAY.
 
-I would like to implement a "No Sleeps!" policy in the tests so 
-they would run fast. The 17 seconds it currently takes, I find 
-rather slow. The slower they are, the less likely I will be to 
-run them after making a small change, and the more confused I 
-will be when later I run them and I discover that something I did 
-broke something else. For some reason, I find it harder to revert 
-half an hour's worth of code than I do reverting 5 to 10 minutes 
-worth of coding 4 or 5 times in a row. For this reason I want it 
-to be easy and painless to run the tests early and often. In the 
+I would like to implement a "No Sleeps!" policy in the tests so
+they would run fast. The 17 seconds it currently takes, I find
+rather slow. The slower they are, the less likely I will be to
+run them after making a small change, and the more confused I
+will be when later I run them and I discover that something I did
+broke something else. For some reason, I find it harder to revert
+half an hour's worth of code than I do reverting 5 to 10 minutes
+worth of coding 4 or 5 times in a row. For this reason I want it
+to be easy and painless to run the tests early and often. In the
 extreme, maybe I'd hook up the test running to my save key. :-)
 
 SYSTEM OF NAMES - Packages, Classes, Variables
 
-For starters, why "Hotpotato" anyway? Well, because when Ian and 
-I first wrote some code to pass objects around between two or 
-three socket connections, it felt like we were playing a virtual 
-game of hotpotato. I'm sort of looking for a better name, but 
-I've had a hard time coming up with one, and this one is sort of 
+For starters, why "Hotpotato" anyway? Well, because when Ian and
+I first wrote some code to pass objects around between two or
+three socket connections, it felt like we were playing a virtual
+game of hotpotato. I'm sort of looking for a better name, but
+I've had a hard time coming up with one, and this one is sort of
 fun, even if not very informative.
 
 I've embraced the restaurant "metaphor" for my model classes.
-Several times I've thought about what would be a better set of 
-names, with no luck. So far, the naming has been more helpful 
-than I would have guessed. Restaurants are easy to understand, 
-and naming things in line with a Restaurant has helped me keep 
-straight which parts are supposed to be doing what things. 
+Several times I've thought about what would be a better set of
+names, with no luck. So far, the naming has been more helpful
+than I would have guessed. Restaurants are easy to understand,
+and naming things in line with a Restaurant has helped me keep
+straight which parts are supposed to be doing what things.
 
-On a few occasions, I made design decisions in part on how well 
-the outcome would fit the names. Also, I've learned to re-work 
-anything I can not find a good name for. This turns out to be 
-really enlightening; maybe it is a coincidence, but when the code 
-is hard to name, it is usually doing too much or, for some other 
+On a few occasions, I made design decisions in part on how well
+the outcome would fit the names. Also, I've learned to re-work
+anything I can not find a good name for. This turns out to be
+really enlightening; maybe it is a coincidence, but when the code
+is hard to name, it is usually doing too much or, for some other
 reason, it is poorly organized.
 
 Other times, I've had to settle for a little bit of "metaphor
-shear" as Brett calls it. For instance, most restaurants don't 
-have some variable number of free-lance cooks willing to work out 
-of their garage. The imperfect fit keeps nudging me to keep an 
-eye out for a better system of names. Please let me know if you 
+shear" as Brett calls it. For instance, most restaurants don't
+have some variable number of free-lance cooks willing to work out
+of their garage. The imperfect fit keeps nudging me to keep an
+eye out for a better system of names. Please let me know if you
 can think of one.
 
-CODING STYLE 
+CODING STYLE
 
-If you wish to contribute, thank you, that would be great. 
+If you wish to contribute, thank you, that would be great.
 Please respect the following guidelines.
 
-Test Test Test. Everything must be exercised in an automated 
-JUnit test. Okay, not everything. You don't have to test the 
-toString() method if it is just for viewing in the debugger. 
-But if you're writing an equals method, go ahead and throw in a 
+Test Test Test. Everything must be exercised in an automated
+JUnit test. Okay, not everything. You don't have to test the
+toString() method if it is just for viewing in the debugger.
+But if you're writing an equals method, go ahead and throw in a
 quick assertEquals(expected.hashCode(), actual.hashCode()); in
 your test ... it's just one extra line to keep us honest. (Brett
 says that, when he's feeling paranoid, he tests the entire equals
@@ -206,9 +206,9 @@ contract, including symmetry, reflexivity, transitivity, and
 consistency checks.)
 
 Keep it simple. I have to be able to understand what is going on
-so I keep it simple. Often when I first add a test, and the 
-feature, the code is complex. But when I get the green bar, I 
-try to re-work the code to a more simple form. Most of the time 
+so I keep it simple. Often when I first add a test, and the
+feature, the code is complex. But when I get the green bar, I
+try to re-work the code to a more simple form. Most of the time
 it is weeks later when a vastly simpler form takes shape in the
 code. But, so far, with each new feature, the code has been
 getting more simple, not more complex. It usually seems to take
@@ -250,7 +250,7 @@ Why? Sigh. Because I'm asking nicely. I just like to be able to
 drop an assertEquals() or println() in anywhere without having to
 add (and later remove) the curly braces.
 
-Also, since I do development work in Eclipse, I rely upon the 
+Also, since I do development work in Eclipse, I rely upon the
 code formatter built therein. Here are some of my settings:
   Java - Code Formatter
   * New Lines tab: deselect all check boxes except the last one
@@ -259,7 +259,7 @@ code formatter built therein. Here are some of my settings:
   * Style tab: number of spaces representing indent: 4
   Java - Editor
   * Appearance: Displayed tab width 8
-  
 
-Cheers!  
+
+Cheers!
 -- Eric Herman
