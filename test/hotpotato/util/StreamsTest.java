@@ -1,8 +1,8 @@
 /**
- * Copyright (C) 2003 - 2009 by Eric Herman.
- * For licensing information see GnuLesserGeneralPublicLicense-2.1.txt
- *  or http://www.gnu.org/licenses/lgpl-2.1.txt 
- *  or for alternative licensing, email Eric Herman: eric AT freesa DOT org 
+ * Copyright (C) 2003 - 2016 by Eric Herman.
+ * For licensing information see COPYING
+ *  or http://www.gnu.org/licenses/lgpl-2.1.txt
+ *  or for alternative licensing, email Eric Herman: eric AT freesa DOT org
  */
 package hotpotato.util;
 
@@ -38,11 +38,11 @@ public class StreamsTest extends TestCase {
     /*
      * Our test tries to provide input to the InputStream and recieve output
      * from the OutputStream.
-     * 
+     *
      * The confusing part is that in order to provide input to the InputStream
      * we need an output stream to write to, and in order to tell what was sent
      * to the OutputStream we need to read it from an input stream.
-     * 
+     *
      * Less than obvious code, I know. It's easy to get lost in who's coming and
      * who's going.
      */

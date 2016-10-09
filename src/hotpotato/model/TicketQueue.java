@@ -1,6 +1,6 @@
 /**
- * Copyright (C) 2003 - 2009 by Eric Herman. 
- * For licensing information see GnuLesserGeneralPublicLicense-2.1.txt 
+ * Copyright (C) 2003 - 2016 by Eric Herman.
+ * For licensing information see COPYING
  *  or http://www.gnu.org/licenses/lgpl-2.1.txt
  *  or for alternative licensing, email Eric Herman: eric AT freesa DOT org
  */
@@ -13,16 +13,16 @@ import java.util.Map;
 /**
  * TicketQueue is marked final as a hint to the compiler. It can safely be
  * un-finalized.
- * 
+ *
  * When making multiple calls to a TicketQueue, please consider whether we need
  * to perform all operations within a single block synchronized on the
  * TicketWheel.
- * 
+ *
  * <code>
  * if (ticketQueue.hasItems())  // possible threading problem
  *     a = ticketQueue.get();   // what if ticketWheel is now empty?
  * </code>
- * 
+ *
  * <code>
  * synchronized (ticketQueue) {
  *     if (ticketQueue.hasItems())

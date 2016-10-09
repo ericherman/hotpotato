@@ -1,6 +1,6 @@
 /**
- * Copyright (C) 2003 - 2009 by Eric Herman. 
- * For licensing information see GnuLesserGeneralPublicLicense-2.1.txt 
+ * Copyright (C) 2003 - 2016 by Eric Herman.
+ * For licensing information see COPYING
  *  or http://www.gnu.org/licenses/lgpl-2.1.txt
  *  or for alternative licensing, email Eric Herman: eric AT freesa DOT org
  */
@@ -24,7 +24,7 @@ public class DynamicClassLoadFromCustomerTest extends
         DynamicClassLoadTestFixture {
 
     private SocketHotpotatoServer server;
-    
+
     private ByteArrayOutputStream baos1;
     private PrintStream ps1;
 
@@ -48,7 +48,7 @@ public class DynamicClassLoadFromCustomerTest extends
         }
     }
 
-    
+
     public void x_testRoundTripAlienOrder() throws Exception {
         String[] source = {
                 "package aliens;", //
